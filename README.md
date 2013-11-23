@@ -1,4 +1,5 @@
 HeartRateMonitor
 ================
-Many people in world suffer with problem with heart.
-I want to create online/modile service for monitoring heart rate.
+Many people in world suffer with problem with heart. Including me.
+
+I want to create online service for monitoring heart rate using your own smartphone.
