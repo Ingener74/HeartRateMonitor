@@ -40,7 +40,7 @@ public class CameraPreview extends SurfaceView implements
 	
 	private void setFlashOn(){
 		Parameters camPam = _camera.getParameters();
-		camPam.setFlashMode(Camera.Parameters.FLASH_MODE_ON);
+		camPam.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
 		_camera.setParameters(camPam);
 	}
 

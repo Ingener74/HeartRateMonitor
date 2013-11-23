@@ -5,14 +5,17 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.FrameLayout;
 
 public class HeartRateMonitor extends Activity {
 	public static String HRM_TAG = "HeartRateMonitor";
 
-	private boolean hasCamera = false;
+	private boolean have_a_Camera = false;
 	private Camera _camera = null;
 	private CameraPreview _cameraPreview = null;
+	
+	private boolean have_a_Flashlight = false;
 
 	private boolean checkCameraHardware(Context context) {
 		if (!context.getPackageManager().hasSystemFeature(
@@ -20,6 +23,13 @@ public class HeartRateMonitor extends Activity {
 			return false;
 		}
 		return true;
+	}
+	
+	private boolean checkFlashLight(Context context){
+		if(context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH)){
+			return true;
+		}
+		return false;
 	}
 
 	public static Camera getCamera() {
@@ -46,7 +56,10 @@ public class HeartRateMonitor extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
-		hasCamera = checkCameraHardware(getBaseContext());
+		have_a_Camera = checkCameraHardware(this);
+		have_a_Flashlight = checkFlashLight(this);
+		if(!have_a_Flashlight)
+			Log.e(HRM_TAG, "have no flash light");
 
 		_camera = getCamera();
 
