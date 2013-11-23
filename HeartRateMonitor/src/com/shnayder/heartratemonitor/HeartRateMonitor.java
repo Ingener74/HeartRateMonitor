@@ -13,7 +13,7 @@ public class HeartRateMonitor extends Activity {
 
 	private boolean have_a_Camera = false;
 	private Camera _camera = null;
-	private CameraPreview _cameraPreview = null;
+	private HeartRateMonitorPreview _cameraPreview = null;
 	
 	private boolean have_a_Flashlight = false;
 
@@ -66,7 +66,7 @@ public class HeartRateMonitor extends Activity {
 		if (_camera == null)
 			return;
 
-		_cameraPreview = new CameraPreview(this, _camera);
+		_cameraPreview = new HeartRateMonitorPreview(this, _camera);
 		FrameLayout framePreview = (FrameLayout) findViewById(R.id.cameraPreview);
 		framePreview.addView(_cameraPreview);
 	}
