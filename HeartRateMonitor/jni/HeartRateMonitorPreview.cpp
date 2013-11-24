@@ -7,11 +7,13 @@
 
 #include "HeartRateMonitorPreview.h"
 
-jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativeStart(JNIEnv*,
-                                                                                   jobject){
+#include "HeartRateProcessor.h"
+
+jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativeStart(
+        JNIEnv*, jobject) {
     return false;
 }
 
-void Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativeStop(JNIEnv*,
-                                                                              jobject){
+void Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativeStop(
+        JNIEnv*, jobject) {
 }
