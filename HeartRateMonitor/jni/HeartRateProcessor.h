@@ -8,8 +8,6 @@
 #ifndef HEARTRATEPROCESSOR_H_
 #define HEARTRATEPROCESSOR_H_
 
-#include <IModule.h>
-
 #include <boost/thread.hpp>
 #include <boost/thread/mutex.hpp>
 
@@ -25,8 +23,6 @@ public:
 
 private:
     void body();
-
-    IModule* _test;
 
     boost::thread _hrpThread;
     boost::mutex  _hrpStopMutex;

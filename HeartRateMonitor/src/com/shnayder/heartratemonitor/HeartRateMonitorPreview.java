@@ -61,7 +61,7 @@ public class HeartRateMonitorPreview extends SurfaceView implements
 	private boolean cameraStart() {
 		try {
 			_camera.setPreviewDisplay(_holder);
-			_camera.setPreviewCallback(this);
+//			_camera.setPreviewCallback(this);
 			setFlashOn();
 			_camera.startPreview();
 
@@ -94,11 +94,14 @@ public class HeartRateMonitorPreview extends SurfaceView implements
 	public void surfaceCreated(SurfaceHolder holder) {
 		Log.i(HeartRateMonitor.HRM_TAG, "hrm preview created");
 		cameraStart();
+		
+		hrmNativeStart();
 	}
 
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		Log.i(HeartRateMonitor.HRM_TAG, "hrm preview destroyed");
+		hrmNativeStop();
 	}
 
 	@Override

@@ -11,8 +11,6 @@
 LOCAL_PATH                             := $(call my-dir)
 MY_ROOT                                := $(LOCAL_PATH)
 
-#include $(call all-subdir-makefiles)
-
 # test_module
 include $(LOCAL_PATH)/test_module/Android.mk
 

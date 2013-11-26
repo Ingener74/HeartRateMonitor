@@ -6,34 +6,36 @@
  */
 
 #include <HeartRateProcessor.h>
-
-#include <TestModule.h>
+#include "hrm_defines.h"
 
 namespace hrm {
 
-HeartRateProcessor::HeartRateProcessor(): _test(0), _hrpStop(false){
-    _test = new TestModule();
+HeartRateProcessor::HeartRateProcessor(): _hrpStop(false){
 }
 
 HeartRateProcessor::~HeartRateProcessor() {
-    delete _test;
-    _test = 0;
 }
 
 bool hrm::HeartRateProcessor::start() {
+    I("heart rate processor start");
     _hrpThread = boost::thread(boost::bind(&HeartRateProcessor::body, this));
     return true;
 }
 
 void hrm::HeartRateProcessor::stop() {
+    I("heart rate processor stop");
     {
         boost::mutex::scoped_lock lock(_hrpStopMutex);
         _hrpStop = true;
     }
     _hrpThread.join();
+    I("heart rate processor stoped");
 }
 
 void HeartRateProcessor::body(){
+
+    I("heart rate processor whiskers");
+
     for(;;){
         {
             boost::mutex::scoped_lock lock(_hrpStopMutex);
@@ -43,6 +45,7 @@ void HeartRateProcessor::body(){
 
         usleep(30 * 1000);
     }
+    I("heart rate processor tail");
 }
 
 } /* namespace hrm */
