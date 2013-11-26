@@ -11,7 +11,7 @@
 
 namespace hrm {
 
-HeartRateProcessor::HeartRateProcessor(): _test(0){
+HeartRateProcessor::HeartRateProcessor(): _test(0), _hrpStop(false){
     _test = new TestModule();
 }
 
@@ -21,10 +21,28 @@ HeartRateProcessor::~HeartRateProcessor() {
 }
 
 bool hrm::HeartRateProcessor::start() {
+    _hrpThread = boost::thread(boost::bind(&HeartRateProcessor::body, this));
     return true;
 }
 
 void hrm::HeartRateProcessor::stop() {
+    {
+        boost::mutex::scoped_lock lock(_hrpStopMutex);
+        _hrpStop = true;
+    }
+    _hrpThread.join();
+}
+
+void HeartRateProcessor::body(){
+    for(;;){
+        {
+            boost::mutex::scoped_lock lock(_hrpStopMutex);
+            if(_hrpStop)
+                break;
+        }
+
+        usleep(30 * 1000);
+    }
 }
 
 } /* namespace hrm */
