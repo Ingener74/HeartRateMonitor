@@ -9,12 +9,12 @@ import android.util.Log;
 import android.widget.FrameLayout;
 
 public class HeartRateMonitor extends Activity {
-	public static String HRM_TAG = "HeartRateMonitor";
+	public static String HRM_TAG = "Heart Rate Monitor Java";
 
 	private boolean have_a_Camera = false;
 	private Camera _camera = null;
 	private HeartRateMonitorPreview _cameraPreview = null;
-	
+
 	private boolean have_a_Flashlight = false;
 
 	private boolean checkCameraHardware(Context context) {
@@ -24,9 +24,10 @@ public class HeartRateMonitor extends Activity {
 		}
 		return true;
 	}
-	
-	private boolean checkFlashLight(Context context){
-		if(context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH)){
+
+	private boolean checkFlashLight(Context context) {
+		if (context.getPackageManager().hasSystemFeature(
+				PackageManager.FEATURE_CAMERA_FLASH)) {
 			return true;
 		}
 		return false;
@@ -50,7 +51,6 @@ public class HeartRateMonitor extends Activity {
 		_camera = null;
 	}
 
-	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -58,7 +58,7 @@ public class HeartRateMonitor extends Activity {
 
 		have_a_Camera = checkCameraHardware(this);
 		have_a_Flashlight = checkFlashLight(this);
-		if(!have_a_Flashlight)
+		if (!have_a_Flashlight)
 			Log.e(HRM_TAG, "have no flash light");
 
 		_camera = getCamera();
@@ -72,8 +72,33 @@ public class HeartRateMonitor extends Activity {
 	}
 
 	@Override
+	protected void onStart() {
+		super.onStart();
+	}
+
+	@Override
+	protected void onRestart() {
+		super.onRestart();
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+	}
+
+	@Override
 	protected void onPause() {
 		super.onPause();
 		releaseCamera();
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
 	}
 }

@@ -17,6 +17,10 @@ jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativeSta
 
     I("native start");
 
+    if(hrp){
+        W("native started: warning memory leak");
+    }
+
     hrp = new hrm::HeartRateProcessor();
     return hrp->start();
 }
@@ -26,8 +30,12 @@ void Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativeStop(
 
     I("native stop");
 
-    if(hrp)
-        hrp->stop();
+    if(!hrp){
+        E("native stoped");
+        return;
+    }
+
+    hrp->stop();
     myFree(hrp);
 
     I("native stoped");
