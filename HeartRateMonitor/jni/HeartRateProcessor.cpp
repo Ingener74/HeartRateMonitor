@@ -1,18 +1,23 @@
 /*
  * HeartRateProcessor.cpp
  *
- *  Created on: 24 но€б. 2013 г.
+ *  Created on: 24.11.2013
  *      Author: Admin
  */
 
 #include <HeartRateProcessor.h>
 
+#include <TestModule.h>
+
 namespace hrm {
 
-HeartRateProcessor::HeartRateProcessor() {
+HeartRateProcessor::HeartRateProcessor(): _test(0){
+    _test = new TestModule();
 }
 
 HeartRateProcessor::~HeartRateProcessor() {
+    delete _test;
+    _test = 0;
 }
 
 bool hrm::HeartRateProcessor::start() {

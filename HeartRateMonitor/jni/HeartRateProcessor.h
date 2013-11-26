@@ -1,12 +1,14 @@
 /*
  * HeartRateProcessor.h
  *
- *  Created on: 24 но€б. 2013 г.
+ *  Created on: 24.11.2013
  *      Author: Admin
  */
 
 #ifndef HEARTRATEPROCESSOR_H_
 #define HEARTRATEPROCESSOR_H_
+
+#include <IModule.h>
 
 namespace hrm {
 
@@ -18,6 +20,8 @@ public:
     bool start();
     void stop();
 
+private:
+    IModule* _test;
 };
 
 } /* namespace hrm */
