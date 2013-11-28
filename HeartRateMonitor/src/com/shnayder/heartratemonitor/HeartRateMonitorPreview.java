@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
 import android.hardware.Camera.PreviewCallback;
@@ -20,16 +21,70 @@ public class HeartRateMonitorPreview extends SurfaceView implements
 	}
 
 	private native boolean hrmNativeStart();
-
 	private native void hrmNativeStop();
 
 	private SurfaceHolder _holder;
+	
 	private Camera _camera;
+	private boolean _cameraIsPresent;
+	
+	public boolean start() {
+		if (_camera == null)
+			return false;
+		
+		cameraStart();
+		
+		if( hrmNativeStart() == false ){
+			
+			return false;
+		}
+		
+		return true;
+	}
+	
+	public void stop(){
+	}
+	
+	private boolean checkCameraHardware(Context context) {
+		if (!context.getPackageManager().hasSystemFeature(
+				PackageManager.FEATURE_CAMERA)) {
+			return false;
+		}
+		return true;
+	}
 
-	public HeartRateMonitorPreview(Context context, Camera camera) {
+	private boolean checkFlashLight(Context context) {
+		if (context.getPackageManager().hasSystemFeature(
+				PackageManager.FEATURE_CAMERA_FLASH)) {
+			return true;
+		}
+		return false;
+	}
+
+	public static Camera getCamera() {
+		Camera c = null;
+		try {
+			c = Camera.open();
+		} catch (Exception e) {
+			Log.e(HeartRateMonitor.HRM_TAG,
+					"getCamera failed: " + e.getMessage());
+		}
+		return c;
+	}
+
+	private void releaseCamera() {
+		if (_camera == null)
+			return;
+		_camera.release();
+		_camera = null;
+	}
+
+	public HeartRateMonitorPreview(Context context) {
 		super(context);
+		
+		_cameraIsPresent = checkCameraHardware(context);
 
-		_camera = camera;
+		_camera = getCamera();
 
 		_holder = getHolder();
 		_holder.addCallback(this);
@@ -37,6 +92,8 @@ public class HeartRateMonitorPreview extends SurfaceView implements
 	}
 
 	private void setFlashOn() {
+		if(_camera == null)
+			return;
 		Parameters camPam = _camera.getParameters();
 
 		camPam.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
@@ -74,10 +131,18 @@ public class HeartRateMonitorPreview extends SurfaceView implements
 		return true;
 	}
 
+	/**********************************************************************
+	 * 
+	 */
+	
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
 			int height) {
 		Log.i(HeartRateMonitor.HRM_TAG, "hrm preview changed");
+		
+		// FIXME
+//		stop();
+//		start();
 
 		if (_holder.getSurface() == null) {
 			return;
@@ -95,13 +160,17 @@ public class HeartRateMonitorPreview extends SurfaceView implements
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
 		Log.i(HeartRateMonitor.HRM_TAG, "hrm preview created");
-		cameraStart();
 
+		// FIXME
+		cameraStart();
 		hrmNativeStart();
 	}
 
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
+		
+		// FIXME
+		
 		Log.i(HeartRateMonitor.HRM_TAG, "hrm preview destroyed");
 		hrmNativeStop();
 
