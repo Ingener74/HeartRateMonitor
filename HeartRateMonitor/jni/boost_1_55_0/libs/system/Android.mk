@@ -10,8 +10,6 @@
 
 LOCAL_PATH                             := $(call my-dir)
 
-$(info    building boost_system)
-
 include $(CLEAR_VARS)
 LOCAL_MODULE                           := boost_system
 LOCAL_SRC_FILES                        := src/error_code.cpp

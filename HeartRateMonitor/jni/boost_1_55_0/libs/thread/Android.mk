@@ -10,8 +10,6 @@
 
 LOCAL_PATH                             := $(call my-dir)
 
-$(info    building boost_thread)
-
 include $(CLEAR_VARS)
 LOCAL_MODULE                           := boost_thread
 LOCAL_SRC_FILES                        := src/future.cpp \

@@ -10,8 +10,6 @@
 
 LOCAL_PATH                             := $(call my-dir)
 
-$(info    building test_module)
-
 include $(CLEAR_VARS)
 LOCAL_MODULE                           := test_module
 LOCAL_SRC_FILES                        := IModule.cpp \
