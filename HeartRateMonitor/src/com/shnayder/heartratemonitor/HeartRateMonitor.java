@@ -35,8 +35,6 @@ public class HeartRateMonitor extends Activity {
 	protected void onStart() {
 		Log.i(HRM_TAG, "onStart");
 		super.onStart();
-		
-		_cameraPreview.start();
 	}
 
 	@Override
@@ -61,8 +59,6 @@ public class HeartRateMonitor extends Activity {
 	protected void onStop() {
 		Log.i(HRM_TAG, "onStop");
 		super.onStop();
-		
-		_cameraPreview.stop();
 	}
 
 	@Override
