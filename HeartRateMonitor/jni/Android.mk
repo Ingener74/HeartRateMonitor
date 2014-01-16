@@ -15,28 +15,39 @@ MY_ROOT                                := $(LOCAL_PATH)
 LOCAL_PATH                             := $(MY_ROOT)
 include $(LOCAL_PATH)/test_module/Android.mk
 
-# boost
-LOCAL_PATH                             := $(MY_ROOT)
-include $(LOCAL_PATH)/boost_1_55_0/libs/system/Android.mk
-LOCAL_PATH                             := $(MY_ROOT)
-include $(LOCAL_PATH)/boost_1_55_0/libs/thread/Android.mk
 
 # Heart Rate Monitor library
 include $(CLEAR_VARS)
 LOCAL_PATH                             := $(MY_ROOT)
 
+LOCAL_ALLOW_UNDEFINED_SYMBOLS := true
+BOOST_LIBS := \
+	$(LOCAL_PATH)/boost/lib/libboost_atomic-gcc-mt-1_55.a \
+	$(LOCAL_PATH)/boost/lib/libboost_date_time-gcc-mt-1_55.a \
+	$(LOCAL_PATH)/boost/lib/libboost_filesystem-gcc-mt-1_55.a \
+	$(LOCAL_PATH)/boost/lib/libboost_iostreams-gcc-mt-1_55.a \
+	$(LOCAL_PATH)/boost/lib/libboost_program_options-gcc-mt-1_55.a \
+	$(LOCAL_PATH)/boost/lib/libboost_regex-gcc-mt-1_55.a \
+	$(LOCAL_PATH)/boost/lib/libboost_signals-gcc-mt-1_55.a \
+	$(LOCAL_PATH)/boost/lib/libboost_system-gcc-mt-1_55.a \
+	$(LOCAL_PATH)/boost/lib/libboost_thread-gcc-mt-1_55.a \
+
 LOCAL_MODULE                           := heartratemonitor
 
 LOCAL_C_INCLUDES                       := $(LOCAL_PATH)/test_module \
-                                          $(LOCAL_PATH)/boost_1_55_0
-                                          
+                                          $(LOCAL_PATH)/boost/include/boost-1_55
+
 LOCAL_SRC_FILES                        := HeartRateMonitorPreview.cpp \
                                           HeartRateProcessor.cpp
-                                          
-LOCAL_STATIC_LIBRARIES                 := test_module boost_system boost_thread
 
-LOCAL_LDLIBS                           := -llog -landroid
+LOCAL_STATIC_LIBRARY := $(BOOST_LIBS)
+include $(PREBUILD_STATIC_LIBRARY)
+
+LOCAL_STATIC_LIBRARIES                 := test_module
+LOCAL_LDLIBS                           := -llog -landroid $(BOOST_LIBS)
+
+LOCAL_CPPFLAGS += -fexceptions
+LOCAL_CPPFLAGS += -frtti
+
 include $(BUILD_SHARED_LIBRARY)
 $(call import-module test_module)
-$(call import-module boost_system)
-$(call import-module boost_thread)

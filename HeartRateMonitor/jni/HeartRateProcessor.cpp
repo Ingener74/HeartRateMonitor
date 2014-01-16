@@ -5,7 +5,7 @@
  *      Author: Admin
  */
 
-#include <HeartRateProcessor.h>
+#include "HeartRateProcessor.h"
 #include "hrm_defines.h"
 
 namespace hrm {
