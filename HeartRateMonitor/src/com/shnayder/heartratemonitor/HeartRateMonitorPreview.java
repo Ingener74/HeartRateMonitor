@@ -17,7 +17,7 @@ public class HeartRateMonitorPreview extends SurfaceView implements
 		SurfaceHolder.Callback, PreviewCallback {
 
 	static {
-		System.loadLibrary("heartratemonitor");
+		System.loadLibrary("HeartRateMonitor");
 	}
 
 	private native boolean hrmNativeStart();
@@ -155,7 +155,7 @@ public class HeartRateMonitorPreview extends SurfaceView implements
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
 		Log.i(HeartRateMonitor.HRM_TAG, "HeartRateMonitorPreview -> surfaceCreated");
-//		star
+		
 	}
 	
 	@Override
