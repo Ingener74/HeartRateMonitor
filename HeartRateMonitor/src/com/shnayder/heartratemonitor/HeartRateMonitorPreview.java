@@ -24,129 +24,44 @@ public class HeartRateMonitorPreview extends SurfaceView implements
 	private native void hrmNativeStop();
 
 	private SurfaceHolder _holder;
-	
 	private Camera _camera;
-	private boolean _cameraIsPresent;
 	
-//	public boolean start() {
-//		if(!_cameraIsPresent){
-//			Log.e(HeartRateMonitor.HRM_TAG, "have no camera");
-//			return false;
-//		}
-//		
-//		Log.i(HeartRateMonitor.HRM_TAG, "preview start");
-//		if (_camera == null){
-//			Log.e(HeartRateMonitor.HRM_TAG,
-//					"preview start fail: camera is null");
-//			return false;
-//		}
-//		
-//		if(_holder.getSurface() == null){
-//			Log.e(HeartRateMonitor.HRM_TAG,
-//					"preview start fail: holder surface is null");
-//			return false;
-//		}
-//		try {
-//			_camera.setPreviewDisplay(_holder);
-//			_camera.setPreviewCallback(this);
-//			setFlashOn();
-//			_camera.startPreview();
+//	private boolean _cameraIsPresent;
+//	
+//	private void setFlashOn() {
+//		if(_camera == null)
+//			return;
+//		Parameters camPam = _camera.getParameters();
 //
-//		} catch (IOException e) {
-//			Log.e(HeartRateMonitor.HRM_TAG,
-//					"camera start fail: " + e.getMessage());
-//			return false;
+//		camPam.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+//
+//		int w = -1, h = -1;
+//		List<Size> prevSizes = camPam.getSupportedPreviewSizes();
+//		for (Size size : prevSizes) {
+//			if (w == -1)
+//				w = size.width;
+//			if (h == -1)
+//				h = size.height;
+//			if (size.height < h || size.width < w) {
+//				w = size.width;
+//				h = size.height;
+//			}
 //		}
-//		if(hrmNativeStart() == false){
-//			Log.e(HeartRateMonitor.HRM_TAG,
-//					"camera start fail: native start false");
-//		}
-//		return true;
+//		camPam.setPreviewSize(w, h);
+//
+//		Log.i(HeartRateMonitor.HRM_TAG, "ps: " + w + " x " + h);
+//
+//		_camera.setParameters(camPam);
 //	}
 	
-	public void stop(){
-		if(_camera != null){
-			try {
-				_camera.stopPreview();
-				
-			} catch (Exception e) {
-				Log.e(HeartRateMonitor.HRM_TAG,
-						"preview stop fail: " + e.getMessage());
-			}
-		}
-	}
-	
-	private boolean checkCameraHardware(Context context) {
-		if (!context.getPackageManager().hasSystemFeature(
-				PackageManager.FEATURE_CAMERA)) {
-			return false;
-		}
-		return true;
-	}
-
-	private boolean checkFlashLight(Context context) {
-		if (context.getPackageManager().hasSystemFeature(
-				PackageManager.FEATURE_CAMERA_FLASH)) {
-			return true;
-		}
-		return false;
-	}
-
-	private boolean cameraStart() {
-		try {
-			_camera.setPreviewDisplay(_holder);
-			_camera.setPreviewCallback(this);
-			setFlashOn();
-			_camera.startPreview();
-
-		} catch (IOException e) {
-			Log.e(HeartRateMonitor.HRM_TAG, "camera start fail: " + e.getMessage());
-			return false;
-		}
-		return true;
-	}
-	
-	private void setFlashOn() {
-		if(_camera == null)
-			return;
-		Parameters camPam = _camera.getParameters();
-
-		camPam.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
-
-		int w = -1, h = -1;
-		List<Size> prevSizes = camPam.getSupportedPreviewSizes();
-		for (Size size : prevSizes) {
-			if (w == -1)
-				w = size.width;
-			if (h == -1)
-				h = size.height;
-			if (size.height < h || size.width < w) {
-				w = size.width;
-				h = size.height;
-			}
-		}
-		camPam.setPreviewSize(w, h);
-
-		Log.i(HeartRateMonitor.HRM_TAG, "ps: " + w + " x " + h);
-
-		_camera.setParameters(camPam);
-	}
-
 	/**********************************************************************
 	 * 
 	 */
-	public HeartRateMonitorPreview(Context context) {
+	public HeartRateMonitorPreview(Context context, Camera camera) {
 		super(context);
 		
-		_cameraIsPresent = checkCameraHardware(context);
-
-		try {
-			_camera = Camera.open();
-		} catch (Exception e) {
-			Log.e(HeartRateMonitor.HRM_TAG,
-					"Camera.open(): fail " + e.getMessage());
-		}
-
+		_camera = camera;
+		
 		_holder = getHolder();
 		_holder.addCallback(this);
 		_holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
@@ -154,24 +69,35 @@ public class HeartRateMonitorPreview extends SurfaceView implements
 	
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
-		Log.i(HeartRateMonitor.HRM_TAG, "HeartRateMonitorPreview -> surfaceCreated");
-		
+		try {
+			_camera.setPreviewDisplay(_holder);
+			_camera.startPreview();
+		} catch (IOException e) {
+			Log.e(HeartRateMonitor.HRM_TAG, "camera start preview fail: " + e.getMessage());
+		}
 	}
 	
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
 			int height) {
-		Log.i(HeartRateMonitor.HRM_TAG, "hrm preview changed");
+		if(_holder.getSurface() == null){
+			return;
+		}
+		try {
+			_camera.stopPreview();
+		} catch (Exception e) {
+			Log.e(HeartRateMonitor.HRM_TAG, "camera stop preview fail: " + e.getMessage());
+		}
+		try {
+			_camera.setPreviewDisplay(_holder);
+			_camera.startPreview();
+		} catch (Exception e) {
+			Log.e(HeartRateMonitor.HRM_TAG, "camera restart preview fail: " + e.getMessage());
+		}
 	}
 
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
-		Log.i(HeartRateMonitor.HRM_TAG, "HeartRateMonitorPreview -> surfaceDestroyed");
-		
-		if (_camera == null)
-			return;
-		_camera.release();
-		_camera = null;
 	}
 
 	@Override

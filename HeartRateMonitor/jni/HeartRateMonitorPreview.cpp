@@ -5,23 +5,27 @@
  *      Author: pavel
  */
 
+#include <boost/smart_ptr.hpp>
+
 #include "HeartRateMonitorPreview.h"
 
 #include "hrm_defines.h"
 #include "HeartRateProcessor.h"
 
-hrm::HeartRateProcessor * hrp = 0;
+//hrm::HeartRateProcessor * hrp = 0;
+
+boost::shared_ptr<hrm::HeartRateProcessor> hrp;
 
 jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativeStart(
         JNIEnv*, jobject) {
 
     I("native start");
 
-    if(hrp){
-        W("native started: warning memory leak");
-    }
+//    if(hrp){
+//        W("native started: warning memory leak");
+//    }
 
-    hrp = new hrm::HeartRateProcessor();
+    hrp = boost::shared_ptr<hrm::HeartRateProcessor>(new hrm::HeartRateProcessor());
     return hrp->start();
 }
 
@@ -36,7 +40,7 @@ void Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativeStop(
     }
 
     hrp->stop();
-    myFree(hrp);
+//    myFree(hrp);
 
     I("native stoped");
 }

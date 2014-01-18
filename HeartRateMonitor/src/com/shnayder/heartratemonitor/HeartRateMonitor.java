@@ -18,16 +18,36 @@ import android.widget.ImageView;
 public class HeartRateMonitor extends Activity {
 	public static String HRM_TAG = "Heart Rate Monitor Java";
 
+	private Camera _camera = null;
 	private HeartRateMonitorPreview _cameraPreview = null;
 	private FrameLayout _previewFrameLayout = null;
+	
+	private boolean checkCamera(Context context){
+		if(!context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)){
+			return false;
+		}
+		return true;
+	}
+	
+	private static Camera getCameraInstance(){
+		Camera c = null;
+		try {
+			c = Camera.open();
+		} catch (Exception e) {
+			Log.e(HeartRateMonitor.HRM_TAG, "camera open fail");
+		}
+		return c;
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		Log.i(HRM_TAG, "onCreate");
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-
-		_cameraPreview = new HeartRateMonitorPreview(this);
+		
+		_camera = getCameraInstance();
+		
+		_cameraPreview = new HeartRateMonitorPreview(this, _camera);
 		_previewFrameLayout = (FrameLayout)findViewById(R.id.previewFrame);
 		_previewFrameLayout.addView(_cameraPreview);
 	}

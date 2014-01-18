@@ -47,7 +47,8 @@ LOCAL_STATIC_LIBRARIES := \
 	
 LOCAL_LDLIBS := \
 	-llog -landroid $(BOOST_LIBS) \
-	${ANDROID_NDK}/sources/cxx-stl/gnu-libstdc++/4.7/libs/armeabi-v7a/libgnustl_static.a # FIXME
+	/home/pavel/dev/android-ndk-r8e/sources/cxx-stl/gnu-libstdc++/4.7/libs/armeabi-v7a/libgnustl_static.a
+#	$(ANDROID_NDK)/sources/cxx-stl/gnu-libstdc++/4.7/libs/armeabi-v7a/libgnustl_static.a # FIXME
 
 LOCAL_CPPFLAGS += -fexceptions -frtti
 
