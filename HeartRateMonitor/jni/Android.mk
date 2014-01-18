@@ -21,21 +21,22 @@ include $(CLEAR_VARS)
 LOCAL_PATH                             := $(MY_ROOT)
 
 LOCAL_ALLOW_UNDEFINED_SYMBOLS := true
+BOOST_PATH := $(LOCAL_PATH)/../../build_android/3RDPARTY
 BOOST_LIBS := \
-	$(LOCAL_PATH)/boost/lib/libboost_atomic-gcc-mt-1_55.a \
-	$(LOCAL_PATH)/boost/lib/libboost_date_time-gcc-mt-1_55.a \
-	$(LOCAL_PATH)/boost/lib/libboost_filesystem-gcc-mt-1_55.a \
-	$(LOCAL_PATH)/boost/lib/libboost_iostreams-gcc-mt-1_55.a \
-	$(LOCAL_PATH)/boost/lib/libboost_program_options-gcc-mt-1_55.a \
-	$(LOCAL_PATH)/boost/lib/libboost_regex-gcc-mt-1_55.a \
-	$(LOCAL_PATH)/boost/lib/libboost_signals-gcc-mt-1_55.a \
-	$(LOCAL_PATH)/boost/lib/libboost_system-gcc-mt-1_55.a \
-	$(LOCAL_PATH)/boost/lib/libboost_thread-gcc-mt-1_55.a \
+	$(BOOST_PATH)/lib/libboost_atomic-gcc-mt-1_55.a \
+	$(BOOST_PATH)/lib/libboost_date_time-gcc-mt-1_55.a \
+	$(BOOST_PATH)/lib/libboost_filesystem-gcc-mt-1_55.a \
+	$(BOOST_PATH)/lib/libboost_iostreams-gcc-mt-1_55.a \
+	$(BOOST_PATH)/lib/libboost_program_options-gcc-mt-1_55.a \
+	$(BOOST_PATH)/lib/libboost_regex-gcc-mt-1_55.a \
+	$(BOOST_PATH)/lib/libboost_signals-gcc-mt-1_55.a \
+	$(BOOST_PATH)/lib/libboost_system-gcc-mt-1_55.a \
+	$(BOOST_PATH)/lib/libboost_thread-gcc-mt-1_55.a \
 
 LOCAL_MODULE                           := HeartRateMonitor
 
 LOCAL_C_INCLUDES                       := $(LOCAL_PATH)/test_module \
-                                          $(LOCAL_PATH)/boost/include/boost-1_55
+                                          $(BOOST_PATH)/include/boost-1_55
 
 LOCAL_SRC_FILES                        := HeartRateMonitorPreview.cpp \
                                           HeartRateProcessor.cpp
