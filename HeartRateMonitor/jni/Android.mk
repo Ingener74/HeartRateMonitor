@@ -32,7 +32,7 @@ BOOST_LIBS := \
 	$(LOCAL_PATH)/boost/lib/libboost_system-gcc-mt-1_55.a \
 	$(LOCAL_PATH)/boost/lib/libboost_thread-gcc-mt-1_55.a \
 
-LOCAL_MODULE                           := heartratemonitor
+LOCAL_MODULE                           := HeartRateMonitor
 
 LOCAL_C_INCLUDES                       := $(LOCAL_PATH)/test_module \
                                           $(LOCAL_PATH)/boost/include/boost-1_55
