@@ -10,7 +10,7 @@
 
 namespace hrm {
 
-HeartRateProcessor::HeartRateProcessor(): _hrpStop(false){
+HeartRateProcessor::HeartRateProcessor(IFrameSource* fs): _frameSource(fs){
 }
 
 HeartRateProcessor::~HeartRateProcessor() {
@@ -18,34 +18,52 @@ HeartRateProcessor::~HeartRateProcessor() {
 
 bool hrm::HeartRateProcessor::start() {
     I("heart rate processor start");
+    _start.get<2>() = false;
+    boost::unique_lock<boost::mutex> lock(_start.get<0>());
     _hrpThread = boost::thread(boost::bind(&HeartRateProcessor::body, this));
-    return true;
+    _start.get<1>().wait(lock);
+    return _start.get<2>();
 }
 
 void hrm::HeartRateProcessor::stop() {
     I("heart rate processor stop");
-    {
-        boost::mutex::scoped_lock lock(_hrpStopMutex);
-        _hrpStop = true;
-    }
+    _hrpThread.interrupt();
     _hrpThread.join();
     I("heart rate processor stoped");
 }
 
-void HeartRateProcessor::body(){
-
-    I("heart rate processor whiskers");
-
-    for(;;){
+void HeartRateProcessor::body() {
+    if(boost::this_thread::interruption_enabled())
+        D("boost::this_thread::interruption_enabled()");
+    try {
+        I("heart rate processor whiskers");
         {
-            boost::mutex::scoped_lock lock(_hrpStopMutex);
-            if(_hrpStop)
-                break;
-        }
+            boost::unique_lock<boost::mutex> lock(_start.get<0>());
 
-        usleep(30 * 1000);
+
+
+        }
+        _start.get<2>() = true;
+        _start.get<1>().notify_all();
+        I("heart rate processor body");
+        while(1){
+            boost::this_thread::interruption_point();
+
+            {
+                /*
+                 * wait frame
+                 */
+                _frameSource->getFrame();
+
+                /*
+                 * process
+                 */
+            }
+
+        }
+    } catch (const boost::thread_interrupted& e) {
+        I("heart rate processor tail");
     }
-    I("heart rate processor tail");
 }
 
 } /* namespace hrm */

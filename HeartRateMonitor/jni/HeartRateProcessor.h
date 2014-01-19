@@ -8,14 +8,17 @@
 #ifndef HEARTRATEPROCESSOR_H_
 #define HEARTRATEPROCESSOR_H_
 
+#include <utility>
 #include <boost/thread.hpp>
 #include <boost/thread/mutex.hpp>
+
+#include "IFrameSource.h"
 
 namespace hrm {
 
 class HeartRateProcessor {
 public:
-    HeartRateProcessor();
+    HeartRateProcessor(IFrameSource* fs);
     virtual ~HeartRateProcessor();
 
     bool start();
@@ -25,8 +28,9 @@ private:
     void body();
 
     boost::thread _hrpThread;
-    boost::mutex  _hrpStopMutex;
-    bool          _hrpStop;
+    boost::tuples::tuple<boost::mutex, boost::condition_variable, bool> _start;
+
+    IFrameSource* _frameSource;
 };
 
 } /* namespace hrm */
