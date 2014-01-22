@@ -1,7 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
 
-include(ExternalProject)
-
 set(EXT_BOOST ext_boost)
 set(EXT_BOOST_VERSION "1.55.0" CACHE STRING "Boost-for-Android version")
 set(EXT_BOOST_BINDIR
@@ -19,7 +17,7 @@ if(ANDROID)
         INSTALL_COMMAND cp -R ${EXT_BOOST_BINDIR}/build/include/ ${3RDPARTY_INSTALL} &&
             cp -R ${EXT_BOOST_BINDIR}/build/lib/ ${3RDPARTY_INSTALL}
         )
+    set_target_properties(${EXT_BOOST} PROPERTIES EXCLUDE_FROM_ALL "TRUE")
 else()
 endif()
 
-set_target_properties(${EXT_BOOST} PROPERTIES EXCLUDE_FROM_ALL "TRUE")
