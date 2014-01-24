@@ -2,12 +2,12 @@ cmake_minimum_required(VERSION 2.8)
 
 include(ExternalProject)
 
-set(3RDPARTY_BUILD_TYPE Release)
-set(3RDPARTY_INSTALL ${CMAKE_BINARY_DIR}/3RDPARTY)
-
-file(MAKE_DIRECTORY ${3RDPARTY_INSTALL})
-file(MAKE_DIRECTORY ${3RDPARTY_INSTALL}/lib)
-file(MAKE_DIRECTORY ${3RDPARTY_INSTALL}/include)
+#set(3RDPARTY_BUILD_TYPE Release)
+#set(3RDPARTY_INSTALL ${CMAKE_BINARY_DIR}/3RDPARTY)
+#
+#file(MAKE_DIRECTORY ${3RDPARTY_INSTALL})
+#file(MAKE_DIRECTORY ${3RDPARTY_INSTALL}/lib)
+#file(MAKE_DIRECTORY ${3RDPARTY_INSTALL}/include)
 
 add_subdirectory(boost)
 add_subdirectory(gtest)
