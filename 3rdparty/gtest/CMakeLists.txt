@@ -17,5 +17,6 @@ else()
             cp ${EXT_GTEST_BINDIR}/libgtest_main.a ${3RDPARTY_INSTALL}/lib/ && 
             cp -R ${EXT_GTEST_SRCDIR}/include/ ${3RDPARTY_INSTALL}
         )
+    set_target_properties(${EXT_GTEST} PROPERTIES EXCLUDE_FROM_ALL "TRUE")
 endif()
 

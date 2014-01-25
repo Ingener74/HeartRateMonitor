@@ -21,6 +21,8 @@ add_custom_target(
 else()
 add_custom_target(
     ${PREPARE}
-    DEPENDS ext_gtest
+    DEPENDS 
+        ext_gtest 
+        ext_boost
     )
 endif()
