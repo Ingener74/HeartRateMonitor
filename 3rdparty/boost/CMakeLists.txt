@@ -8,7 +8,8 @@ set(EXT_BOOST_SRCDIR
 if(ANDROID)
     ExternalProject_Add(
         ${EXT_BOOST}
-        GIT_REPOSITORY https://github.com/MysticTreeGames/Boost-for-Android.git
+        # GIT_REPOSITORY https://github.com/MysticTreeGames/Boost-for-Android.git
+        URL ${CMAKE_CURRENT_LIST_DIR}/Boost-for-Android-master.zip
         CONFIGURE_COMMAND ""
         BUILD_COMMAND bash ${EXT_BOOST_SRCDIR}/build-android.sh ${ANDROID_NDK} --boost=${EXT_BOOST_VERSION}
         BINARY_DIR ${EXT_BOOST_SRCDIR}
