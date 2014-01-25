@@ -15,6 +15,9 @@ MY_ROOT                                := $(LOCAL_PATH)
 LOCAL_PATH                             := $(MY_ROOT)
 include $(LOCAL_PATH)/test_module/Android.mk
 
+# heartbeatrate module
+LOCAL_PATH                             := $(MY_ROOT)
+include $(LOCAL_PATH)/../../modules/libheartbeatrate/Android.mk
 
 # Heart Rate Monitor library
 include $(CLEAR_VARS)
@@ -35,15 +38,16 @@ BOOST_LIBS := \
 LOCAL_MODULE                           := HeartRateMonitor
 
 LOCAL_C_INCLUDES                       := $(LOCAL_PATH)/test_module \
-                                          $(BOOST_PATH)/include/boost-1_55
+                                          $(BOOST_PATH)/include \
+                                          $(LOCAL_PATH)/../../modules/libheartbeatrate/include
 
 LOCAL_SRC_FILES := \
 	HeartRateMonitor.cpp \
-	HeartRateMonitorPreview.cpp \
-	HeartRateProcessor.cpp
+	HeartRateMonitorPreview.cpp
 
 LOCAL_STATIC_LIBRARIES := \
-	test_module
+	test_module \
+	heartbeatrate
 	
 LOCAL_LDLIBS := \
 	-llog -landroid $(BOOST_LIBS) \
@@ -54,3 +58,4 @@ LOCAL_CPPFLAGS += -fexceptions -frtti
 
 include $(BUILD_SHARED_LIBRARY)
 $(call import-module test_module)
+$(call import-module heartbeatrate)

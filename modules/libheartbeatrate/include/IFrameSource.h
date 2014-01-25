@@ -16,7 +16,7 @@ class IFrameSource{
 public:
     virtual ~IFrameSource(){}
 
-    virtual boost::shared_lock<boost::mutex> getFrame() = 0;
+//    virtual boost::shared_lock<boost::mutex> getFrame() = 0;
 
     virtual void setFrame() = 0;
 

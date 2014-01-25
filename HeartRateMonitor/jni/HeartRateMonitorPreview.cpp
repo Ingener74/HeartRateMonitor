@@ -25,7 +25,7 @@ boost::shared_ptr<hrm::IFrameSource> frameSource;
 jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativeStart(
         JNIEnv* JNIEnv_, jobject thiz) {
 
-    frameSource = boost::shared_ptr<hrm::IFrameSource>(new ConcreteFrameSource());
+//    frameSource = boost::shared_ptr<hrm::IFrameSource>(new ConcreteFrameSource());
 
     I("native start");
     hrp = boost::shared_ptr<hrm::HeartRateProcessor>(new hrm::HeartRateProcessor(frameSource.get()));

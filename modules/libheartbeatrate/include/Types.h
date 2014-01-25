@@ -50,7 +50,7 @@ struct FrameRect {
     bool operator!() const {
         return (!_rows || !_cols);
     }
-    bool operator bool(){
+    operator bool(){
         return _rows && _cols;
     }
     uint32_t area() const {
@@ -72,8 +72,9 @@ struct FrameFormat {
     bool operator!() const {
         return !_rect;
     }
-    bool operator bool() const {
-        return _rect;
+    operator bool() const {
+//        return bool(_rect); // FIXME
+        return false;
     }
     uint32_t size() const {
         return _rect.area() * _bytesInPixel;

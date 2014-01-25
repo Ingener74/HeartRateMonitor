@@ -9,6 +9,11 @@ file(MAKE_DIRECTORY ${3RDPARTY_INSTALL}/include)
 
 include_directories(${3RDPARTY_INSTALL}/include)
 link_directories(${3RDPARTY_INSTALL}/lib)
+if(ANDROID)
+    message(STATUS api level = ${ANDROID_NATIVE_API_LEVEL})
+    include_directories(${ANDROID_NDK}/platforms/android-${ANDROID_NATIVE_API_LEVEL}/arch-arm/usr/include)
+else()
+endif()
 
 add_subdirectory(3rdparty)
 

@@ -53,7 +53,7 @@ void HeartRateProcessor::body() {
                 /*
                  * wait frame
                  */
-                _frameSource->getFrame();
+//                _frameSource->getFrame();
 
                 /*
                  * process
