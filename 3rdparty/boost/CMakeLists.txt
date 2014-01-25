@@ -12,8 +12,9 @@ if(ANDROID)
         CONFIGURE_COMMAND ""
         BUILD_COMMAND bash ${EXT_BOOST_SRCDIR}/build-android.sh ${ANDROID_NDK} --boost=${EXT_BOOST_VERSION}
         BINARY_DIR ${EXT_BOOST_SRCDIR}
-        INSTALL_COMMAND cp -R ${EXT_BOOST_SRCDIR}/build/include/ ${3RDPARTY_INSTALL} &&
-        cp -R ${EXT_BOOST_SRCDIR}/build/lib/ ${3RDPARTY_INSTALL}
+        INSTALL_COMMAND 
+            cp -R ${EXT_BOOST_SRCDIR}/build/include/boost-1_55/boost ${3RDPARTY_INSTALL}/include &&
+            cp -R ${EXT_BOOST_SRCDIR}/build/lib/ ${3RDPARTY_INSTALL}
         )
     set_target_properties(${EXT_BOOST} PROPERTIES EXCLUDE_FROM_ALL "TRUE")
 else()

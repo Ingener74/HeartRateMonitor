@@ -7,13 +7,8 @@ file(MAKE_DIRECTORY ${3RDPARTY_INSTALL})
 file(MAKE_DIRECTORY ${3RDPARTY_INSTALL}/lib)
 file(MAKE_DIRECTORY ${3RDPARTY_INSTALL}/include)
 
-if(ANDROID)
-    include_directories(${3RDPARTY_INSTALL}/include/boost-1_55)
-    link_directories(${3RDPARTY_INSTALL}/lib)
-else()
-    include_directories(${3RDPARTY_INSTALL}/include)
-    link_directories(${3RDPARTY_INSTALL}/lib)
-endif()
+include_directories(${3RDPARTY_INSTALL}/include)
+link_directories(${3RDPARTY_INSTALL}/lib)
 
 add_subdirectory(3rdparty)
 
