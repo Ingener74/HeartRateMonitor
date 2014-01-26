@@ -8,6 +8,7 @@ include_directories(include)
 set(SOURCES
     src/HeartRateProcessor.cpp
     src/RGBFrameSource.cpp
+    src/NV21FrameSource.cpp
     )
 
 add_library(${PROJECT_NAME} ${SOURCES})

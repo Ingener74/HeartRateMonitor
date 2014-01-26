@@ -9,16 +9,25 @@
 
 namespace hrm {
 
-hrm::RGBFrameSource::RGBFrameSource() {
+hrm::RGBFrameSource::RGBFrameSource(boost::shared_ptr<NV21FrameSource> nv21) :
+        _nv21(nv21) {
 }
 
 hrm::RGBFrameSource::~RGBFrameSource() {
 }
 
-boost::shared_lock<boost::mutex> hrm::RGBFrameSource::getFrame() {
-}
+LockedFrame RGBFrameSource::getFrame() {
+    {
+        LockedFrame lockedFrame = _nv21->getFrame();
 
-void hrm::RGBFrameSource::setFrame() {
+        /*
+         * convert nv21 to rgb
+         */
+    }
+    LockedFrame lockedFrame(
+            boost::shared_ptr<boost::unique_lock<boost::mutex> >(
+                    new boost::unique_lock<boost::mutex>(_frameMutex)), _frame);
+    return lockedFrame;
 }
 
 }  // namespace hrm

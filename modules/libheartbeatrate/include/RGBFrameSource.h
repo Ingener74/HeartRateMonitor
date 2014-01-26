@@ -8,20 +8,20 @@
 #ifndef RGBFRAMESOURCE_H_
 #define RGBFRAMESOURCE_H_
 
-#include "IFrameSource.h"
+#include "NV21FrameSource.h"
 
 namespace hrm {
 
 class RGBFrameSource : public IFrameSource{
 public:
-    RGBFrameSource();
+    RGBFrameSource(boost::shared_ptr<NV21FrameSource> nv21);
     virtual ~RGBFrameSource();
 
-    virtual boost::shared_lock<boost::mutex> getFrame();
-
-    virtual void setFrame();
-
+    virtual LockedFrame getFrame();
 private:
+    Frame _frame;
+    boost::mutex _frameMutex;
+    boost::shared_ptr<NV21FrameSource> _nv21;
 };
 
 }  // namespace hrm

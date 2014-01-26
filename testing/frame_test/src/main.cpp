@@ -1,25 +1,10 @@
-#include <Types.h>
+#include <HeartBeatRateTypes.h>
 #include <gtest/gtest.h>
 
 namespace HRM_Testing {
 
-//class FrameTest: public ::testing::Test {
-//public:
-//    FrameTest() {
-//    }
-//    virtual ~FrameTest() {
-//    }
-//
-//    virtual void SetUp(){
-//    }
-//    virtual void TearDown(){
-//    }
-//
-//private:
-//};
-
 /*
- * Frame format
+ * Frame rect
  */
 
 TEST(FrameTest, FrameRectEmpty) {
@@ -117,6 +102,9 @@ TEST(FrameTest, FrameFormatEqual) {
     EXPECT_TRUE(ff5 != ff6);
 }
 
+/*
+ * Frame
+ */
 TEST(FrameTest, FrameEmpty) {
     hrm::Frame f1;
     EXPECT_FALSE(f1);
@@ -131,6 +119,25 @@ TEST(FrameTest, FrameEmpty) {
 
     uint8_t * data2 = f2.getData();
     EXPECT_TRUE(data2 != NULL);
+}
+
+TEST(FrameTest, FrameAssignment){
+    hrm::Frame f1(hrm::FrameFormat(hrm::FrameRect(10, 10))), f2 = f1;
+    EXPECT_TRUE(f1.getFrameFormat() == f2.getFrameFormat());
+    EXPECT_TRUE(f1.getData() == f2.getData());
+
+    uint8_t * data1 = f1.getData();
+    for (int i = 0; i < f1.getFrameFormat().size(); ++i, ++data1) {
+        *data1 = i;
+    }
+
+    uint8_t * data2 = f1.getData(), *data3 = f2.getData();
+    EXPECT_TRUE(
+            data2[f1.getFrameFormat().size() - 1]
+                    == data3[f2.getFrameFormat().size() - 1]);
+
+    EXPECT_EQ(99, data2[f1.getFrameFormat().size() - 1]);
+    EXPECT_EQ(99, data3[f1.getFrameFormat().size() - 1]);
 }
 
 }  // namespace HRM_Testing

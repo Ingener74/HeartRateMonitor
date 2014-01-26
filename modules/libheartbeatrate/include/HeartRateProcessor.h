@@ -12,13 +12,13 @@
 #include <boost/thread.hpp>
 #include <boost/thread/mutex.hpp>
 
-#include "IFrameSource.h"
+#include "RGBFrameSource.h"
 
 namespace hrm {
 
 class HeartRateProcessor {
 public:
-    HeartRateProcessor(IFrameSource* fs);
+    HeartRateProcessor(boost::shared_ptr<RGBFrameSource> fs);
     virtual ~HeartRateProcessor();
 
     bool start();
@@ -30,7 +30,7 @@ private:
     boost::thread _hrpThread;
     boost::tuples::tuple<boost::mutex, boost::condition_variable, bool> _start;
 
-    IFrameSource* _frameSource;
+    boost::shared_ptr<RGBFrameSource> _rgbfs;
 };
 
 } /* namespace hrm */

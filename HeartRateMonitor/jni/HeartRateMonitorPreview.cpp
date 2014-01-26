@@ -10,25 +10,26 @@
 
 #include <boost/smart_ptr.hpp>
 
+#include <HeartBeatRateTypes.h>
+#include <HeartBeatRateDefines.h>
+#include <HeartRateProcessor.h>
+#include <ImageFormat.h>
+#include <RGBFrameSource.h>
+
 #include "HeartRateMonitorPreview.h"
 
-#include "hrm_defines.h"
-#include "HeartRateProcessor.h"
-#include "ImageFormat.h"
-#include "Types.h"
-
-boost::shared_ptr<hrm::HeartRateProcessor> hrp;
 hrm::TimeCounter tc;
-
-boost::shared_ptr<hrm::IFrameSource> frameSource;
+boost::shared_ptr<hrm::NV21FrameSource> nv21;
+boost::shared_ptr<hrm::HeartRateProcessor> hrp;
 
 jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativeStart(
         JNIEnv* JNIEnv_, jobject thiz) {
 
-//    frameSource = boost::shared_ptr<hrm::IFrameSource>(new ConcreteFrameSource());
+    nv21 = boost::shared_ptr<hrm::NV21FrameSource>(new hrm::NV21FrameSource());
+    boost::shared_ptr<hrm::RGBFrameSource> rgbfs(new hrm::RGBFrameSource(nv21));
 
     I("native start");
-    hrp = boost::shared_ptr<hrm::HeartRateProcessor>(new hrm::HeartRateProcessor(frameSource.get()));
+    hrp = boost::shared_ptr<hrm::HeartRateProcessor>(new hrm::HeartRateProcessor(rgbfs));
     return hrp->start();
 }
 
@@ -65,7 +66,7 @@ jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativePas
             imageData
             );
 
-
+    nv21->putFrame(uint16_t(rows), uint16_t(cols), (uint8_t *)imageData);
 
     JNIEnv_->ReleaseByteArrayElements(data, imageData, 0);
     return false;

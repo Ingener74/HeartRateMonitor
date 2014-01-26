@@ -6,11 +6,11 @@
  */
 
 #include "HeartRateProcessor.h"
-#include "hrm_defines.h"
+#include "HeartBeatRateDefines.h"
 
 namespace hrm {
 
-HeartRateProcessor::HeartRateProcessor(IFrameSource* fs): _frameSource(fs){
+HeartRateProcessor::HeartRateProcessor(boost::shared_ptr<RGBFrameSource> fs): _rgbfs(fs){
 }
 
 HeartRateProcessor::~HeartRateProcessor() {
@@ -53,7 +53,7 @@ void HeartRateProcessor::body() {
                 /*
                  * wait frame
                  */
-//                _frameSource->getFrame();
+                LockedFrame lockedFrame = _rgbfs->getFrame();
 
                 /*
                  * process

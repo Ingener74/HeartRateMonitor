@@ -9,16 +9,22 @@
 #define IFRAMESOURCE_H_
 
 #include <boost/thread/mutex.hpp>
+#include <boost/smart_ptr.hpp>
+#include <boost/tuple/tuple.hpp>
+
+#include "HeartBeatRateTypes.h"
 
 namespace hrm {
+
+typedef boost::tuple<
+        boost::shared_ptr<boost::unique_lock<boost::mutex> >,
+        Frame> LockedFrame;
 
 class IFrameSource{
 public:
     virtual ~IFrameSource(){}
 
-//    virtual boost::shared_lock<boost::mutex> getFrame() = 0;
-
-    virtual void setFrame() = 0;
+    virtual LockedFrame getFrame() = 0;
 
 protected:
     IFrameSource(){}
