@@ -18,21 +18,33 @@ hrm::NV21FrameSource::~NV21FrameSource() {
 }
 
 LockedFrame hrm::NV21FrameSource::getFrame() {
+    {
+        boost::unique_lock<boost::mutex> lock(_frameMutex);
+        _frameCond.wait(lock);
+    }
     LockedFrame lf(boost::shared_ptr<boost::unique_lock<boost::mutex> >(
             new boost::unique_lock<boost::mutex>(_frameMutex)), _frame);
     return lf;
 }
 
 void NV21FrameSource::putFrame(uint16_t rows, uint16_t cols, uint8_t * data) {
-    boost::unique_lock<boost::mutex> lock(_frameMutex);
-    /*
-     * move
-     */
-    FrameRect inputRect = FrameRect(rows, cols);
-    if(_frame.getFrameFormat()._rect != inputRect){
-        _frame = Frame(FrameFormat(inputRect, 2));
+    {
+        boost::unique_lock<boost::mutex> lock(_frameMutex);
+
+        FrameRect inputRect = FrameRect(rows, cols);
+        if(_frame.getFrameFormat()._rect != inputRect){
+            _frame = Frame(FrameFormat(inputRect, 2));
+        }
+        /*
+         * copy original
+         */
+        uint32_t bytesToCopy = _frame.getFrameFormat()._rect.area() * 3 / 2; // FIXME 12bit image
+        uint8_t * s = data, * d = _frame.getData();
+        for (int i = 0; i < bytesToCopy; ++i) {
+            *d++ = *s++;
+        }
     }
-    D("uint16_t rows = %d, uint16_t cols = %d, uint8_t * data = %p", rows, cols, data);
+    _frameCond.notify_one();
 }
 
 }  // namespace hrm

@@ -8,6 +8,8 @@
 #ifndef NV21FRAMESOURCE_H_
 #define NV21FRAMESOURCE_H_
 
+#include <boost/thread/condition_variable.hpp>
+
 #include "IFrameSource.h"
 
 namespace hrm {
@@ -24,6 +26,7 @@ public:
 private:
     Frame _frame;
     boost::mutex _frameMutex;
+    boost::condition_variable _frameCond;
 };
 
 }  // namespace hrm

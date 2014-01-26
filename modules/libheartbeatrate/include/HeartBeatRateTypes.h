@@ -81,7 +81,7 @@ struct FrameFormat {
         return _rect.area() * _bytesInPixel;
     }
     FrameRect _rect;
-    uint16_t _bytesInPixel;
+    uint16_t _bytesInPixel; // FIXME change to bit per pixel
 };
 
 class Frame {
