@@ -11,6 +11,8 @@
 #include <stdint.h>
 #include <time.h>
 
+#include <boost/smart_ptr.hpp>
+
 namespace hrm {
 
 class TimeCounter {
@@ -50,7 +52,7 @@ struct FrameRect {
     bool operator!() const {
         return (!_rows || !_cols);
     }
-    operator bool(){
+    operator bool() const {
         return _rows && _cols;
     }
     uint32_t area() const {
@@ -73,8 +75,7 @@ struct FrameFormat {
         return !_rect;
     }
     operator bool() const {
-//        return bool(_rect); // FIXME
-        return false;
+        return _rect.operator bool();
     }
     uint32_t size() const {
         return _rect.area() * _bytesInPixel;
@@ -93,12 +94,12 @@ public:
     }
     virtual ~Frame() {
     }
-    Frame(const Frame& frame) {
+    operator bool() const {
+        return bool(_format);
     }
-    Frame& operator=(const Frame& frame) {
-        return *this;
+    bool operator!() const {
+        return !_format;
     }
-
     const FrameFormat& getFrameFormat() const {
         return _format;
     }

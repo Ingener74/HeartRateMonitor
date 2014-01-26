@@ -37,9 +37,10 @@ BOOST_LIBS := \
 
 LOCAL_MODULE                           := HeartRateMonitor
 
-LOCAL_C_INCLUDES                       := $(LOCAL_PATH)/test_module \
-                                          $(BOOST_PATH)/include \
-                                          $(LOCAL_PATH)/../../modules/libheartbeatrate/include
+LOCAL_C_INCLUDES := \
+	$(LOCAL_PATH)/test_module \
+	$(BOOST_PATH)/include \
+	$(LOCAL_PATH)/../../modules/libheartbeatrate/include
 
 LOCAL_SRC_FILES := \
 	HeartRateMonitor.cpp \
