@@ -7,7 +7,9 @@
 
 #include <string>
 #include <map>
+#include <list>
 
+#include <boost/lambda/lambda.hpp>
 #include <boost/smart_ptr.hpp>
 
 #include <HeartBeatRateTypes.h>
@@ -50,6 +52,7 @@ void Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativeStop(
 jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativePassImage(
         JNIEnv* JNIEnv_, jobject thiz,
         jint rows, jint cols, jint type, jbyteArray data) {
+
     jboolean imageDataIsCopy = false;
     jbyte* imageData = JNIEnv_->GetByteArrayElements(data, &imageDataIsCopy);
 

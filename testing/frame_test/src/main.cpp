@@ -1,13 +1,28 @@
 #include <HeartBeatRateTypes.h>
 #include <gtest/gtest.h>
 
+//#include <list>
+//#include <vector>
+//#include <map>
+//#include <string>
+//#include <boost/lambda/lambda.hpp>
+//namespace bl = boost::lambda;
+
 namespace HRM_Testing {
 
 /*
  * Frame rect
  */
-
 TEST(FrameTest, FrameRectEmpty) {
+
+//    int i[] = {100, 3, 200, 4, 300, 9, 1000, 230, 3, 1, 900};
+//    std::vector<int> l1(i, i + sizeof(i) / sizeof(i[0]));
+//
+//    std::vector<int>::iterator last = std::remove_if(l1.begin(), l1.end(), bl::_1 < 10);
+//    std::for_each(l1.begin(), last, std::cout << bl::_1 << "\n");
+//    std::cout << "===========" << std::endl;
+//    std::for_each(l1.begin(), l1.end(), std::cout << bl::_1 << "\n");
+
     hrm::FrameRect fr1;
 
     EXPECT_FALSE(fr1);
