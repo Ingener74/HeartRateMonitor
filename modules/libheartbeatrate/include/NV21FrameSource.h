@@ -19,13 +19,13 @@ public:
     NV21FrameSource();
     virtual ~NV21FrameSource();
 
-    virtual LockedFrame getFrame();
+    virtual SharedLockedFrame getFrame();
 
     virtual void putFrame(uint16_t rows, uint16_t cols, uint8_t * data);
 
 private:
     Frame _frame;
-    boost::mutex _frameMutex;
+    boost::shared_mutex _frameMutex;
     boost::condition_variable _frameCond;
 };
 

@@ -17,10 +17,10 @@ public:
     RGBFrameSource(boost::shared_ptr<NV21FrameSource> nv21);
     virtual ~RGBFrameSource();
 
-    virtual LockedFrame getFrame();
+    virtual SharedLockedFrame getFrame();
 private:
     Frame _frame;
-    boost::mutex _frameMutex;
+    boost::shared_mutex _frameMutex;
     boost::shared_ptr<NV21FrameSource> _nv21;
 };
 
