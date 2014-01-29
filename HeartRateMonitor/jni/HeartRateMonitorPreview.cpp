@@ -20,12 +20,13 @@
 
 #include "HeartRateMonitorPreview.h"
 
-hrm::TimeCounter tc;
 boost::shared_ptr<hrm::NV21FrameSource> nv21;
 boost::shared_ptr<hrm::HeartRateProcessor> hrp;
 
 jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativeStart(
         JNIEnv* JNIEnv_, jobject thiz) {
+
+    hrm::TimeCounter::instance();
 
     nv21 = boost::shared_ptr<hrm::NV21FrameSource>(new hrm::NV21FrameSource());
     boost::shared_ptr<hrm::RGBFrameSource> rgbfs(new hrm::RGBFrameSource(nv21));
@@ -59,8 +60,9 @@ jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativePas
     /*
      * measure time and pass image in processor
      */
-    double delta = tc.timeElapsedInMS();
-    I("delta time = %.2f ms, fps = %.1f", delta, 1000.0 / delta);
+    boost::tuple<hrm::TimeStamp, hrm::ElapsedTime> ts =
+            hrm::TimeCounter::instance()->getTimeStampExt();
+    I("current time = %.2f ms, fps = %.1f", ts.get<0>(), 1000.0 / ts.get<1>());
 
     I("%d x %d, type = %s, %p",
             cols,
@@ -69,7 +71,7 @@ jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativePas
             imageData
             );
 
-    nv21->putFrame(uint16_t(rows), uint16_t(cols), (uint8_t *)imageData);
+    nv21->putFrame(uint16_t(rows), uint16_t(cols), (uint8_t *)imageData, ts.get<0>());
 
     JNIEnv_->ReleaseByteArrayElements(data, imageData, 0);
     return false;

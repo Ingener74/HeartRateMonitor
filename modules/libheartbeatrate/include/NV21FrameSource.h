@@ -21,7 +21,7 @@ public:
 
     virtual LockedFrame getFrame();
 
-    virtual void putFrame(uint16_t rows, uint16_t cols, uint8_t * data);
+    virtual void putFrame(uint16_t rows, uint16_t cols, uint8_t * data, TimeStamp timeStamp);
 
 private:
     Frame _frame;

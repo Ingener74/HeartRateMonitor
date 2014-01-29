@@ -9,32 +9,27 @@
 #define TYPES_H_
 
 #include <stdint.h>
-#include <time.h>
 
+#include <boost/tuple/tuple.hpp>
 #include <boost/smart_ptr.hpp>
 
 namespace hrm {
 
+typedef double TimeStamp;
+typedef double ElapsedTime;
+//typedef boost::tuple<TimeStamp, ElapsedTime>
+
 class TimeCounter {
 public:
-    TimeCounter() :
-            _time(0), _delta(0) {
-    }
-    virtual ~TimeCounter() {
-    }
-    double timeElapsedInMS() {
-        struct timespec tm;
-        clock_gettime(CLOCK_MONOTONIC, &tm);
+    static TimeCounter * instance();
+    virtual ~TimeCounter();
 
-        uint64_t t1 = tm.tv_sec * 1000000000LL + tm.tv_nsec;
-        double t = double(t1 / 1e6);
-        _delta = t - _time;
-        _time = t;
-        return _delta;
-    }
+    TimeStamp getTimeStamp();
+    boost::tuple<TimeStamp, ElapsedTime> getTimeStampExt();
 
 private:
-    double _time, _delta;
+    TimeCounter();
+    TimeStamp _time;
 };
 
 struct FrameRect {
@@ -86,8 +81,8 @@ struct FrameFormat {
 
 class Frame {
 public:
-    Frame(FrameFormat format = FrameFormat()) :
-            _format(format) {
+    Frame(FrameFormat format = FrameFormat(), TimeStamp timeStamp = 0.0) :
+            _format(format), _timeStamp(timeStamp){
         if (_format) {
             _data = boost::shared_array<uint8_t>(new uint8_t[_format.size()]);
         }
@@ -103,6 +98,12 @@ public:
     const FrameFormat& getFrameFormat() const {
         return _format;
     }
+    void setTimeStamp(TimeStamp timeStamp){
+        _timeStamp = timeStamp;
+    }
+    const TimeStamp getTimeStamp() const {
+        return _timeStamp;
+    }
     uint8_t* getData() {
         return _data.get();
     }
@@ -110,6 +111,7 @@ public:
 private:
     FrameFormat _format;
     boost::shared_array<uint8_t> _data;
+    TimeStamp _timeStamp;
 };
 
 }  // namespace hrm

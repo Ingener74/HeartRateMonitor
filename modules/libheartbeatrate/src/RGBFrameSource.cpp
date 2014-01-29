@@ -26,7 +26,7 @@ LockedFrame RGBFrameSource::getFrame() {
 
         FrameRect r = lockedFrame.get<1>().getFrameFormat()._rect;
         if(_frame.getFrameFormat()._rect != r){
-            _frame = Frame(FrameFormat(r, 3));
+            _frame = Frame(FrameFormat(r, 8 * 3));
             D("rgb frame resized %d x %d", _frame.getFrameFormat()._rect._rows, _frame.getFrameFormat()._rect._cols);
         }
         /*
@@ -52,6 +52,7 @@ LockedFrame RGBFrameSource::getFrame() {
             g = std::max(uint8_t(0), std::min(g, uint8_t(255)));
             b = std::max(uint8_t(0), std::min(b, uint8_t(255)));
         }
+        _frame.setTimeStamp(lockedFrame.get<1>().getTimeStamp());
         D("rgb frame converted");
     }
     LockedFrame lockedFrame(

@@ -19,6 +19,10 @@ include $(LOCAL_PATH)/test_module/Android.mk
 LOCAL_PATH                             := $(MY_ROOT)
 include $(LOCAL_PATH)/../../modules/libheartbeatrate/Android.mk
 
+# boost
+#LOCAL_PATH                             := $(MY_ROOT)
+#include $(LOCAL_PATH)/boost/Android.mk
+
 # Heart Rate Monitor library
 include $(CLEAR_VARS)
 LOCAL_PATH                             := $(MY_ROOT)
@@ -33,7 +37,7 @@ BOOST_LIBS := \
 	$(BOOST_PATH)/lib/libboost_regex-gcc-mt-1_55.a \
 	$(BOOST_PATH)/lib/libboost_signals-gcc-mt-1_55.a \
 	$(BOOST_PATH)/lib/libboost_system-gcc-mt-1_55.a \
-	$(BOOST_PATH)/lib/libboost_thread-gcc-mt-1_55.a \
+	$(BOOST_PATH)/lib/libboost_thread-gcc-mt-1_55.a
 
 LOCAL_MODULE                           := HeartRateMonitor
 
@@ -42,21 +46,18 @@ LOCAL_C_INCLUDES := \
 	$(BOOST_PATH)/include \
 	$(LOCAL_PATH)/../../modules/libheartbeatrate/include
 
+LOCAL_CPPFLAGS += -fexceptions -frtti
+
 LOCAL_SRC_FILES := \
 	HeartRateMonitor.cpp \
 	HeartRateMonitorPreview.cpp
 
 LOCAL_STATIC_LIBRARIES := \
 	test_module \
-	heartbeatrate
-	
-LOCAL_LDLIBS := \
-	-llog -landroid $(BOOST_LIBS) \
-	/home/pavel/dev/android-ndk-r8e/sources/cxx-stl/gnu-libstdc++/4.7/libs/armeabi-v7a/libgnustl_static.a
-#	$(ANDROID_NDK)/sources/cxx-stl/gnu-libstdc++/4.7/libs/armeabi-v7a/libgnustl_static.a # FIXME
+	heartbeatrate \
+	boost
 
-LOCAL_CPPFLAGS += -fexceptions -frtti
+LOCAL_LDLIBS := \
+	-llog -landroid $(BOOST_LIBS)
 
 include $(BUILD_SHARED_LIBRARY)
-$(call import-module test_module)
-$(call import-module heartbeatrate)
