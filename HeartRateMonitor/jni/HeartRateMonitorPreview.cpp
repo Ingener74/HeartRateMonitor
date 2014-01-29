@@ -31,8 +31,10 @@ jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativeSta
     nv21 = boost::shared_ptr<hrm::NV21FrameSource>(new hrm::NV21FrameSource());
     boost::shared_ptr<hrm::RGBFrameSource> rgbfs(new hrm::RGBFrameSource(nv21));
 
+    boost::shared_ptr<IImageDrawer> heartRateOutput(new JavaHeartRateOutput());
+
     I("native start");
-    hrp = boost::shared_ptr<hrm::HeartRateProcessor>(new hrm::HeartRateProcessor(rgbfs));
+    hrp = boost::shared_ptr<hrm::HeartRateProcessor>(new hrm::HeartRateProcessor(rgbfs, ImageDrawInterface ));
     return hrp->start();
 }
 
