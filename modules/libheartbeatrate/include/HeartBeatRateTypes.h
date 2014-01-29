@@ -62,14 +62,14 @@ struct FrameRect {
 };
 
 struct FrameFormat {
-    FrameFormat(FrameRect rect = FrameRect(), uint16_t bytesInPixel = 1) :
-            _rect(rect), _bytesInPixel(bytesInPixel) {
+    FrameFormat(FrameRect rect = FrameRect(), uint16_t bitsPerPixel = 8) :
+            _rect(rect), _bitsPerPixel(bitsPerPixel) {
     }
     bool operator==(const FrameFormat& other) const {
-        return (_rect == other._rect && _bytesInPixel == other._bytesInPixel);
+        return (_rect == other._rect && _bitsPerPixel == other._bitsPerPixel);
     }
     bool operator!=(const FrameFormat& other) const {
-        return (_rect != other._rect || _bytesInPixel != other._bytesInPixel);
+        return (_rect != other._rect || _bitsPerPixel != other._bitsPerPixel);
     }
     bool operator!() const {
         return !_rect;
@@ -78,10 +78,10 @@ struct FrameFormat {
         return _rect.operator bool();
     }
     uint32_t size() const {
-        return _rect.area() * _bytesInPixel;
+        return _rect.area() * _bitsPerPixel / 8;
     }
     FrameRect _rect;
-    uint16_t _bytesInPixel; // FIXME change to bit per pixel
+    uint16_t _bitsPerPixel;
 };
 
 class Frame {

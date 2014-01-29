@@ -82,23 +82,26 @@ TEST(FrameTest, FrameFormatSize) {
     hrm::FrameFormat ff2(hrm::FrameRect(10, 10));
     EXPECT_EQ(100, ff2.size());
 
-    hrm::FrameFormat ff3(hrm::FrameRect(10, 10), 2);
+    hrm::FrameFormat ff3(hrm::FrameRect(10, 10), 16);
     EXPECT_EQ(200, ff3.size());
 
     hrm::FrameFormat ff4(hrm::FrameRect(100, 100));
     EXPECT_EQ(10000, ff4.size());
 
-    hrm::FrameFormat ff5(hrm::FrameRect(100, 100), 3);
+    hrm::FrameFormat ff5(hrm::FrameRect(100, 100), 24);
     EXPECT_EQ(30000, ff5.size());
 
     hrm::FrameFormat ff6(hrm::FrameRect(480, 640));
     EXPECT_EQ(307200, ff6.size());
 
-    hrm::FrameFormat ff7(hrm::FrameRect(480, 640), 2);
-    EXPECT_EQ(307200 * 2, ff7.size());
+    hrm::FrameFormat ff7(hrm::FrameRect(480, 640), 16);
+    EXPECT_EQ(614400, ff7.size());
 
-    hrm::FrameFormat ff8(hrm::FrameRect(480, 640), 3);
-    EXPECT_EQ(307200 * 3, ff8.size());
+    hrm::FrameFormat ff8(hrm::FrameRect(480, 640), 24);
+    EXPECT_EQ(921600, ff8.size());
+
+    hrm::FrameFormat ff9(hrm::FrameRect(480, 640), 12);
+    EXPECT_EQ(460800, ff9.size());
 }
 
 TEST(FrameTest, FrameFormatEqual) {
