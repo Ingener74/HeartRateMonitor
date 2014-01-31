@@ -55,7 +55,7 @@ void HeartRateProcessor::body() {
                 /*
                  * wait frame
                  */
-                LockedFrame lockedFrame = _rgbfs->getFrame();
+                SharedLockedFrame lockedFrame = _rgbfs->getFrame();
 
                 /*
                  * process

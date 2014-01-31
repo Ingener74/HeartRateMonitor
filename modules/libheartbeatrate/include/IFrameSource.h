@@ -9,6 +9,7 @@
 #define IFRAMESOURCE_H_
 
 #include <boost/thread/mutex.hpp>
+#include <boost/thread/shared_mutex.hpp>
 #include <boost/smart_ptr.hpp>
 #include <boost/tuple/tuple.hpp>
 
@@ -17,14 +18,18 @@
 namespace hrm {
 
 typedef boost::tuple<
-        boost::shared_ptr<boost::unique_lock<boost::mutex> >,
-        Frame> LockedFrame;
+        boost::shared_ptr<boost::unique_lock<boost::shared_mutex> >,
+        Frame> UniqueLockedFrame;
+
+typedef boost::tuple<
+        boost::shared_ptr<boost::shared_lock<boost::shared_mutex> >,
+        Frame> SharedLockedFrame;
 
 class IFrameSource{
 public:
     virtual ~IFrameSource(){}
 
-    virtual LockedFrame getFrame() = 0;
+    virtual SharedLockedFrame getFrame() = 0;
 
 protected:
     IFrameSource(){}

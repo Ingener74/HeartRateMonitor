@@ -20,9 +20,11 @@ hrm::RGBFrameSource::RGBFrameSource(boost::shared_ptr<NV21FrameSource> nv21) :
 hrm::RGBFrameSource::~RGBFrameSource() {
 }
 
-LockedFrame RGBFrameSource::getFrame() {
+SharedLockedFrame RGBFrameSource::getFrame() {
     {
-        LockedFrame lockedFrame = _nv21->getFrame();
+        SharedLockedFrame lockedFrame = _nv21->getFrame();
+
+        boost::unique_lock<boost::shared_mutex> lock(_frameMutex);
 
         ImageRect r = lockedFrame.get<1>().getFormat()._rect;
         if(_frame.getFormat()._rect != r){
@@ -74,9 +76,9 @@ LockedFrame RGBFrameSource::getFrame() {
         _frame.setTimeStamp(lockedFrame.get<1>().getTimeStamp());
         D("rgb frame converted");
     }
-    LockedFrame lockedFrame(
-            boost::shared_ptr<boost::unique_lock<boost::mutex> >(
-                    new boost::unique_lock<boost::mutex>(_frameMutex)), _frame);
+    SharedLockedFrame lockedFrame(
+            boost::shared_ptr<boost::shared_lock<boost::shared_mutex> >(
+                    new boost::shared_lock<boost::shared_mutex>(_frameMutex)), _frame);
     return lockedFrame;
 }
 

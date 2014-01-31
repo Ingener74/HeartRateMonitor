@@ -17,20 +17,20 @@ hrm::NV21FrameSource::NV21FrameSource() {
 hrm::NV21FrameSource::~NV21FrameSource() {
 }
 
-LockedFrame hrm::NV21FrameSource::getFrame() {
+SharedLockedFrame hrm::NV21FrameSource::getFrame() {
     {
-        boost::unique_lock<boost::mutex> lock(_frameMutex);
+        boost::unique_lock<boost::shared_mutex> lock(_frameMutex);
         _frameCond.wait(lock);
     }
-    LockedFrame lf(boost::shared_ptr<boost::unique_lock<boost::mutex> >(
-            new boost::unique_lock<boost::mutex>(_frameMutex)), _frame);
+    SharedLockedFrame lf(boost::shared_ptr<boost::shared_lock<boost::shared_mutex> >(
+            new boost::shared_lock<boost::shared_mutex>(_frameMutex)), _frame);
     return lf;
 }
 
 void NV21FrameSource::putFrame(uint16_t rows, uint16_t cols, uint8_t * data,
         TimeStamp timeStamp) {
     {
-        boost::unique_lock<boost::mutex> lock(_frameMutex);
+        boost::unique_lock<boost::shared_mutex> lock(_frameMutex);
 
         ImageRect inputRect = ImageRect(rows, cols);
         if(_frame.getFormat()._rect != inputRect){
