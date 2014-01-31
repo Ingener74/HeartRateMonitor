@@ -24,6 +24,8 @@
 boost::shared_ptr<hrm::NV21FrameSource> nv21;
 boost::shared_ptr<hrm::HeartRateProcessor> hrp;
 
+jobject HeartRateMonitorPreviewThis = 0;
+
 class HeartRateMonitorPreviewJava: public hrm::IImageDrawer {
 public:
     HeartRateMonitorPreviewJava() {
@@ -35,7 +37,12 @@ public:
 };
 
 jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativeStart(
-        JNIEnv* JNIEnv_, jobject thiz) {
+        JNIEnv* JNIEnv_, jobject self) {
+
+    HeartRateMonitorPreviewThis = JNIEnv_->NewGlobalRef(self);
+    if(!HeartRateMonitorPreviewThis){
+        E("!HeartRateMonitorPreviewThis");
+    }
 
     hrm::TimeCounter::instance();
 
@@ -50,7 +57,7 @@ jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativeSta
 }
 
 void Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativeStop(
-        JNIEnv* JNIEnv_, jobject thiz) {
+        JNIEnv* JNIEnv_, jobject self) {
 
     I("native stop");
 
@@ -61,10 +68,12 @@ void Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativeStop(
     hrp->stop();
 
     I("native stoped");
+
+    JNIEnv_->DeleteGlobalRef(HeartRateMonitorPreviewThis);
 }
 
 jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativePassImage(
-        JNIEnv* JNIEnv_, jobject thiz,
+        JNIEnv* JNIEnv_, jobject self,
         jint rows, jint cols, jint type, jbyteArray data) {
 
     jboolean imageDataIsCopy = false;
@@ -76,7 +85,6 @@ jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativePas
     boost::tuple<hrm::TimeStamp, hrm::ElapsedTime> ts =
             hrm::TimeCounter::instance()->getTimeStampExt();
     I("current time = %.2f ms, fps = %.1f", ts.get<0>(), 1000.0 / ts.get<1>());
-//    I("current time = %.2f ms, fps = %.1f", ts.get<0>(), ts.get<1>());
 
     I("%d x %d, type = %s, %p",
             cols,
