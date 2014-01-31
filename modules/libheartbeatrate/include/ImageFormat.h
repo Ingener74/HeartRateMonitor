@@ -10,7 +10,7 @@
 
 namespace hrm {
 
-class ImageFormat {
+class AndroidImageFormat {
 public:
     enum {
         UNKNOWN = 0,
@@ -22,8 +22,8 @@ public:
         JPEG = 256,
         YV12 = 842094169
     };
-    static ImageFormat* instance() {
-        static boost::scoped_ptr<ImageFormat> ptr(new ImageFormat());
+    static AndroidImageFormat* instance() {
+        static boost::scoped_ptr<AndroidImageFormat> ptr(new AndroidImageFormat());
         return ptr.get();
     }
     std::string getImageFormatString(int imageFormat) {
@@ -34,11 +34,11 @@ public:
             return std::string("");
         }
     }
-    virtual ~ImageFormat() {
+    virtual ~AndroidImageFormat() {
     }
 
 private:
-    ImageFormat() {
+    AndroidImageFormat() {
         _imageFormatTranslations[UNKNOWN] = "UNKNOWN";
         _imageFormatTranslations[RGB_565] = "RGB_565";
         _imageFormatTranslations[NV16] = "NV16";

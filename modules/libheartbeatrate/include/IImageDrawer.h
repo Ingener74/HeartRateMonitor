@@ -8,13 +8,15 @@
 #ifndef IIMAGEDRAWER_H_
 #define IIMAGEDRAWER_H_
 
+#include "HeartBeatRateTypes.h"
+
 namespace hrm {
 
 class IImageDrawer {
 public:
     virtual ~IImageDrawer(){}
 
-    virtual void drawImage() = 0;
+    virtual void drawImage(Image image) = 0;
 
 protected:
     IImageDrawer(){}

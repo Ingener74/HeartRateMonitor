@@ -32,14 +32,14 @@ void NV21FrameSource::putFrame(uint16_t rows, uint16_t cols, uint8_t * data,
     {
         boost::unique_lock<boost::mutex> lock(_frameMutex);
 
-        FrameRect inputRect = FrameRect(rows, cols);
-        if(_frame.getFrameFormat()._rect != inputRect){
-            _frame = Frame(FrameFormat(inputRect, 12));
+        ImageRect inputRect = ImageRect(rows, cols);
+        if(_frame.getFormat()._rect != inputRect){
+            _frame = Frame(ImageFormat(inputRect, 12));
         }
         /*
          * copy original
          */
-        uint32_t bytesToCopy = _frame.getFrameFormat()._rect.area();
+        uint32_t bytesToCopy = _frame.getFormat()._rect.area();
         uint8_t * s = data, * d = _frame.getData();
         for (int i = 0; i < bytesToCopy; ++i) {
             *d++ = *s++;

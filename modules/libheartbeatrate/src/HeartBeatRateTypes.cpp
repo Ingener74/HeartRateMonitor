@@ -26,13 +26,14 @@ TimeStamp TimeCounter::getTimeStamp() {
     struct timespec tm;
     clock_gettime(CLOCK_MONOTONIC, &tm);
 
-    uint64_t t = tm.tv_sec * 1000000000LL + tm.tv_nsec;
-    _time = t;
+    _time = double(tm.tv_sec*1000 + tm.tv_nsec/1000000);
     return _time;
 }
 
 boost::tuple<TimeStamp, ElapsedTime> TimeCounter::getTimeStampExt() {
-    TimeStamp time = getTimeStamp();
+    struct timespec tm;
+    clock_gettime(CLOCK_MONOTONIC, &tm);
+    TimeStamp time = TimeStamp(tm.tv_sec*1000 + tm.tv_nsec/1000000);
     ElapsedTime dt = time - _time;
     _time = time;
     return boost::tuple<TimeStamp, ElapsedTime>(time, dt);

@@ -24,10 +24,10 @@ LockedFrame RGBFrameSource::getFrame() {
     {
         LockedFrame lockedFrame = _nv21->getFrame();
 
-        FrameRect r = lockedFrame.get<1>().getFrameFormat()._rect;
-        if(_frame.getFrameFormat()._rect != r){
-            _frame = Frame(FrameFormat(r, 8 * 3));
-            D("rgb frame resized %d x %d", _frame.getFrameFormat()._rect._rows, _frame.getFrameFormat()._rect._cols);
+        ImageRect r = lockedFrame.get<1>().getFormat()._rect;
+        if(_frame.getFormat()._rect != r){
+            _frame = Frame(ImageFormat(r, 8 * 3));
+            D("rgb frame resized %d x %d", _frame.getFormat()._rect._rows, _frame.getFormat()._rect._cols);
         }
         /*
          * Convert nv21 to rgb
@@ -45,12 +45,12 @@ LockedFrame RGBFrameSource::getFrame() {
          *      U1   V1   U2   V2   U3   V3   U4   V4   U5   V5   U6   V6
          */
         uint8_t * y = lockedFrame.get<1>().getData();
-        uint8_t * uv = y + lockedFrame.get<1>().getFrameFormat()._rect.area();
+        uint8_t * uv = y + lockedFrame.get<1>().getFormat()._rect.area();
 
         uint8_t * rgb = _frame.getData();
 
-        uint32_t imax = _frame.getFrameFormat()._rect._rows,
-                 jmax = _frame.getFrameFormat()._rect._cols;
+        uint32_t imax = _frame.getFormat()._rect._rows,
+                 jmax = _frame.getFormat()._rect._cols;
 
         for (uint32_t i = 0; i < imax;    ++i, uv -= jmax) {
 
