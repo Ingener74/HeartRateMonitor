@@ -20,7 +20,9 @@ LOCAL_C_INCLUDES                       := $(LOCAL_PATH)/include \
 LOCAL_MODULE                           := heartbeatrate
 LOCAL_SRC_FILES                        := src/HeartRateProcessor.cpp \
                                           src/RGBFrameSource.cpp \
-                                          src/NV21FrameSource.cpp
+                                          src/NV21FrameSource.cpp \
+                                          src/HeartBeatRateTypes.cpp
+
 LOCAL_EXPORT_C_INCLUDES                := $(LOCAL_PATH)
 
 include $(BUILD_STATIC_LIBRARY)

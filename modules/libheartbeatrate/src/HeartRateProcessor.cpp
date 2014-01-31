@@ -10,7 +10,9 @@
 
 namespace hrm {
 
-HeartRateProcessor::HeartRateProcessor(boost::shared_ptr<RGBFrameSource> fs): _rgbfs(fs){
+HeartRateProcessor::HeartRateProcessor(boost::shared_ptr<RGBFrameSource> fs,
+        boost::shared_ptr<IImageDrawer> drawer) :
+        _rgbfs(fs), _drawer(drawer){
 }
 
 HeartRateProcessor::~HeartRateProcessor() {
