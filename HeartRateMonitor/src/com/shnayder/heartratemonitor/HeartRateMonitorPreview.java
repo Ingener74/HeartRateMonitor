@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
 import android.hardware.Camera.PreviewCallback;
@@ -12,6 +13,7 @@ import android.hardware.Camera.Size;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.ImageView;
 
 public class HeartRateMonitorPreview extends SurfaceView implements
 		SurfaceHolder.Callback, PreviewCallback {
@@ -25,6 +27,8 @@ public class HeartRateMonitorPreview extends SurfaceView implements
 
 	private SurfaceHolder _holder;
 	private Camera _camera;
+	private ImageView _imageView;
+	private Bitmap _outputBitmap = null;
 	
 	private void setMinResAndFlashOn() {
 		Parameters camPam = _camera.getParameters();
@@ -44,10 +48,17 @@ public class HeartRateMonitorPreview extends SurfaceView implements
 		camPam.setPreviewSize(w, h);
 		_camera.setParameters(camPam);
 	}
+	private void drawBitmap(){
+		if(_outputBitmap == null)
+			return;
+		if(_outputBitmap.getWidth() == 0 || _outputBitmap.getHeight() == 0)
+			return;
+		_imageView.setImageBitmap(_outputBitmap);
+	}
 	/**********************************************************************
 	 * 
 	 */
-	public HeartRateMonitorPreview(Context context, Camera camera) {
+	public HeartRateMonitorPreview(Context context, Camera camera, ImageView imageView) {
 		super(context);
 		
 		_camera = camera;
@@ -55,6 +66,9 @@ public class HeartRateMonitorPreview extends SurfaceView implements
 		_holder = getHolder();
 		_holder.addCallback(this);
 		_holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+		
+		_imageView = imageView;
+//		_outputBitmap = Bitmap.createBitmap(0, 0, Bitmap.Config.ARGB_8888);
 	}
 	
 	@Override

@@ -45,11 +45,14 @@ public class HeartRateMonitor extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		
+		ImageView iv1 = (ImageView)findViewById(R.id.imageViewHeartRate);
+		
 		_camera = getCameraInstance();
 		
-		_cameraPreview = new HeartRateMonitorPreview(this, _camera);
+		_cameraPreview = new HeartRateMonitorPreview(this, _camera, iv1);
 		_previewFrameLayout = (FrameLayout)findViewById(R.id.previewFrame);
 		_previewFrameLayout.addView(_cameraPreview);
+		
 	}
 
 	@Override

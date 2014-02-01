@@ -31,7 +31,12 @@ SharedLockedFrame RGBFrameSource::getFrame() {
             _frame = Frame(ImageFormat(r, 8 * 3));
             D("rgb frame resized %d x %d", _frame.getFormat()._rect._rows, _frame.getFormat()._rect._cols);
         }
-        /*
+        /* Internet sources
+         *
+         * http://ru.wikipedia.org/wiki/YUV
+         * http://linuxtv.org/downloads/v4l-dvb-apis/re29.html
+         * http://stackoverflow.com/questions/5272388/extract-black-and-white-image-from-android-cameras-nv21-format
+         *
          * Convert nv21 to rgb
          *
          *   Y1   Y2   Y3   Y4   Y5   Y6
