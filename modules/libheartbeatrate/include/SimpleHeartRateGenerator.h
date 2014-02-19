@@ -18,7 +18,6 @@ public:
     virtual ~SimpleHeartRateGenerator();
 
     virtual std::vector<boost::tuple<TimeStamp, HeartValue> > getHeartRate();
-
 private:
 };
 
