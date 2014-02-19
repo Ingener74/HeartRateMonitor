@@ -21,9 +21,9 @@ HeartRateProcessor::~HeartRateProcessor() {
 
 void HeartRateProcessor::body() {
     if(boost::this_thread::interruption_enabled())
-        D("boost::this_thread::interruption_enabled()");
+        LLDEBUG("boost::this_thread::interruption_enabled()");
     try {
-        I("heart rate processor whiskers");
+        LLINFO("heart rate processor whiskers");
 //        {
 //            boost::unique_lock<boost::mutex> lock(_start.get<0>());
 //
@@ -32,7 +32,7 @@ void HeartRateProcessor::body() {
 //        }
 //        _start.get<2>() = true;
 //        _start.get<1>().notify_all();
-        I("heart rate processor body");
+        LLINFO("heart rate processor body");
         while(1){
             boost::this_thread::interruption_point();
 
@@ -49,12 +49,11 @@ void HeartRateProcessor::body() {
 
         }
     } catch (const boost::thread_interrupted& e) {
-        I("heart rate processor tail");
+        LLINFO("heart rate processor tail");
     }
 }
 
 SharedLockedImage HeartRateProcessor::getImage() {
-
 }
 
 } /* namespace hrm */

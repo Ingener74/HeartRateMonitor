@@ -22,36 +22,43 @@
 #include <RGBFrameSource.h>
 #include <IImageDrawer.h>
 
+#include <HeartRateCounter.h>
+#include <SimpleHeartRateNumber.h>
+#include <SimpleHeartRateGenerator.h>
+#include <SimpleHeartRateVisualizer.h>
+
 #include "HeartRateMonitorPreview.h"
 
 boost::shared_ptr<hrm::NV21FrameSource> nv21;
 boost::shared_ptr<hrm::HeartRateProcessor> hrp;
+
+boost::shared_ptr<hrm::HeartRateCounter> heartRateCounter;
 
 class HeartRateMonitorPreviewJava: public hrm::IImageDrawer {
 public:
     HeartRateMonitorPreviewJava(JNIEnv * JNIEnv_, jobject self):
         _jni(0), _self(0), _hrmPreviewClass(0), _drawBitmap(0){
 
-        D("HeartRateMonitorPreviewJava(JNIEnv * JNIEnv_, jobject self): _jni(0), _self(0)");
+        LLDEBUG("HeartRateMonitorPreviewJava(JNIEnv * JNIEnv_, jobject self): _jni(0), _self(0)");
         _jni = JNIEnv_;
         _self = _jni->NewGlobalRef(self);
         if(!_self){
-            E("!_self");
+            LLERROR("!_self");
             return;
         }
         _hrmPreviewClass = _jni->FindClass("com/shnayder/heartratemonitor/HeartRateMonitorPreview");
         if(!_hrmPreviewClass){
-            E("!_hrmPreviewClass");
+            LLERROR("!_hrmPreviewClass");
             return;
         }
         _drawBitmap = _jni->GetMethodID(_hrmPreviewClass, "drawBitmap", "()V");
         if(!_drawBitmap){
-            E("!_drawBitmap");
+            LLERROR("!_drawBitmap");
         }
-        D("ctor HeartRateMonitorPreviewJava success");
+        LLDEBUG("ctor HeartRateMonitorPreviewJava success");
     }
     virtual ~HeartRateMonitorPreviewJava() {
-        D("~HeartRateMonitorPreviewJava()");
+        LLDEBUG("~HeartRateMonitorPreviewJava()");
         _jni->DeleteGlobalRef(_self);
     }
     virtual void drawImage(hrm::Image image) {
@@ -65,7 +72,7 @@ private:
 };
 
 jint JNI_OnLoad(JavaVM* vm, void* reserved) {
-    D("JNI_OnLoad(JavaVM* vm, void* reserved)");
+    LLDEBUG("JNI_OnLoad(JavaVM* vm, void* reserved)");
     JNIEnv* env;
     if (vm->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_6) != JNI_OK) {
         return -1;
@@ -73,7 +80,7 @@ jint JNI_OnLoad(JavaVM* vm, void* reserved) {
     return JNI_VERSION_1_6;
 }
 void JNI_OnUnload(JavaVM* vm, void* reserved){
-    D("JNI_OnUnload");
+    LLDEBUG("JNI_OnUnload");
 }
 
 jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativeStart(
@@ -86,23 +93,38 @@ jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativeSta
 
     boost::shared_ptr<hrm::IImageDrawer> heartRateOutput(new HeartRateMonitorPreviewJava(JNIEnv_, self));
 
-    I("native start");
-    hrp = boost::shared_ptr<hrm::HeartRateProcessor>(new hrm::HeartRateProcessor(rgbfs, heartRateOutput));
-    return hrp->start();
+    boost::shared_ptr<hrm::IHeartRateGenerator> hrGenerator(
+            new hrm::SimpleHeartRateGenerator());
+    boost::shared_ptr<hrm::IHeartRateNumber> hrNumber(
+            new hrm::SimpleHeartRateNumber());
+    boost::shared_ptr<hrm::IHeartRateVisualizer> hrVisualizer(
+            new hrm::SimpleHeartRateVisualizer());
+    heartRateCounter = boost::shared_ptr<hrm::HeartRateCounter>(
+            new hrm::HeartRateCounter(
+                    hrGenerator,
+                    hrNumber,
+                    hrVisualizer
+                    ));
+
+    LLINFO("native start");
+    hrp = boost::shared_ptr<hrm::HeartRateProcessor>(new hrm::HeartRateProcessor(rgbfs));
+//    return hrp->start();
+
+    return true;
 }
 
 void Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativeStop(
         JNIEnv* JNIEnv_, jobject self) {
 
-    I("native stop");
+    LLINFO("native stop");
 
     if(!hrp){
-        E("native stoped");
+        LLERROR("native stoped");
         return;
     }
-    hrp->stop();
+//    hrp->stop();
 
-    I("native stoped");
+    LLINFO("native stoped");
 
 //    JNIEnv_->DeleteGlobalRef(HeartRateMonitorPreviewThis);
 }
@@ -119,9 +141,9 @@ jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativePas
      */
     boost::tuple<hrm::TimeStamp, hrm::ElapsedTime> ts =
             hrm::TimeCounter::instance()->getTimeStampExt();
-    I("current time = %.2f ms, fps = %.1f", ts.get<0>(), 1000.0 / ts.get<1>());
+    LLINFO("current time = %.2f ms, fps = %.1f", ts.get<0>(), 1000.0 / ts.get<1>());
 
-    I("%d x %d, type = %s, %p",
+    LLINFO("%d x %d, type = %s, %p",
             cols,
             rows,
             hrm::AndroidImageFormat::instance()->getImageFormatString(type).c_str(),

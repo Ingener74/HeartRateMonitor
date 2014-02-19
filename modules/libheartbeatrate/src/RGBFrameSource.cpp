@@ -29,7 +29,7 @@ SharedLockedFrame RGBFrameSource::getFrame() {
         ImageRect r = lockedFrame.get<1>().getFormat()._rect;
         if(_frame.getFormat()._rect != r){
             _frame = Frame(ImageFormat(r, 8 * 3));
-            D("rgb frame resized %d x %d", _frame.getFormat()._rect._rows, _frame.getFormat()._rect._cols);
+            LLDEBUG("rgb frame resized %d x %d", _frame.getFormat()._rect._rows, _frame.getFormat()._rect._cols);
         }
         /* Internet sources
          *
@@ -79,7 +79,7 @@ SharedLockedFrame RGBFrameSource::getFrame() {
             }
         }
         _frame.setTimeStamp(lockedFrame.get<1>().getTimeStamp());
-        D("rgb frame converted");
+        LLDEBUG("rgb frame converted");
     }
     SharedLockedFrame lockedFrame(
             boost::shared_ptr<boost::shared_lock<boost::shared_mutex> >(

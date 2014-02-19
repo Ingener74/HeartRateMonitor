@@ -6,11 +6,25 @@ project(${PROJECT_NAME})
 include_directories(include)
 
 set(SOURCES
-    src/HeartRateProcessor.cpp
-    src/RGBFrameSource.cpp
-    src/NV21FrameSource.cpp
     src/HeartBeatRateTypes.cpp
+    src/HeartRateProcessor.cpp
+    src/HeartRateTools.cpp
+    src/NV21FrameSource.cpp
+    src/RGBFrameSource.cpp
+    src/SimpleHeartRateGenerator.cpp
+    src/SimpleHeartRateVisualizer.cpp
+    src/HeartRateCounter.cpp
     )
+
+if(ANDROID)
+    set(SOURCES ${SOURCES}
+        src/AndroidLog.cpp
+        )
+else()
+    set(SOURCES ${SOURCES}
+        src/LinuxLog.cpp
+        )
+endif()
 
 add_library(${PROJECT_NAME} ${SOURCES})
 
