@@ -49,6 +49,7 @@ ImageViewHeartRateVisualizer::ImageViewHeartRateVisualizer(JNIEnv * jniEnv,
 }
 
 ImageViewHeartRateVisualizer::~ImageViewHeartRateVisualizer() {
+    /* todo attach current thread and delete global ref */
 }
 
 void ImageViewHeartRateVisualizer::visualizeHeartRate(

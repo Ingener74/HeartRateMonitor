@@ -65,8 +65,6 @@ jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativeSta
     boost::shared_ptr<hrm::IHeartRateNumber> hrNumber(
             new hrm::SimpleHeartRateNumber());
 
-//    hrVisualizer = boost::shared_ptr<hrm::IHeartRateVisualizer>(
-//            new hrm::SimpleHeartRateVisualizer());
     hrVisualizer = boost::shared_ptr<hrm::IHeartRateVisualizer>(
             new hrm::ImageViewHeartRateVisualizer(JNIEnv_, self));
 
@@ -91,8 +89,6 @@ void Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativeStop(
     heartRateCounter->stop();
 
     hrm::HeartRateTools::instance()->getLog()->INFO("native stoped");
-
-//    JNIEnv_->DeleteGlobalRef(HeartRateMonitorPreviewThis);
 }
 
 jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativePassImage(
