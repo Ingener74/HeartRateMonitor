@@ -27,6 +27,7 @@
 #include <SimpleHeartRateGenerator.h>
 #include <SimpleHeartRateVisualizer.h>
 #include <HeartRateTools.h>
+#include <ImageViewHeartRateVisualizer.h>
 
 #include "HeartRateMonitorPreview.h"
 
@@ -57,12 +58,18 @@ jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativeSta
 //    boost::shared_ptr<hrm::RGBFrameSource> rgbfs(new hrm::RGBFrameSource(nv21));
 //    boost::shared_ptr<hrm::IImageDrawer> heartRateOutput(new HeartRateMonitorPreviewJava(JNIEnv_, self));
 
+    boost::shared_ptr<hrm::IHeartRateVisualizer> hrVisualizer;
+
     boost::shared_ptr<hrm::IHeartRateGenerator> hrGenerator(
             new hrm::SimpleHeartRateGenerator());
     boost::shared_ptr<hrm::IHeartRateNumber> hrNumber(
             new hrm::SimpleHeartRateNumber());
-    boost::shared_ptr<hrm::IHeartRateVisualizer> hrVisualizer(
-            new hrm::SimpleHeartRateVisualizer());
+
+//    hrVisualizer = boost::shared_ptr<hrm::IHeartRateVisualizer>(
+//            new hrm::SimpleHeartRateVisualizer());
+    hrVisualizer = boost::shared_ptr<hrm::IHeartRateVisualizer>(
+            new hrm::ImageViewHeartRateVisualizer(JNIEnv_, self));
+
     heartRateCounter = boost::shared_ptr<hrm::HeartRateCounter>(
             new hrm::HeartRateCounter(
                     hrGenerator,

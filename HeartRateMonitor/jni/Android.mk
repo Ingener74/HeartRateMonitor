@@ -58,6 +58,6 @@ LOCAL_STATIC_LIBRARIES := \
 	boost
 
 LOCAL_LDLIBS := \
-	-llog -landroid $(BOOST_LIBS)
+	-llog -landroid -ljnigraphics $(BOOST_LIBS)
 
 include $(BUILD_SHARED_LIBRARY)

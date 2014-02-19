@@ -28,7 +28,6 @@ public class HeartRateMonitorPreview extends SurfaceView implements
 	private SurfaceHolder _holder;
 	private Camera _camera;
 	private ImageView _imageView;
-	private Bitmap _outputBitmap = null;
 	
 	private void setMinResAndFlashOn() {
 		Parameters camPam = _camera.getParameters();
@@ -48,12 +47,16 @@ public class HeartRateMonitorPreview extends SurfaceView implements
 		camPam.setPreviewSize(w, h);
 		_camera.setParameters(camPam);
 	}
-	private void drawBitmap(){
-		if(_outputBitmap == null)
+	private void drawBitmap(final Bitmap bitmap){
+		if(bitmap.getWidth() == 0 || bitmap.getHeight() == 0)
 			return;
-		if(_outputBitmap.getWidth() == 0 || _outputBitmap.getHeight() == 0)
-			return;
-		_imageView.setImageBitmap(_outputBitmap);
+		_imageView.post(new Runnable() {
+			
+			@Override
+			public void run() {
+				_imageView.setImageBitmap(bitmap);
+			}
+		});
 	}
 	/**********************************************************************
 	 * 

@@ -27,8 +27,8 @@ LOCAL_SRC_FILES := \
 	src/RGBFrameSource.cpp \
 	src/SimpleHeartRateGenerator.cpp \
 	src/SimpleHeartRateVisualizer.cpp \
-	src/HeartRateCounter.cpp
-                                          
+	src/HeartRateCounter.cpp \
+	src/ImageViewHeartRateVisualizer.cpp
 
 LOCAL_EXPORT_C_INCLUDES                := $(LOCAL_PATH)
 
