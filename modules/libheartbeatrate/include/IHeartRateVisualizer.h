@@ -8,6 +8,8 @@
 #ifndef IHEARTRATEVISUALIZER_H_
 #define IHEARTRATEVISUALIZER_H_
 
+
+
 #include "HeartBeatRateTypes.h"
 
 namespace hrm {
@@ -16,7 +18,7 @@ class IHeartRateVisualizer {
 public:
     virtual ~IHeartRateVisualizer(){}
 
-    virtual void visualizeHeartRate(Image heartRateGraph) = 0;
+    virtual void visualizeHeartRate(MeasurementGraph heartRateMeasuredGraph) = 0;
 
 protected:
     IHeartRateVisualizer(){}

@@ -8,18 +8,23 @@
 #ifndef SIMPLEHEARTRATENUMBER_H_
 #define SIMPLEHEARTRATENUMBER_H_
 
+#include <boost/format.hpp>
+
+#include "HeartRateTools.h"
+
 #include "IHeartRateNumber.h"
 
 namespace hrm {
 
-class SimpleHeartRateNumber: public IHeartRateNumber{
+class SimpleHeartRateNumber: public IHeartRateNumber {
 public:
     SimpleHeartRateNumber() {
     }
     virtual ~SimpleHeartRateNumber() {
     }
 
-    virtual void setHeartRateNumber(int32_t heartRateNumber){
+    virtual void setHeartRateNumber(HeartRateValue heartRateNumber) {
+        HeartRateTools::instance()->getLog()->INFO( (boost::format("Heart rate = %1% beats per minute") % heartRateNumber).str());
     }
 
 private:

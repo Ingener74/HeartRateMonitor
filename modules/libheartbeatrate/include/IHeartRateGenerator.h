@@ -22,7 +22,7 @@ public:
     virtual ~IHeartRateGenerator() {
     }
 
-    virtual std::vector<boost::tuple<TimeStamp, HeartValue> > getHeartRate() = 0;
+    virtual RawMeasurementGraph getHeartRate() = 0;
 
 protected:
     IHeartRateGenerator() {

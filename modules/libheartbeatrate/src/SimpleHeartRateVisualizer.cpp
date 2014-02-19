@@ -15,7 +15,8 @@ SimpleHeartRateVisualizer::SimpleHeartRateVisualizer() {
 SimpleHeartRateVisualizer::~SimpleHeartRateVisualizer() {
 }
 
-void SimpleHeartRateVisualizer::visualizeHeartRate(Image heartRateGraph) {
+void SimpleHeartRateVisualizer::visualizeHeartRate(
+        MeasurementGraph heartRateMeasuredGraph) {
 }
 
 }  // namespace hrm

@@ -23,12 +23,15 @@ void AndroidLog::DEBUG(const std::string& message) {
 }
 
 void AndroidLog::INFO(const std::string& message) {
+    __android_log_print(ANDROID_LOG_INFO, HRM_TAG, "%s", message.c_str());
 }
 
 void AndroidLog::ERROR(const std::string& message) {
+    __android_log_print(ANDROID_LOG_ERROR, HRM_TAG, "%s", message.c_str());
 }
 
 void AndroidLog::WARN(const std::string& message) {
+    __android_log_print(ANDROID_LOG_WARN, HRM_TAG, "%s", message.c_str());
 }
 
 }  // namespace hrm

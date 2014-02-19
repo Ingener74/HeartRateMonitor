@@ -17,7 +17,7 @@ public:
     SimpleHeartRateVisualizer();
     virtual ~SimpleHeartRateVisualizer();
 
-    virtual void visualizeHeartRate(Image heartRateGraph);
+    virtual void visualizeHeartRate(MeasurementGraph heartRateMeasuredGraph);
 
 private:
 };

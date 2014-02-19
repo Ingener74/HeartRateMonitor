@@ -8,6 +8,7 @@
 #ifndef HEARTRATECOUNTER_H_
 #define HEARTRATECOUNTER_H_
 
+#include <boost/thread.hpp>
 #include <boost/smart_ptr.hpp>
 
 #include "IHeartRateGenerator.h"
@@ -30,6 +31,9 @@ private:
     boost::shared_ptr<IHeartRateGenerator> _hrg;
     boost::shared_ptr<IHeartRateNumber> _hrn;
     boost::shared_ptr<IHeartRateVisualizer> _hrv;
+
+    boost::thread _thread;
+    void threadBody();
 };
 
 }  // namespace hrm

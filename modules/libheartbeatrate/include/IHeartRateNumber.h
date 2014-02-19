@@ -10,6 +10,8 @@
 
 #include <stdint.h>
 
+#include "HeartBeatRateTypes.h"
+
 namespace hrm {
 
 class IHeartRateNumber {
@@ -17,7 +19,7 @@ public:
     virtual ~IHeartRateNumber() {
     }
 
-    virtual void setHeartRateNumber(int32_t heartRateNumber) = 0;
+    virtual void setHeartRateNumber(HeartRateValue heartRateNumber) = 0;
 
 protected:
     IHeartRateNumber() {

@@ -10,6 +10,8 @@
 
 #include <stdint.h>
 
+#include <vector>
+
 #include <boost/tuple/tuple.hpp>
 #include <boost/smart_ptr.hpp>
 
@@ -17,7 +19,19 @@ namespace hrm {
 
 typedef double TimeStamp;
 typedef double ElapsedTime;
-//typedef boost::tuple<TimeStamp, ElapsedTime>
+
+typedef int32_t NormalizedMeasurementValue;
+typedef int32_t HeartRateValue;
+
+typedef int64_t HeartBeatID;
+
+typedef boost::tuple<TimeStamp, NormalizedMeasurementValue>
+    RawMeasurement;
+typedef boost::tuple<TimeStamp, NormalizedMeasurementValue, HeartBeatID>
+    Measurement;
+
+typedef std::vector<RawMeasurement> RawMeasurementGraph;
+typedef std::vector<Measurement> MeasurementGraph;
 
 class TimeCounter {
 public:

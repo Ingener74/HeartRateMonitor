@@ -5,6 +5,7 @@
  *      Author: pavel
  */
 
+#include "HeartRateTools.h"
 #include "HeartRateCounter.h"
 
 namespace hrm {
@@ -12,17 +13,39 @@ namespace hrm {
 HeartRateCounter::HeartRateCounter(
         boost::shared_ptr<IHeartRateGenerator> hrGenerator,
         boost::shared_ptr<IHeartRateNumber> hrNumber,
-        boost::shared_ptr<IHeartRateVisualizer> hrVisualizer) {
+        boost::shared_ptr<IHeartRateVisualizer> hrVisualizer):
+                _hrg(hrGenerator), _hrn(hrNumber), _hrv(hrVisualizer){
 }
 
 HeartRateCounter::~HeartRateCounter() {
 }
 
 bool HeartRateCounter::start() {
-    return false;
+    _thread = boost::thread(boost::bind(&HeartRateCounter::threadBody, this));
+    return true;
 }
 
 void HeartRateCounter::stop() {
+    _thread.interrupt();
+    _thread.join();
+}
+
+void HeartRateCounter::threadBody() {
+    try {
+        while(1){
+            boost::this_thread::interruption_point();
+
+            RawMeasurementGraph hrRawGraph = _hrg->getHeartRate();
+            MeasurementGraph hrGraph;
+            HeartRateValue hrNumber = 70;
+
+            /* calculate heart rate */
+
+            _hrn->setHeartRateNumber(hrNumber);
+            _hrv->visualizeHeartRate(hrGraph);
+        }
+    } catch (const boost::thread_interrupted& e) {
+    }
 }
 
 }  // namespace hrm

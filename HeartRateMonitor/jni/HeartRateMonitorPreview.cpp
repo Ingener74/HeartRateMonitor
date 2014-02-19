@@ -26,6 +26,7 @@
 #include <SimpleHeartRateNumber.h>
 #include <SimpleHeartRateGenerator.h>
 #include <SimpleHeartRateVisualizer.h>
+#include <HeartRateTools.h>
 
 #include "HeartRateMonitorPreview.h"
 
@@ -33,43 +34,6 @@ boost::shared_ptr<hrm::NV21FrameSource> nv21;
 boost::shared_ptr<hrm::HeartRateProcessor> hrp;
 
 boost::shared_ptr<hrm::HeartRateCounter> heartRateCounter;
-
-class HeartRateMonitorPreviewJava: public hrm::IImageDrawer {
-public:
-    HeartRateMonitorPreviewJava(JNIEnv * JNIEnv_, jobject self):
-        _jni(0), _self(0), _hrmPreviewClass(0), _drawBitmap(0){
-
-        LLDEBUG("HeartRateMonitorPreviewJava(JNIEnv * JNIEnv_, jobject self): _jni(0), _self(0)");
-        _jni = JNIEnv_;
-        _self = _jni->NewGlobalRef(self);
-        if(!_self){
-            LLERROR("!_self");
-            return;
-        }
-        _hrmPreviewClass = _jni->FindClass("com/shnayder/heartratemonitor/HeartRateMonitorPreview");
-        if(!_hrmPreviewClass){
-            LLERROR("!_hrmPreviewClass");
-            return;
-        }
-        _drawBitmap = _jni->GetMethodID(_hrmPreviewClass, "drawBitmap", "()V");
-        if(!_drawBitmap){
-            LLERROR("!_drawBitmap");
-        }
-        LLDEBUG("ctor HeartRateMonitorPreviewJava success");
-    }
-    virtual ~HeartRateMonitorPreviewJava() {
-        LLDEBUG("~HeartRateMonitorPreviewJava()");
-        _jni->DeleteGlobalRef(_self);
-    }
-    virtual void drawImage(hrm::Image image) {
-    }
-private:
-    JNIEnv * _jni;
-    jobject _self;
-
-    jclass _hrmPreviewClass;
-    jmethodID _drawBitmap;
-};
 
 jint JNI_OnLoad(JavaVM* vm, void* reserved) {
     LLDEBUG("JNI_OnLoad(JavaVM* vm, void* reserved)");
@@ -87,11 +51,11 @@ jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativeSta
         JNIEnv* JNIEnv_, jobject self) {
 
     hrm::TimeCounter::instance();
+    hrm::HeartRateTools::instance()->getLog()->INFO("native start");
 
-    nv21 = boost::shared_ptr<hrm::NV21FrameSource>(new hrm::NV21FrameSource());
-    boost::shared_ptr<hrm::RGBFrameSource> rgbfs(new hrm::RGBFrameSource(nv21));
-
-    boost::shared_ptr<hrm::IImageDrawer> heartRateOutput(new HeartRateMonitorPreviewJava(JNIEnv_, self));
+//    nv21 = boost::shared_ptr<hrm::NV21FrameSource>(new hrm::NV21FrameSource());
+//    boost::shared_ptr<hrm::RGBFrameSource> rgbfs(new hrm::RGBFrameSource(nv21));
+//    boost::shared_ptr<hrm::IImageDrawer> heartRateOutput(new HeartRateMonitorPreviewJava(JNIEnv_, self));
 
     boost::shared_ptr<hrm::IHeartRateGenerator> hrGenerator(
             new hrm::SimpleHeartRateGenerator());
@@ -106,25 +70,20 @@ jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativeSta
                     hrVisualizer
                     ));
 
-    LLINFO("native start");
-    hrp = boost::shared_ptr<hrm::HeartRateProcessor>(new hrm::HeartRateProcessor(rgbfs));
-//    return hrp->start();
+    hrm::HeartRateTools::instance()->getLog()->INFO("native started");
 
-    return true;
+//    return true;
+    return heartRateCounter->start();
 }
 
 void Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativeStop(
         JNIEnv* JNIEnv_, jobject self) {
 
-    LLINFO("native stop");
+    hrm::HeartRateTools::instance()->getLog()->INFO("native stop");
 
-    if(!hrp){
-        LLERROR("native stoped");
-        return;
-    }
-//    hrp->stop();
+    heartRateCounter->stop();
 
-    LLINFO("native stoped");
+    hrm::HeartRateTools::instance()->getLog()->INFO("native stoped");
 
 //    JNIEnv_->DeleteGlobalRef(HeartRateMonitorPreviewThis);
 }
@@ -132,6 +91,15 @@ void Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativeStop(
 jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativePassImage(
         JNIEnv* JNIEnv_, jobject self,
         jint rows, jint cols, jint type, jbyteArray data) {
+
+    static bool nv21_error = false;
+    if(!nv21 ){
+        if(!nv21_error){
+            LLWARN("NV21 is null");
+            nv21_error = true;
+        }
+        return false;
+    }
 
     jboolean imageDataIsCopy = false;
     jbyte* imageData = JNIEnv_->GetByteArrayElements(data, &imageDataIsCopy);
