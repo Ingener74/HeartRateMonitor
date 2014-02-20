@@ -25,7 +25,6 @@ public:
     virtual ~HeartRateCounter();
 
     bool start();
-    void stop();
 
 private:
     boost::shared_ptr<IHeartRateGenerator> _hrg;

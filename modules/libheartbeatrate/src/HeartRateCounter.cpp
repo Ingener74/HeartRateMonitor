@@ -18,16 +18,14 @@ HeartRateCounter::HeartRateCounter(
 }
 
 HeartRateCounter::~HeartRateCounter() {
+    HeartRateTools::instance()->getLog()->DEBUG("HeartRateCounter::~HeartRateCounter()");
+    _thread.interrupt();
+    _thread.join();
 }
 
 bool HeartRateCounter::start() {
     _thread = boost::thread(boost::bind(&HeartRateCounter::threadBody, this));
     return true;
-}
-
-void HeartRateCounter::stop() {
-    _thread.interrupt();
-    _thread.join();
 }
 
 void HeartRateCounter::threadBody() {

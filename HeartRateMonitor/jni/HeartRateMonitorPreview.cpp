@@ -86,7 +86,8 @@ void Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativeStop(
 
     hrm::HeartRateTools::instance()->getLog()->INFO("native stop");
 
-    heartRateCounter->stop();
+//    heartRateCounter->stop();
+    heartRateCounter.reset();
 
     hrm::HeartRateTools::instance()->getLog()->INFO("native stoped");
 }
