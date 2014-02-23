@@ -93,27 +93,52 @@ struct ImageRect {
     uint16_t _rows, _cols;
 };
 
+
 struct ImageFormat {
-    ImageFormat(ImageRect rect = ImageRect(), uint16_t bitsPerPixel = 8) :
-            _rect(rect), _bitsPerPixel(bitsPerPixel) {
+    ImageFormat(ImageRect rect = ImageRect()): _rect(rect){
     }
-    bool operator==(const ImageFormat& other) const {
-        return (_rect == other._rect && _bitsPerPixel == other._bitsPerPixel);
-    }
-    bool operator!=(const ImageFormat& other) const {
-        return (_rect != other._rect || _bitsPerPixel != other._bitsPerPixel);
-    }
+    virtual bool operator==(const ImageFormat& other) const = 0;
+    virtual bool operator!=(const ImageFormat& other) const = 0;
+    virtual uint32_t size() const = 0;
+
     bool operator!() const {
         return !_rect;
     }
     operator bool() const {
         return _rect.operator bool();
     }
-    uint32_t size() const {
+
+    ImageRect _rect;
+};
+template <typename imageType>
+struct TypeImageFormat: public ImageFormat{
+    TypeImageFormat(ImageRect rect = ImageRect()): ImageFormat(rect){
+    }
+    virtual bool operator==(const TypeImageFormat& other) const {
+        return false;
+    }
+    virtual bool operator!=(const TypeImageFormat& other) const {
+        return false;
+    }
+    virtual uint32_t size() const {
+        return _rect.area() * sizeof(imageType);
+    }
+};
+struct BitsPerPixelImageFormat: public ImageFormat{
+    BitsPerPixelImageFormat(
+            ImageRect rect = ImageRect(), uint32_t bitsPerPixel = 8):
+            _rect(rect), _bitsPerPixel(bitsPerPixel){
+    }
+    virtual bool operator==(const ImageFormat& other) const {
+        return false;
+    }
+    virtual bool operator!=(const ImageFormat& other) const {
+        return false;
+    }
+    virtual uint32_t size() const {
         return _rect.area() * _bitsPerPixel / 8;
     }
-    ImageRect _rect;
-    uint16_t _bitsPerPixel;
+    uint32_t _bitsPerPixel;
 };
 
 class Image{
