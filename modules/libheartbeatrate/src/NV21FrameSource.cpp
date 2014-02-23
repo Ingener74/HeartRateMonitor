@@ -39,7 +39,7 @@ void NV21FrameSource::putFrame(uint16_t rows, uint16_t cols, uint8_t * data,
         /*
          * copy original
          */
-        uint32_t bytesToCopy = _frame.getFormat()._rect.area();
+        uint32_t bytesToCopy = _frame.getFormat().size();
         uint8_t * s = data, * d = _frame.getData();
         for (int i = 0; i < bytesToCopy; ++i) {
             *d++ = *s++;

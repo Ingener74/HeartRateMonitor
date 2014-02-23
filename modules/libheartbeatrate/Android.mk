@@ -28,7 +28,9 @@ LOCAL_SRC_FILES := \
 	src/SimpleHeartRateGenerator.cpp \
 	src/SimpleHeartRateVisualizer.cpp \
 	src/HeartRateCounter.cpp \
-	src/ImageViewHeartRateVisualizer.cpp
+	src/ImageViewHeartRateVisualizer.cpp \
+	src/ImageViewImageDrawer.cpp \
+	src/RGBHeartRateGenerator.cpp
 
 LOCAL_EXPORT_C_INCLUDES                := $(LOCAL_PATH)
 

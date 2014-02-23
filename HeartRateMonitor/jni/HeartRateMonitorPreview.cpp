@@ -24,10 +24,15 @@
 
 #include <HeartRateCounter.h>
 #include <SimpleHeartRateNumber.h>
-#include <SimpleHeartRateGenerator.h>
-#include <SimpleHeartRateVisualizer.h>
 #include <HeartRateTools.h>
+
+#include <SimpleHeartRateVisualizer.h>
 #include <ImageViewHeartRateVisualizer.h>
+
+#include <SimpleHeartRateGenerator.h>
+#include <RGBHeartRateGenerator.h>
+
+#include <ImageViewImageDrawer.h>
 
 #include "HeartRateMonitorPreview.h"
 
@@ -54,19 +59,27 @@ jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativeSta
     hrm::TimeCounter::instance();
     hrm::HeartRateTools::instance()->getLog()->INFO("native start");
 
-//    nv21 = boost::shared_ptr<hrm::NV21FrameSource>(new hrm::NV21FrameSource());
-//    boost::shared_ptr<hrm::RGBFrameSource> rgbfs(new hrm::RGBFrameSource(nv21));
-//    boost::shared_ptr<hrm::IImageDrawer> heartRateOutput(new HeartRateMonitorPreviewJava(JNIEnv_, self));
+    nv21 = boost::shared_ptr<hrm::NV21FrameSource>(new hrm::NV21FrameSource());
+    boost::shared_ptr<hrm::RGBFrameSource> rgbfs(new hrm::RGBFrameSource(nv21));
+
+    boost::shared_ptr<hrm::IImageDrawer> debugImageDrawer(
+            new hrm::ImageViewImageDrawer(JNIEnv_, self));
 
     boost::shared_ptr<hrm::IHeartRateVisualizer> hrVisualizer;
+    boost::shared_ptr<hrm::IHeartRateGenerator> hrGenerator;
 
-    boost::shared_ptr<hrm::IHeartRateGenerator> hrGenerator(
-            new hrm::SimpleHeartRateGenerator());
+//    hrGenerator = boost::shared_ptr<hrm::IHeartRateGenerator>(
+//            new hrm::SimpleHeartRateGenerator());
+    hrGenerator = boost::shared_ptr<hrm::IHeartRateGenerator>(
+            new hrm::RGBHeartRateGenerator(rgbfs, debugImageDrawer));
+
     boost::shared_ptr<hrm::IHeartRateNumber> hrNumber(
             new hrm::SimpleHeartRateNumber());
 
+//    hrVisualizer = boost::shared_ptr<hrm::IHeartRateVisualizer>(
+//            new hrm::ImageViewHeartRateVisualizer(JNIEnv_, self));
     hrVisualizer = boost::shared_ptr<hrm::IHeartRateVisualizer>(
-            new hrm::ImageViewHeartRateVisualizer(JNIEnv_, self));
+            new hrm::SimpleHeartRateVisualizer());
 
     heartRateCounter = boost::shared_ptr<hrm::HeartRateCounter>(
             new hrm::HeartRateCounter(
@@ -77,19 +90,14 @@ jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativeSta
 
     hrm::HeartRateTools::instance()->getLog()->INFO("native started");
 
-//    return true;
     return heartRateCounter->start();
 }
 
 void Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativeStop(
         JNIEnv* JNIEnv_, jobject self) {
-
-    hrm::HeartRateTools::instance()->getLog()->INFO("native stop");
-
-//    heartRateCounter->stop();
     heartRateCounter.reset();
-
-    hrm::HeartRateTools::instance()->getLog()->INFO("native stoped");
+    hrp.reset();
+    nv21.reset();
 }
 
 jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativePassImage(

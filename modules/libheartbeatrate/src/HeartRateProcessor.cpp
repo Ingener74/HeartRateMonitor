@@ -20,18 +20,10 @@ HeartRateProcessor::~HeartRateProcessor() {
 }
 
 void HeartRateProcessor::body() {
-    if(boost::this_thread::interruption_enabled())
-        LLDEBUG("boost::this_thread::interruption_enabled()");
     try {
         LLINFO("heart rate processor whiskers");
-//        {
-//            boost::unique_lock<boost::mutex> lock(_start.get<0>());
-//
-//
-//
-//        }
-//        _start.get<2>() = true;
-//        _start.get<1>().notify_all();
+
+
         LLINFO("heart rate processor body");
         while(1){
             boost::this_thread::interruption_point();

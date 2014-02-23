@@ -13,6 +13,10 @@
 
 namespace hrm {
 
+struct RGB{
+    uint8_t r, g, b;
+};
+
 hrm::RGBFrameSource::RGBFrameSource(boost::shared_ptr<NV21FrameSource> nv21) :
         _nv21(nv21) {
 }
@@ -54,28 +58,37 @@ SharedLockedFrame RGBFrameSource::getFrame() {
         uint8_t * y = lockedFrame.get<1>().getData();
         uint8_t * uv = y + lockedFrame.get<1>().getFormat()._rect.area();
 
-        uint8_t * rgb = _frame.getData();
+        RGB * rgb = reinterpret_cast<RGB *>(_frame.getData());
 
-        uint32_t imax = _frame.getFormat()._rect._rows,
-                 jmax = _frame.getFormat()._rect._cols;
+        for (uint32_t i = 0, imax = _frame.getFormat()._rect._rows; i < imax; i += 2){
 
-        for (uint32_t i = 0; i < imax;    ++i, uv -= jmax) {
+            for (uint32_t j = 0, jmax = _frame.getFormat()._rect._cols; j < jmax; j += 2){
 
-            for (uint32_t j = 0; j < jmax;    ++j, rgb += 3, ++y /*, uv += 2*/ ) {
+                int Y1 = int(*(y +  i     *jmax +  j      )) - 16;
+                int Y2 = int(*(y +  i     *jmax + (j + 1) )) - 16;
+                int Y3 = int(*(y + (i + 1)*jmax +  j      )) - 16;
+                int Y4 = int(*(y + (i + 1)*jmax + (j + 1) )) - 16;
 
-                uint8_t Y = *y;
-                uint8_t U = *uv;
-                uint8_t V = *(uv + 1);
+                int U = int(*uv++) - 128;
+                int V = int(*uv++) - 128;
 
-                uint8_t r = Y + 1.13983 * (V - 128);
-                uint8_t g = Y - 0.39465 * (U - 128) - 0.58060 * (V - 128);
-                uint8_t b = Y + 2.03211 * (U - 128);
+                RGB* rgb1 = rgb +  i     *jmax +  j      ;
+                RGB* rgb2 = rgb +  i     *jmax + (j + 1) ;
+                RGB* rgb3 = rgb + (i + 1)*jmax +  j      ;
+                RGB* rgb4 = rgb + (i + 1)*jmax + (j + 1) ;
 
-                r = std::max(uint8_t(0), std::min(r, uint8_t(255)));
-                g = std::max(uint8_t(0), std::min(g, uint8_t(255)));
-                b = std::max(uint8_t(0), std::min(b, uint8_t(255)));
+#define YUV2RGB(Y, U, V, pRGB){                             \
+                int r = 1.164 * Y              + 2.018 * U; \
+                int g = 1.164 * Y -  0.813 * V - 0.391 * U; \
+                int b = 1.164 * Y +  1.596 * V;             \
+                pRGB->r = std::max(0, std::min(r, 255));    \
+                pRGB->g = std::max(0, std::min(g, 255));    \
+                pRGB->b = std::max(0, std::min(b, 255));}   \
 
-                uv += j%2 * 2;
+                YUV2RGB(Y1, U, V, rgb1);
+                YUV2RGB(Y2, U, V, rgb2);
+                YUV2RGB(Y3, U, V, rgb3);
+                YUV2RGB(Y4, U, V, rgb4);
             }
         }
         _frame.setTimeStamp(lockedFrame.get<1>().getTimeStamp());
