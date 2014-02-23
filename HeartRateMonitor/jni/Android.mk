@@ -39,7 +39,7 @@ BOOST_LIBS := \
 	$(BOOST_PATH)/lib/libboost_system-gcc-mt-1_55.a \
 	$(BOOST_PATH)/lib/libboost_thread-gcc-mt-1_55.a
 
-LOCAL_MODULE                           := HeartRateMonitor
+LOCAL_MODULE := HeartRateMonitor
 
 LOCAL_C_INCLUDES := \
 	$(LOCAL_PATH)/test_module \
@@ -53,9 +53,7 @@ LOCAL_SRC_FILES := \
 	HeartRateMonitorPreview.cpp
 
 LOCAL_STATIC_LIBRARIES := \
-	test_module \
-	heartbeatrate \
-	boost
+	test_module heartbeatrate
 
 LOCAL_LDLIBS := \
 	-llog -landroid -ljnigraphics $(BOOST_LIBS)

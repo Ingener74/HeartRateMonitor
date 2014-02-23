@@ -8,7 +8,7 @@
 #ifndef NV21FRAMESOURCE_H_
 #define NV21FRAMESOURCE_H_
 
-#include <boost/thread/condition_variable.hpp>
+#include <boost/thread.hpp>
 
 #include "IFrameSource.h"
 

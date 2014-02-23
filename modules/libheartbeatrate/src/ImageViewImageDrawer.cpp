@@ -62,11 +62,7 @@ void ImageViewImageDrawer::drawImage(Image image) {
         return;
     }
 
-//    HeartRateTools::instance()->getLog()->DEBUG(
-//            (boost::format("image view draw %1% x %2%, %3%")
-//                % image.getFormat()._rect._cols
-//                % image.getFormat()._rect._rows
-//                % image.getFormat()._bitsPerPixel).str());
+    Image::drawLine(image, Point(10, 10), Point(50, 50), Color(0, 255, 0));
 
     JNIEnv * jniEnv = 0;
     jint res = 0;

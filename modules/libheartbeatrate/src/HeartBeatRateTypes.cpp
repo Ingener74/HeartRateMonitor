@@ -6,6 +6,7 @@
  */
 
 #include <time.h>
+#include <algorithm>
 
 #include "HeartBeatRateTypes.h"
 
@@ -39,10 +40,36 @@ boost::tuple<TimeStamp, ElapsedTime> TimeCounter::getTimeStampExt() {
     return boost::tuple<TimeStamp, ElapsedTime>(time, dt);
 }
 
-void Image::drawLine(Image image, const Point& p1, const Point& p2,
+void Image::drawLine(Image image, const Point& p1,
+        const Point& p2,
+        const Color& color,
         DrawLineMethod method) {
+    if(image.getFormat()._bitsPerPixel != 24){
+        return;
+    }
     switch (method) {
     case DrawLineMethod_DDA: {
+        uint8_t* data = image.getData();
+        ImageRect ir = image.getFormat()._rect;
+        int L = std::max(std::abs(p2.x - p1.x), std::abs(p2.y - p1.y));
+
+        double dX = (p2.x - p1.x) / L,
+                dY = (p2.y - p1.y) / L;
+
+        int x = p1.x, y = p1.y;
+
+        *(data + y*(ir._cols * 3) + x + 0) = color.r;
+        *(data + y*(ir._cols * 3) + x + 1) = color.g;
+        *(data + y*(ir._cols * 3) + x + 2) = color.b;
+
+        for (int i = 1, imax = L; i < imax; ++i) {
+            x += dX;
+            y += dY;
+
+            *(data + y*ir._cols + x + 0) = color.r;
+            *(data + y*ir._cols + x + 1) = color.g;
+            *(data + y*ir._cols + x + 2) = color.b;
+        }
         break;
     }
     case DrawLineMethod_Bresenham: {

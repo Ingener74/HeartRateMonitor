@@ -37,8 +37,6 @@
 #include "HeartRateMonitorPreview.h"
 
 boost::shared_ptr<hrm::NV21FrameSource> nv21;
-boost::shared_ptr<hrm::HeartRateProcessor> hrp;
-
 boost::shared_ptr<hrm::HeartRateCounter> heartRateCounter;
 
 jint JNI_OnLoad(JavaVM* vm, void* reserved) {
@@ -96,7 +94,6 @@ jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativeSta
 void Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativeStop(
         JNIEnv* JNIEnv_, jobject self) {
     heartRateCounter.reset();
-    hrp.reset();
     nv21.reset();
 }
 
@@ -117,7 +114,7 @@ jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativePas
     jbyte* imageData = JNIEnv_->GetByteArrayElements(data, &imageDataIsCopy);
 
     /*
-     * measure time and pass image in processor
+     * measure time and pass image in nv21 frame source
      */
     boost::tuple<hrm::TimeStamp, hrm::ElapsedTime> ts =
             hrm::TimeCounter::instance()->getTimeStampExt();

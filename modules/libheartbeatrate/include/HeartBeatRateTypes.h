@@ -62,6 +62,13 @@ struct Point{
     int32_t x, y;
 };
 
+struct Color{
+    Color(uint8_t r = 0, uint8_t g = 0, uint8_t b = 0, uint8_t a = 0):
+        r(r), g(g), b(b), a(a){
+    }
+    uint8_t r, g, b, a;
+};
+
 struct ImageRect {
     ImageRect(uint16_t rows = 0, uint16_t cols = 0) :
             _rows(rows), _cols(cols) {
@@ -143,7 +150,9 @@ public:
         DrawLineMethod_Bresenham,
         DrawLineMethod_By,
     };
-    static void drawLine(Image image, const Point& p1, const Point& p2 = Point(),
+    static void drawLine(Image image, const Point& p1,
+            const Point& p2 = Point(),
+            const Color& color = Color(),
             DrawLineMethod method = DrawLineMethod_DDA);
 
 protected:

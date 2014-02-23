@@ -6,9 +6,10 @@
  */
 
 #include <algorithm>
+#include <boost/format.hpp>
 
+#include "HeartRateTools.h"
 #include "RGBFrameSource.h"
-
 #include "HeartBeatRateDefines.h"
 
 namespace hrm {
@@ -33,13 +34,17 @@ SharedLockedFrame RGBFrameSource::getFrame() {
         ImageRect r = lockedFrame.get<1>().getFormat()._rect;
         if(_frame.getFormat()._rect != r){
             _frame = Frame(ImageFormat(r, 8 * 3));
-            LLDEBUG("rgb frame resized %d x %d", _frame.getFormat()._rect._rows, _frame.getFormat()._rect._cols);
+//            HeartRateTools::instance()->getLog()->DEBUG((boost::format(
+//                    "rgb frame resized %1% x %2%")
+//            % _frame.getFormat()._rect._rows
+//            % _frame.getFormat()._rect._cols).str());
         }
         /* Internet sources
          *
          * http://ru.wikipedia.org/wiki/YUV
          * http://linuxtv.org/downloads/v4l-dvb-apis/re29.html
          * http://stackoverflow.com/questions/5272388/extract-black-and-white-image-from-android-cameras-nv21-format
+         * http://www.fourcc.org/fccyvrgb.php
          *
          * Convert nv21 to rgb
          *
@@ -92,7 +97,7 @@ SharedLockedFrame RGBFrameSource::getFrame() {
             }
         }
         _frame.setTimeStamp(lockedFrame.get<1>().getTimeStamp());
-        LLDEBUG("rgb frame converted");
+//        HeartRateTools::instance()->getLog()->DEBUG("rgb frame converted");
     }
     SharedLockedFrame lockedFrame(
             boost::shared_ptr<boost::shared_lock<boost::shared_mutex> >(
