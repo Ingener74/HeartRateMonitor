@@ -144,8 +144,8 @@ struct BitsPerPixelImageFormat {
 //struct ImageFormat {
 //    ImageFormat(ImageRect rect = ImageRect()): _rect(rect){}
 //
-//    virtual bool operator==(const ImageFormat& other) const = 0;
-//    virtual bool operator!=(const ImageFormat& other) const = 0;
+//    virtual bool operator==(const ImageFormat& other) const ;
+//    virtual bool operator!=(const ImageFormat& other) const ;
 //    virtual uint32_t size() const = 0;
 //
 //    bool operator!() const ;
@@ -156,32 +156,41 @@ struct BitsPerPixelImageFormat {
 
 template<typename ImageFormat>
 class Image{
+protected:
+    template <typename ImageFormat>
+    class ImageData;
+    boost::shared_ptr<ImageData<ImageFormat> > _p;
+
 public:
-    Image(ImageFormat format = ImageFormat()) :
-            _format(format) {
-        if (_format)
-            _data = boost::shared_array<uint8_t>(new uint8_t[_format.size()]);
+    Image(ImageFormat format = ImageFormat()){
+        if (format){
+            _p = boost::shared_ptr<ImageData>(
+                    new ImageData<ImageFormat>(format, ));
+        }
+//            _data = boost::shared_array<uint8_t>(new uint8_t[_format.size()]);
     }
     virtual ~Image(){}
     operator bool() const {
-        return bool(_format);
+//        return bool(_format);
+        return false;
     }
     bool operator!() const {
-        return !_format;
+//        return !_format;
+        return false;
     }
     void operator << (const Image& original){
-        _format = original._format;
-        _data = boost::shared_array<uint8_t>(new uint8_t[_format.size()]);
-        uint8_t * src = original._data.get(), * dst = _data.get();
-        for (int i = 0, imax = _format.size(); i < imax; ++i) {
-            *dst++ = *src++;
-        }
+//        _format = original._format;
+//        _data = boost::shared_array<uint8_t>(new uint8_t[_format.size()]);
+//        uint8_t * src = original._data.get(), * dst = _data.get();
+//        for (int i = 0, imax = _format.size(); i < imax; ++i) {
+//            *dst++ = *src++;
+//        }
     }
     const ImageFormat& getFormat() const {
-        return _format;
+//        return _format;
     }
     ImageFormat::PixelType* getData() {
-        return _data.get();
+//        return _data.get();
     }
 
     enum DrawLineMethod {
@@ -193,36 +202,34 @@ public:
             const Point& p2 = Point(),
             const Color& color = Color(),
             DrawLineMethod method = DrawLineMethod_DDA);
-
-protected:
-    class ImageData;
-    boost::shared_ptr<ImageData> _p;
-
 };
 
-class Image::ImageData{
+template <typename ImageFormat>
+class Image<ImageFormat>::ImageData{
 public:
+    typedef boost::shared_array<ImageFormat::PixelType> ptr;
+    ImageData(ImageFormat if_, ptr data): _format(if_), _data(data){}
     ImageFormat _format;
-    boost::shared_array<uint8_t> _data;
+    ptr _data;
 };
 
-class Frame: public Image {
-public:
-    Frame(ImageFormat format = ImageFormat(), TimeStamp timeStamp = 0.0) :
-            Image(format), _timeStamp(timeStamp) {
-    }
-    virtual ~Frame() {
-    }
-    void setTimeStamp(TimeStamp timeStamp) {
-        _timeStamp = timeStamp;
-    }
-    const TimeStamp getTimeStamp() const {
-        return _timeStamp;
-    }
-
-private:
-    TimeStamp _timeStamp;
-};
+//class Frame: public Image {
+//public:
+//    Frame(ImageFormat format = ImageFormat(), TimeStamp timeStamp = 0.0) :
+//            Image(format), _timeStamp(timeStamp) {
+//    }
+//    virtual ~Frame() {
+//    }
+//    void setTimeStamp(TimeStamp timeStamp) {
+//        _timeStamp = timeStamp;
+//    }
+//    const TimeStamp getTimeStamp() const {
+//        return _timeStamp;
+//    }
+//
+//private:
+//    TimeStamp _timeStamp;
+//};
 
 }  // namespace hrm
 
