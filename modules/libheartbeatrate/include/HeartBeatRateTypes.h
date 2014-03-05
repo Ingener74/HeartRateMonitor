@@ -162,12 +162,7 @@ protected:
     boost::shared_ptr<ImageData<ImageFormat> > _p;
 
 public:
-    Image(ImageFormat format = ImageFormat()){
-        if (format){
-            _p = boost::shared_ptr<ImageData>(
-                    new ImageData<ImageFormat>(format, ));
-        }
-//            _data = boost::shared_array<uint8_t>(new uint8_t[_format.size()]);
+    Image(ImageFormat format = ImageFormat()): _p(new ){
     }
     virtual ~Image(){}
     operator bool() const {
@@ -207,10 +202,14 @@ public:
 template <typename ImageFormat>
 class Image<ImageFormat>::ImageData{
 public:
-    typedef boost::shared_array<ImageFormat::PixelType> ptr;
-    ImageData(ImageFormat if_, ptr data): _format(if_), _data(data){}
+    typedef boost::shared_ptr<ImageData<ImageFormat> > Ptr;
+    typedef boost::shared_array<ImageFormat::PixelType> Array;
+
+    ImageData(ImageFormat if_):
+        _format(if_),
+        _data(new ImageFormat::PixelType[if_.size()]) {}
     ImageFormat _format;
-    ptr _data;
+    Array _data;
 };
 
 //class Frame: public Image {
