@@ -154,15 +154,33 @@ struct BitsPerPixelImageFormat {
 //    ImageRect _rect;
 //};
 
+template <typename ImageFormat>
+class Image;
+
+template <typename ImageFormat>
+class ImageData{
+public:
+    typedef boost::shared_ptr<ImageData<ImageFormat> > Ptr;
+    typedef boost::shared_array<ImageFormat::PixelType> Array;
+
+    ImageFormat _format;
+    Array _data;
+
+    ImageData(ImageFormat if_):
+        _format(if_),
+        _data(new ImageFormat::PixelType[if_.size()]) {}
+
+};
+
 template<typename ImageFormat>
 class Image{
 protected:
-    template <typename ImageFormat>
-    class ImageData;
-    boost::shared_ptr<ImageData<ImageFormat> > _p;
+//    template <typename ImageFormat>
+//    class ImageData;
+    ImageData<ImageFormat>::Ptr _p;
 
 public:
-    Image(ImageFormat format = ImageFormat()): _p(new ){
+    Image(ImageFormat format = ImageFormat()): _p(new ImageData(format)){
     }
     virtual ~Image(){}
     operator bool() const {
@@ -182,10 +200,10 @@ public:
 //        }
     }
     const ImageFormat& getFormat() const {
-//        return _format;
+        return _p->_format;
     }
     ImageFormat::PixelType* getData() {
-//        return _data.get();
+        return _p->_data.get();
     }
 
     enum DrawLineMethod {
@@ -197,19 +215,6 @@ public:
             const Point& p2 = Point(),
             const Color& color = Color(),
             DrawLineMethod method = DrawLineMethod_DDA);
-};
-
-template <typename ImageFormat>
-class Image<ImageFormat>::ImageData{
-public:
-    typedef boost::shared_ptr<ImageData<ImageFormat> > Ptr;
-    typedef boost::shared_array<ImageFormat::PixelType> Array;
-
-    ImageData(ImageFormat if_):
-        _format(if_),
-        _data(new ImageFormat::PixelType[if_.size()]) {}
-    ImageFormat _format;
-    Array _data;
 };
 
 //class Frame: public Image {
