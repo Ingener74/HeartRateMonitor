@@ -161,60 +161,57 @@ template <typename ImageFormat>
 class ImageData{
 public:
     typedef boost::shared_ptr<ImageData<ImageFormat> > Ptr;
-    typedef boost::shared_array<ImageFormat::PixelType> Array;
+    typedef boost::shared_array<typename ImageFormat::PixelType> Array;
 
     ImageFormat _format;
     Array _data;
 
     ImageData(ImageFormat if_):
         _format(if_),
-        _data(new ImageFormat::PixelType[if_.size()]) {}
+        _data(new typename ImageFormat::PixelType[if_.size()]) {}
 
 };
 
 template<typename ImageFormat>
 class Image{
 protected:
-//    template <typename ImageFormat>
-//    class ImageData;
-    ImageData<ImageFormat>::Ptr _p;
+    typename ImageData<ImageFormat>::Ptr _p;
 
 public:
-    Image(ImageFormat format = ImageFormat()): _p(new ImageData(format)){
+    Image(ImageFormat format = ImageFormat()):
+        _p(new ImageData<ImageFormat>(format)){
     }
     virtual ~Image(){}
     operator bool() const {
-//        return bool(_format);
-        return false;
+        return _p->_format;
     }
     bool operator!() const {
-//        return !_format;
-        return false;
+        return !_p->_format;
     }
-    void operator << (const Image& original){
+//    void operator << (const Image& original){
 //        _format = original._format;
 //        _data = boost::shared_array<uint8_t>(new uint8_t[_format.size()]);
 //        uint8_t * src = original._data.get(), * dst = _data.get();
 //        for (int i = 0, imax = _format.size(); i < imax; ++i) {
 //            *dst++ = *src++;
 //        }
-    }
+//    }
     const ImageFormat& getFormat() const {
         return _p->_format;
     }
-    ImageFormat::PixelType* getData() {
+    typename ImageFormat::PixelType* getData() {
         return _p->_data.get();
     }
 
-    enum DrawLineMethod {
-        DrawLineMethod_DDA,
-        DrawLineMethod_Bresenham,
-        DrawLineMethod_By,
-    };
-    static void drawLine(Image image, const Point& p1,
-            const Point& p2 = Point(),
-            const Color& color = Color(),
-            DrawLineMethod method = DrawLineMethod_DDA);
+//    enum DrawLineMethod {
+//        DrawLineMethod_DDA,
+//        DrawLineMethod_Bresenham,
+//        DrawLineMethod_By,
+//    };
+//    static void drawLine(Image image, const Point& p1,
+//            const Point& p2 = Point(),
+//            const Color& color = Color(),
+//            DrawLineMethod method = DrawLineMethod_DDA);
 };
 
 //class Frame: public Image {
