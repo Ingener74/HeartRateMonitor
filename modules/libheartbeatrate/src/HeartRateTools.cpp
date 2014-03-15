@@ -5,7 +5,7 @@
  *      Author: pavel
  */
 
-#include "boost/smart_ptr.hpp"
+#include <memory>
 
 #ifdef ANDROID
 #include "AndroidLog.h"
@@ -32,10 +32,10 @@ ILog* HeartRateTools::getLog() {
 HeartRateTools::HeartRateTools() {
 #ifdef ANDROID
 #warning AndroidLog
-    _log = boost::shared_ptr<ILog>(new AndroidLog());
+    _log = std::shared_ptr<ILog>(new AndroidLog());
 #else
 #warning LinuxLog
-    _log = boost::shared_ptr<ILog>(new LinuxLog());
+    _log = std::shared_ptr<ILog>(new LinuxLog());
 #endif
 }
 

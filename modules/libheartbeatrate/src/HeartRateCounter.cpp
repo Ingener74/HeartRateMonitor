@@ -11,28 +11,20 @@
 namespace hrm {
 
 HeartRateCounter::HeartRateCounter(
-        boost::shared_ptr<IHeartRateGenerator> hrGenerator,
-        boost::shared_ptr<IHeartRateNumber> hrNumber,
-        boost::shared_ptr<IHeartRateVisualizer> hrVisualizer):
+        IHeartRateGenerator::Ptr hrGenerator,
+        IHeartRateNumber::Ptr hrNumber,
+        IHeartRateVisualizer::Ptr hrVisualizer):
                 _hrg(hrGenerator), _hrn(hrNumber), _hrv(hrVisualizer){
 }
 
 HeartRateCounter::~HeartRateCounter() {
     HeartRateTools::instance()->getLog()->DEBUG("HeartRateCounter::~HeartRateCounter()");
-    _thread.interrupt();
     _thread.join();
 }
 
 bool HeartRateCounter::start() {
-    _thread = boost::thread(boost::bind(&HeartRateCounter::threadBody, this));
-    return true;
-}
-
-void HeartRateCounter::threadBody() {
-    try {
+    _thread = boost::thread([](){
         while(1){
-            boost::this_thread::interruption_point();
-
             RawMeasurementGraph hrRawGraph = _hrg->getHeartRate();
             MeasurementGraph hrGraph;
             HeartRateValue hrNumber = 70;
@@ -42,8 +34,8 @@ void HeartRateCounter::threadBody() {
             _hrn->setHeartRateNumber(hrNumber);
             _hrv->visualizeHeartRate(hrGraph);
         }
-    } catch (const boost::thread_interrupted& e) {
-    }
+    });
+    return true;
 }
 
 }  // namespace hrm

@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 
+
 set(3RDPARTY_BUILD_TYPE Release)
 set(3RDPARTY_INSTALL ${CMAKE_BINARY_DIR}/3RDPARTY)
 
@@ -13,6 +14,8 @@ if(ANDROID)
     include_directories(${ANDROID_NDK}/platforms/android-${ANDROID_NATIVE_API_LEVEL}/arch-arm/usr/include)
 else()
 endif()
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
 
 add_subdirectory(3rdparty)
 

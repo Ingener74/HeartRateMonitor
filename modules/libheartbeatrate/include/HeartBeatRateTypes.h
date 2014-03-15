@@ -11,10 +11,12 @@
 #include <stdint.h>
 #include <cmath>
 
+#include <memory>
+#include <tuple>
+#include <thread>
+#include <mutex>
 #include <vector>
 
-#include <boost/tuple/tuple.hpp>
-#include <boost/smart_ptr.hpp>
 #include <boost/thread.hpp>
 
 namespace hrm {
@@ -27,9 +29,9 @@ typedef int32_t HeartRateValue;
 
 typedef int64_t HeartBeatID;
 
-typedef boost::tuple<TimeStamp, NormalizedMeasurementValue>
+typedef std::tuple<TimeStamp, NormalizedMeasurementValue>
     RawMeasurement;
-typedef boost::tuple<TimeStamp, NormalizedMeasurementValue, HeartBeatID>
+typedef std::tuple<TimeStamp, NormalizedMeasurementValue, HeartBeatID>
     Measurement;
 
 typedef std::vector<RawMeasurement> RawMeasurementGraph;
@@ -41,7 +43,7 @@ public:
     virtual ~TimeCounter();
 
     TimeStamp getTimeStamp();
-    boost::tuple<TimeStamp, ElapsedTime> getTimeStampExt();
+    std::tuple<TimeStamp, ElapsedTime> getTimeStampExt();
 
 private:
     TimeCounter();
@@ -164,8 +166,8 @@ class Image;
 template <typename ImageFormat>
 class ImageData{
 public:
-    typedef boost::shared_ptr<ImageData<ImageFormat> > Ptr;
-    typedef boost::shared_array<typename ImageFormat::PixelType> Array;
+    typedef std::shared_ptr<ImageData<ImageFormat> > Ptr;
+    typedef std::shared_ptr<typename ImageFormat::PixelType[]> Array;
 
     ImageFormat _format;
     Array _data;
@@ -249,12 +251,12 @@ typedef Frame<TypeImageFormat<BGRA> > FrameBGRA;
 
 template <typename ImageFormat>
 struct LockedFrame{
-    typedef boost::tuple<
-            boost::shared_ptr<boost::unique_lock<boost::shared_mutex> >,
+    typedef std::tuple<
+            std::shared_ptr<boost::unique_lock<boost::shared_mutex> >,
             Frame<ImageFormat> > Unique;
 
-    typedef boost::tuple<
-            boost::shared_ptr<boost::shared_lock<boost::shared_mutex> >,
+    typedef std::tuple<
+            std::shared_ptr<boost::shared_lock<boost::shared_mutex> >,
             Frame<ImageFormat> > Shared;
 };
 

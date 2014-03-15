@@ -109,17 +109,18 @@ jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativePas
     /*
      * measure time and pass image in nv21 frame source
      */
-    boost::tuple<hrm::TimeStamp, hrm::ElapsedTime> ts =
+    std::tuple<hrm::TimeStamp, hrm::ElapsedTime> ts =
             hrm::TimeCounter::instance()->getTimeStampExt();
-    LLINFO("current time = %.2f ms, fps = %.1f", ts.get<0>(),
-            1000.0 / ts.get<1>());
+    LLINFO("current time = %.2f ms, fps = %.1f", std::get<0>(ts),
+            1000.0 / std::get<1>(ts));
 
-    LLINFO("%d x %d, type = %s, %p", cols, rows,
-            hrm::AndroidImageFormat::instance()->getImageFormatString(type).c_str(),
-            imageData);
+//    LLINFO("%d x %d, type = %s, %p", cols, rows,
+//            hrm::AndroidImageFormat::instance().getImageFormatString(
+//                    reinterpret_cast<hrm::AndroidImageFormat::Type>(type)
+//                    ).c_str(), imageData);
 
     nv21->putFrame(uint16_t(rows), uint16_t(cols), (uint8_t *) imageData,
-            ts.get<0>());
+            std::get<0>(ts));
 
     JNIEnv_->ReleaseByteArrayElements(data, imageData, 0);
     return false;

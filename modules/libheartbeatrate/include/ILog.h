@@ -9,14 +9,13 @@
 #define ILOG_H_
 
 #include <string>
-
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace hrm {
 
 class ILog {
 public:
-	typedef boost::shared_ptr<ILog> Ptr;
+	typedef std::shared_ptr<ILog> Ptr;
 
 	virtual ~ILog() {
 	}

@@ -22,7 +22,7 @@ public:
 
 private:
     HeartRateTools();
-    boost::shared_ptr<ILog> _log;
+    std::shared_ptr<ILog> _log;
 };
 
 }  // namespace hrm

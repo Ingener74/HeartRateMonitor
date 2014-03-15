@@ -8,9 +8,8 @@
 #ifndef IHEARTRATEGENERATOR_H_
 #define IHEARTRATEGENERATOR_H_
 
+#include <memory>
 #include <vector>
-#include <boost/tuple/tuple.hpp>
-#include <boost/smart_ptr.hpp>
 
 #include "HeartBeatRateTypes.h"
 
@@ -20,7 +19,7 @@ typedef double HeartValue;
 
 class IHeartRateGenerator {
 public:
-	typedef boost::shared_ptr<IHeartRateGenerator> Ptr;
+	typedef std::shared_ptr<IHeartRateGenerator> Ptr;
 
 	virtual ~IHeartRateGenerator() {
 	}

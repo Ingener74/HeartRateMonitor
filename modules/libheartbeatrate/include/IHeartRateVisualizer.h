@@ -8,7 +8,7 @@
 #ifndef IHEARTRATEVISUALIZER_H_
 #define IHEARTRATEVISUALIZER_H_
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include "HeartBeatRateTypes.h"
 
@@ -16,7 +16,7 @@ namespace hrm {
 
 class IHeartRateVisualizer {
 public:
-	typedef boost::shared_ptr<IHeartRateVisualizer> Ptr;
+	typedef std::shared_ptr<IHeartRateVisualizer> Ptr;
 
 	virtual ~IHeartRateVisualizer() {
 	}

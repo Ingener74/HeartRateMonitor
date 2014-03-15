@@ -31,13 +31,13 @@ TimeStamp TimeCounter::getTimeStamp() {
     return _time;
 }
 
-boost::tuple<TimeStamp, ElapsedTime> TimeCounter::getTimeStampExt() {
+std::tuple<TimeStamp, ElapsedTime> TimeCounter::getTimeStampExt() {
     struct timespec tm;
     clock_gettime(CLOCK_MONOTONIC, &tm);
     TimeStamp time = TimeStamp(tm.tv_sec * 1000 + tm.tv_nsec / 1000000);
     ElapsedTime dt = time - _time;
     _time = time;
-    return boost::tuple<TimeStamp, ElapsedTime>(time, dt);
+    return std::tuple<TimeStamp, ElapsedTime>(time, dt);
 }
 
 //void Image::drawLine(Image image, const Point& p1,
