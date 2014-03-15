@@ -15,6 +15,7 @@
 
 #include <boost/tuple/tuple.hpp>
 #include <boost/smart_ptr.hpp>
+#include <boost/thread.hpp>
 
 namespace hrm {
 
@@ -47,6 +48,11 @@ private:
     TimeStamp _time;
 };
 
+struct RGB{ uint8_t r, g, b; };
+struct RGBA{ uint8_t r, g, b, a; };
+struct BGR{ uint8_t b, g, r; };
+struct BGRA{ uint8_t b, g, r, a; };
+
 struct Point{
     Point(int32_t x = 0, int32_t y = 0): x(x), y(y){
     }
@@ -60,13 +66,6 @@ struct Point{
         return sqrt((p2.y - p1.y)*(p2.y - p1.y) + (p2.x - p1.x)*(p2.x - p1.x));
     }
     int32_t x, y;
-};
-
-struct Color{
-    Color(uint8_t r = 0, uint8_t g = 0, uint8_t b = 0, uint8_t a = 0):
-        r(r), g(g), b(b), a(a){
-    }
-    uint8_t r, g, b, a;
 };
 
 struct ImageRect {
@@ -116,11 +115,16 @@ struct TypeImageFormat {
     ImageRect rect;
 };
 
+typedef TypeImageFormat<RGB> ImageFormatRGB;
+typedef TypeImageFormat<RGBA> ImageFormatRGBA;
+typedef TypeImageFormat<BGR> ImageFormatBGR;
+typedef TypeImageFormat<BGRA> ImageFormatBGRA;
+
 struct BitsPerPixelImageFormat {
     typedef uint8_t PixelType;
     BitsPerPixelImageFormat(
             ImageRect rect = ImageRect(), uint32_t bitsPerPixel = 8):
-            rect(rect), _bitsPerPixel(bitsPerPixel){
+            rect(rect), bitsPerPixel(bitsPerPixel){
     }
     bool operator!() const {
         return !rect;
@@ -135,9 +139,9 @@ struct BitsPerPixelImageFormat {
         return false;
     }
     uint32_t size() const {
-        return rect.area() * _bitsPerPixel / 8;
+        return rect.area() * bitsPerPixel / 8;
     }
-    uint32_t _bitsPerPixel;
+    uint32_t bitsPerPixel;
     ImageRect rect;
 };
 
@@ -214,23 +218,50 @@ public:
 //            DrawLineMethod method = DrawLineMethod_DDA);
 };
 
-//class Frame: public Image {
-//public:
-//    Frame(ImageFormat format = ImageFormat(), TimeStamp timeStamp = 0.0) :
-//            Image(format), _timeStamp(timeStamp) {
-//    }
-//    virtual ~Frame() {
-//    }
-//    void setTimeStamp(TimeStamp timeStamp) {
-//        _timeStamp = timeStamp;
-//    }
-//    const TimeStamp getTimeStamp() const {
-//        return _timeStamp;
-//    }
-//
-//private:
-//    TimeStamp _timeStamp;
-//};
+typedef Image<ImageFormatRGB> RGBImage;
+typedef Image<ImageFormatRGBA> RGBAImage;
+typedef Image<ImageFormatBGR> BGRImage;
+typedef Image<ImageFormatBGRA> BGRAImage;
+
+template<typename ImageFormat>
+class Frame: public Image<ImageFormat> {
+public:
+    Frame(ImageFormat format = ImageFormat(), TimeStamp timeStamp = 0.0) :
+            Image<ImageFormat>(format), _timeStamp(timeStamp) {
+    }
+    virtual ~Frame() {
+    }
+    void setTimeStamp(TimeStamp timeStamp) {
+        _timeStamp = timeStamp;
+    }
+    const TimeStamp getTimeStamp() const {
+        return _timeStamp;
+    }
+
+private:
+    TimeStamp _timeStamp;
+};
+
+typedef Frame<TypeImageFormat<RGB> > FrameRGB;
+typedef Frame<TypeImageFormat<RGBA> > FrameRGBA;
+typedef Frame<TypeImageFormat<BGR> > FrameBGR;
+typedef Frame<TypeImageFormat<BGRA> > FrameBGRA;
+
+template <typename ImageFormat>
+struct LockedFrame{
+    typedef boost::tuple<
+            boost::shared_ptr<boost::unique_lock<boost::shared_mutex> >,
+            Frame<ImageFormat> > Unique;
+
+    typedef boost::tuple<
+            boost::shared_ptr<boost::shared_lock<boost::shared_mutex> >,
+            Frame<ImageFormat> > Shared;
+};
+
+typedef LockedFrame<TypeImageFormat<RGB> >::Shared FrameSharedLockedRGB;
+typedef LockedFrame<TypeImageFormat<RGBA> >::Shared FrameSharedLockedRGBA;
+typedef LockedFrame<TypeImageFormat<BGR> >::Shared FrameSharedLockedBGR;
+typedef LockedFrame<TypeImageFormat<BGRA> >::Shared FrameSharedLockedBGRA;
 
 }  // namespace hrm
 

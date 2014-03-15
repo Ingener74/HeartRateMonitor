@@ -10,21 +10,22 @@
 
 #include <boost/thread.hpp>
 
-#include "IFrameSource.h"
+#include "INV21FrameSource.h"
 
 namespace hrm {
 
-class NV21FrameSource: public IFrameSource {
+class NV21FrameSource: public INV21FrameSource {
 public:
     NV21FrameSource();
     virtual ~NV21FrameSource();
 
-    virtual SharedLockedFrame getFrame();
+    virtual LockedFrame<BitsPerPixelImageFormat>::Shared getFrame();
 
-    virtual void putFrame(uint16_t rows, uint16_t cols, uint8_t * data, TimeStamp timeStamp);
+    virtual void putFrame(uint16_t rows, uint16_t cols, uint8_t * data,
+            TimeStamp timeStamp);
 
 private:
-    Frame _frame;
+    Frame<BitsPerPixelImageFormat> _frame;
     boost::shared_mutex _frameMutex;
     boost::condition_variable_any _frameCond;
 };

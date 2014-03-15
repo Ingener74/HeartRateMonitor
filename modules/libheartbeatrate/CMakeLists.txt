@@ -7,7 +7,7 @@ include_directories(include)
 
 set(SOURCES
     src/HeartBeatRateTypes.cpp
-    src/HeartRateProcessor.cpp
+#    src/HeartRateProcessor.cpp
     src/HeartRateTools.cpp
     src/NV21FrameSource.cpp
     src/RGBFrameSource.cpp
