@@ -52,7 +52,7 @@ ImageViewImageDrawer::ImageViewImageDrawer(JNIEnv * jniEnv, jobject object_self)
 ImageViewImageDrawer::~ImageViewImageDrawer() {
 }
 
-void ImageViewImageDrawer::drawImage(Image image) {
+void ImageViewImageDrawer::drawImage(RGBImage image) {
     if(_isError){
         HeartRateTools::instance()->getLog()->ERROR("is error");
         return;
@@ -62,7 +62,7 @@ void ImageViewImageDrawer::drawImage(Image image) {
         return;
     }
 
-    Image::drawLine(image, Point(10, 10), Point(50, 50), Color(0, 255, 0));
+//    Image::drawLine(image, Point(10, 10), Point(50, 50), Color(0, 255, 0));
 
     JNIEnv * jniEnv = 0;
     jint res = 0;
@@ -95,7 +95,7 @@ void ImageViewImageDrawer::drawImage(Image image) {
     jobject object_Bitmap = jniEnv->CallStaticObjectMethod(
             class_Bitmap,
             method_Bitmap_createBitmap,
-            image.getFormat()._rect._cols, image.getFormat()._rect._rows,
+            image.getFormat().rect._cols, image.getFormat().rect._rows,
             object_Bitmap_Config);
 
     uint8_t *data = 0;
@@ -104,13 +104,13 @@ void ImageViewImageDrawer::drawImage(Image image) {
 
     if(data){
 
-        uint8_t *src = image.getData();
+        RGB * src = image.getData();
         uint8_t *dst = data;
-        for (int i = 0, imax = image.getFormat()._rect._rows; i < imax; ++i) {
-            for (int j = 0, jmax = image.getFormat()._rect._cols; j < jmax; ++j) {
-                *dst++ = *src++;
-                *dst++ = *src++;
-                *dst++ = *src++;
+        for (int i = 0, imax = image.getFormat().rect._rows; i < imax; ++i) {
+            for (int j = 0, jmax = image.getFormat().rect._cols; j < jmax; ++j, ++src) {
+                *dst++ = src->r;
+                *dst++ = src->g;
+                *dst++ = src->b;
                 *dst++ = 255;
             }
         }

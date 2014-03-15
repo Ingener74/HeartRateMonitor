@@ -1,0 +1,11 @@
+.cproject
+.project
+build
+build_android
+.gitignore
+HeartRateMonitor/.settings
+HeartRateMonitor/bin
+HeartRateMonitor/libs
+HeartRateMonitor/obj
+HeartRateMonitor/project.properties
+libs

@@ -67,16 +67,16 @@ void ImageViewHeartRateVisualizer::visualizeHeartRate(
     CHECK(res != JNI_OK, "can't attach current thread");
 
     int32_t rows = 480, cols = 640;
-    Image testImage = Image(ImageFormat(ImageRect(rows, cols), 24));
+    RGBImage testImage = RGBImage(ImageFormatRGB(ImageRect(rows, cols)));
 
-    uint8_t *dst = testImage.getData();
-    for (int i = 0, imax = testImage.getFormat()._rect._rows; i < imax; ++i) {
-        for (int j = 0, jmax = testImage.getFormat()._rect._cols; j < jmax; ++j, dst += 3) {
+    RGB * dst = testImage.getData();
+    for (int i = 0, imax = testImage.getFormat().rect._rows; i < imax; ++i) {
+        for (int j = 0, jmax = testImage.getFormat().rect._cols; j < jmax; ++j, dst += 3) {
             if(i >= rows / 2 || j >= rows / 2)
                 continue;
-            *(dst + 0) = i % 255;
-            *(dst + 1) = j % 255;
-            *(dst + 2) = 0;
+            dst->r = i % 255;
+            dst->g = j % 255;
+            dst->b = 0;
         }
     }
 
@@ -114,13 +114,13 @@ void ImageViewHeartRateVisualizer::visualizeHeartRate(
 
     if(data){
 
-        uint8_t *src = testImage.getData();
+        RGB * src = testImage.getData();
         uint8_t *dst = data;
         for (int i = 0, imax = rows; i < imax; ++i) {
-            for (int j = 0, jmax = cols; j < jmax; ++j) {
-                *dst++ = *src++;
-                *dst++ = *src++;
-                *dst++ = *src++;
+            for (int j = 0, jmax = cols; j < jmax; ++j, ++src) {
+                *dst++ = src->r;
+                *dst++ = src->g;
+                *dst++ = src->b;
                 *dst++ = 255;
             }
         }

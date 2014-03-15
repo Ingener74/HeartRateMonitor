@@ -5,7 +5,6 @@
  *      Author: pavel
  */
 
-
 #include <string>
 #include <map>
 #include <list>
@@ -17,10 +16,9 @@
 
 #include <HeartBeatRateTypes.h>
 #include <HeartBeatRateDefines.h>
-#include <HeartRateProcessor.h>
 #include <ImageFormat.h>
 #include <RGBFrameSource.h>
-#include <IImageDrawer.h>
+#include <NV21FrameSource.h>
 
 #include <HeartRateCounter.h>
 #include <SimpleHeartRateNumber.h>
@@ -36,7 +34,7 @@
 
 #include "HeartRateMonitorPreview.h"
 
-boost::shared_ptr<hrm::NV21FrameSource> nv21;
+hrm::NV21FrameSource::Ptr nv21;
 boost::shared_ptr<hrm::HeartRateCounter> heartRateCounter;
 
 jint JNI_OnLoad(JavaVM* vm, void* reserved) {
@@ -47,7 +45,7 @@ jint JNI_OnLoad(JavaVM* vm, void* reserved) {
     }
     return JNI_VERSION_1_6;
 }
-void JNI_OnUnload(JavaVM* vm, void* reserved){
+void JNI_OnUnload(JavaVM* vm, void* reserved) {
     LLDEBUG("JNI_OnUnload");
 }
 
@@ -57,34 +55,29 @@ jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativeSta
     hrm::TimeCounter::instance();
     hrm::HeartRateTools::instance()->getLog()->INFO("native start");
 
-    nv21 = boost::shared_ptr<hrm::NV21FrameSource>(new hrm::NV21FrameSource());
-    boost::shared_ptr<hrm::RGBFrameSource> rgbfs(new hrm::RGBFrameSource(nv21));
+    nv21 = hrm::NV21FrameSource::Ptr(new hrm::NV21FrameSource());
+    hrm::IRGBFrameSource::Ptr rgbfs(new hrm::RGBFrameSource(nv21));
 
-    boost::shared_ptr<hrm::IImageDrawer> debugImageDrawer(
+    hrm::IRGBImageDrawer::Ptr debugImageDrawer(
             new hrm::ImageViewImageDrawer(JNIEnv_, self));
 
-    boost::shared_ptr<hrm::IHeartRateVisualizer> hrVisualizer;
-    boost::shared_ptr<hrm::IHeartRateGenerator> hrGenerator;
+    hrm::IHeartRateVisualizer::Ptr hrVisualizer;
+    hrm::IHeartRateGenerator::Ptr hrGenerator;
 
 //    hrGenerator = boost::shared_ptr<hrm::IHeartRateGenerator>(
 //            new hrm::SimpleHeartRateGenerator());
-    hrGenerator = boost::shared_ptr<hrm::IHeartRateGenerator>(
+    hrGenerator = hrm::IHeartRateGenerator::Ptr(
             new hrm::RGBHeartRateGenerator(rgbfs, debugImageDrawer));
 
-    boost::shared_ptr<hrm::IHeartRateNumber> hrNumber(
-            new hrm::SimpleHeartRateNumber());
+    hrm::IHeartRateNumber::Ptr hrNumber(new hrm::SimpleHeartRateNumber());
 
 //    hrVisualizer = boost::shared_ptr<hrm::IHeartRateVisualizer>(
 //            new hrm::ImageViewHeartRateVisualizer(JNIEnv_, self));
-    hrVisualizer = boost::shared_ptr<hrm::IHeartRateVisualizer>(
+    hrVisualizer = hrm::IHeartRateVisualizer::Ptr(
             new hrm::SimpleHeartRateVisualizer());
 
     heartRateCounter = boost::shared_ptr<hrm::HeartRateCounter>(
-            new hrm::HeartRateCounter(
-                    hrGenerator,
-                    hrNumber,
-                    hrVisualizer
-                    ));
+            new hrm::HeartRateCounter(hrGenerator, hrNumber, hrVisualizer));
 
     hrm::HeartRateTools::instance()->getLog()->INFO("native started");
 
@@ -98,12 +91,12 @@ void Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativeStop(
 }
 
 jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativePassImage(
-        JNIEnv* JNIEnv_, jobject self,
-        jint rows, jint cols, jint type, jbyteArray data) {
+        JNIEnv* JNIEnv_, jobject self, jint rows, jint cols, jint type,
+        jbyteArray data) {
 
     static bool nv21_error = false;
-    if(!nv21 ){
-        if(!nv21_error){
+    if (!nv21) {
+        if (!nv21_error) {
             LLWARN("NV21 is null");
             nv21_error = true;
         }
@@ -118,16 +111,15 @@ jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativePas
      */
     boost::tuple<hrm::TimeStamp, hrm::ElapsedTime> ts =
             hrm::TimeCounter::instance()->getTimeStampExt();
-    LLINFO("current time = %.2f ms, fps = %.1f", ts.get<0>(), 1000.0 / ts.get<1>());
+    LLINFO("current time = %.2f ms, fps = %.1f", ts.get<0>(),
+            1000.0 / ts.get<1>());
 
-    LLINFO("%d x %d, type = %s, %p",
-            cols,
-            rows,
+    LLINFO("%d x %d, type = %s, %p", cols, rows,
             hrm::AndroidImageFormat::instance()->getImageFormatString(type).c_str(),
-            imageData
-            );
+            imageData);
 
-    nv21->putFrame(uint16_t(rows), uint16_t(cols), (uint8_t *)imageData, ts.get<0>());
+    nv21->putFrame(uint16_t(rows), uint16_t(cols), (uint8_t *) imageData,
+            ts.get<0>());
 
     JNIEnv_->ReleaseByteArrayElements(data, imageData, 0);
     return false;

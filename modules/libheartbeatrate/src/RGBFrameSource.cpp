@@ -14,26 +14,22 @@
 
 namespace hrm {
 
-struct RGB{
-    uint8_t r, g, b;
-};
-
-hrm::RGBFrameSource::RGBFrameSource(boost::shared_ptr<NV21FrameSource> nv21) :
+RGBFrameSource::RGBFrameSource(INV21FrameSource::Ptr nv21) :
         _nv21(nv21) {
 }
 
-hrm::RGBFrameSource::~RGBFrameSource() {
+RGBFrameSource::~RGBFrameSource() {
 }
 
-SharedLockedFrame RGBFrameSource::getFrame() {
+FrameSharedLockedRGB RGBFrameSource::getFrame(){
     {
-        SharedLockedFrame lockedFrame = _nv21->getFrame();
+        LockedFrame<BitsPerPixelImageFormat>::Shared lockedFrame = _nv21->getFrame();
 
         boost::unique_lock<boost::shared_mutex> lock(_frameMutex);
 
-        ImageRect r = lockedFrame.get<1>().getFormat()._rect;
-        if(_frame.getFormat()._rect != r){
-            _frame = Frame(ImageFormat(r, 8 * 3));
+        ImageRect r = lockedFrame.get<1>().getFormat().rect;
+        if(_frame.getFormat().rect != r){
+            _frame = FrameRGB(ImageFormatRGB(r));
 //            HeartRateTools::instance()->getLog()->DEBUG((boost::format(
 //                    "rgb frame resized %1% x %2%")
 //            % _frame.getFormat()._rect._rows
@@ -61,13 +57,13 @@ SharedLockedFrame RGBFrameSource::getFrame() {
          *      U1   V1   U2   V2   U3   V3   U4   V4   U5   V5   U6   V6
          */
         uint8_t * y = lockedFrame.get<1>().getData();
-        uint8_t * uv = y + lockedFrame.get<1>().getFormat()._rect.area();
+        uint8_t * uv = y + lockedFrame.get<1>().getFormat().rect.area();
 
-        RGB * rgb = reinterpret_cast<RGB *>(_frame.getData());
+        RGB * rgb = _frame.getData();
 
-        for (uint32_t i = 0, imax = _frame.getFormat()._rect._rows; i < imax; i += 2){
+        for (uint32_t i = 0, imax = _frame.getFormat().rect._rows; i < imax; i += 2){
 
-            for (uint32_t j = 0, jmax = _frame.getFormat()._rect._cols; j < jmax; j += 2){
+            for (uint32_t j = 0, jmax = _frame.getFormat().rect._cols; j < jmax; j += 2){
 
                 int Y1 = int(*(y +  i     *jmax +  j      )) - 16;
                 int Y2 = int(*(y +  i     *jmax + (j + 1) )) - 16;
@@ -99,7 +95,7 @@ SharedLockedFrame RGBFrameSource::getFrame() {
         _frame.setTimeStamp(lockedFrame.get<1>().getTimeStamp());
 //        HeartRateTools::instance()->getLog()->DEBUG("rgb frame converted");
     }
-    SharedLockedFrame lockedFrame(
+    FrameSharedLockedRGB lockedFrame(
             boost::shared_ptr<boost::shared_lock<boost::shared_mutex> >(
                     new boost::shared_lock<boost::shared_mutex>(_frameMutex)), _frame);
     return lockedFrame;

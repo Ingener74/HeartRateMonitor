@@ -18,10 +18,12 @@ LOCAL_C_INCLUDES                       := $(LOCAL_PATH)/include \
                                           $(BOOST_PATH)/include
 
 LOCAL_MODULE                           := heartbeatrate
+
+#src/HeartRateProcessor.cpp \
+	
 LOCAL_SRC_FILES := \
 	src/AndroidLog.cpp \
 	src/HeartBeatRateTypes.cpp \
-	src/HeartRateProcessor.cpp \
 	src/HeartRateTools.cpp \
 	src/NV21FrameSource.cpp \
 	src/RGBFrameSource.cpp \

@@ -15,6 +15,7 @@
 
 #include <boost/tuple/tuple.hpp>
 #include <boost/smart_ptr.hpp>
+#include <boost/thread.hpp>
 
 namespace hrm {
 
@@ -47,6 +48,11 @@ private:
     TimeStamp _time;
 };
 
+struct RGB{ uint8_t r, g, b; };
+struct RGBA{ uint8_t r, g, b, a; };
+struct BGR{ uint8_t b, g, r; };
+struct BGRA{ uint8_t b, g, r, a; };
+
 struct Point{
     Point(int32_t x = 0, int32_t y = 0): x(x), y(y){
     }
@@ -60,13 +66,6 @@ struct Point{
         return sqrt((p2.y - p1.y)*(p2.y - p1.y) + (p2.x - p1.x)*(p2.x - p1.x));
     }
     int32_t x, y;
-};
-
-struct Color{
-    Color(uint8_t r = 0, uint8_t g = 0, uint8_t b = 0, uint8_t a = 0):
-        r(r), g(g), b(b), a(a){
-    }
-    uint8_t r, g, b, a;
 };
 
 struct ImageRect {
@@ -93,77 +92,142 @@ struct ImageRect {
     uint16_t _rows, _cols;
 };
 
-struct ImageFormat {
-    ImageFormat(ImageRect rect = ImageRect(), uint16_t bitsPerPixel = 8) :
-            _rect(rect), _bitsPerPixel(bitsPerPixel) {
-    }
-    bool operator==(const ImageFormat& other) const {
-        return (_rect == other._rect && _bitsPerPixel == other._bitsPerPixel);
-    }
-    bool operator!=(const ImageFormat& other) const {
-        return (_rect != other._rect || _bitsPerPixel != other._bitsPerPixel);
+template <typename imageType>
+struct TypeImageFormat {
+    typedef imageType PixelType;
+    TypeImageFormat(ImageRect rect = ImageRect()): rect(rect){
     }
     bool operator!() const {
-        return !_rect;
+        return !rect;
     }
     operator bool() const {
-        return _rect.operator bool();
+        return rect.operator bool();
+    }
+    bool operator==(const TypeImageFormat& other) const {
+        return false;
+    }
+    bool operator!=(const TypeImageFormat& other) const {
+        return false;
     }
     uint32_t size() const {
-        return _rect.area() * _bitsPerPixel / 8;
+        return rect.area() * sizeof(imageType);
     }
-    ImageRect _rect;
-    uint16_t _bitsPerPixel;
+    ImageRect rect;
 };
 
-class Image{
+typedef TypeImageFormat<RGB> ImageFormatRGB;
+typedef TypeImageFormat<RGBA> ImageFormatRGBA;
+typedef TypeImageFormat<BGR> ImageFormatBGR;
+typedef TypeImageFormat<BGRA> ImageFormatBGRA;
+
+struct BitsPerPixelImageFormat {
+    typedef uint8_t PixelType;
+    BitsPerPixelImageFormat(
+            ImageRect rect = ImageRect(), uint32_t bitsPerPixel = 8):
+            rect(rect), bitsPerPixel(bitsPerPixel){
+    }
+    bool operator!() const {
+        return !rect;
+    }
+    operator bool() const {
+        return rect.operator bool();
+    }
+    bool operator==(const BitsPerPixelImageFormat & other) const {
+        return false;
+    }
+    bool operator!=(const BitsPerPixelImageFormat & other) const {
+        return false;
+    }
+    uint32_t size() const {
+        return rect.area() * bitsPerPixel / 8;
+    }
+    uint32_t bitsPerPixel;
+    ImageRect rect;
+};
+
+//struct ImageFormat {
+//    ImageFormat(ImageRect rect = ImageRect()): _rect(rect){}
+//
+//    virtual bool operator==(const ImageFormat& other) const ;
+//    virtual bool operator!=(const ImageFormat& other) const ;
+//    virtual uint32_t size() const = 0;
+//
+//    bool operator!() const ;
+//    operator bool() const ;
+//
+//    ImageRect _rect;
+//};
+
+template <typename ImageFormat>
+class Image;
+
+template <typename ImageFormat>
+class ImageData{
 public:
-    Image(ImageFormat format = ImageFormat()) :
-            _format(format) {
-        if (_format)
-            _data = boost::shared_array<uint8_t>(new uint8_t[_format.size()]);
+    typedef boost::shared_ptr<ImageData<ImageFormat> > Ptr;
+    typedef boost::shared_array<typename ImageFormat::PixelType> Array;
+
+    ImageFormat _format;
+    Array _data;
+
+    ImageData(ImageFormat if_):
+        _format(if_),
+        _data(new typename ImageFormat::PixelType[if_.size()]) {}
+
+};
+
+template<typename ImageFormat>
+class Image{
+protected:
+    typename ImageData<ImageFormat>::Ptr _p;
+
+public:
+    Image(ImageFormat format = ImageFormat()):
+        _p(new ImageData<ImageFormat>(format)){
     }
     virtual ~Image(){}
     operator bool() const {
-        return bool(_format);
+        return _p->_format;
     }
     bool operator!() const {
-        return !_format;
+        return !_p->_format;
     }
-    void operator << (const Image& original){
-        _format = original._format;
-        _data = boost::shared_array<uint8_t>(new uint8_t[_format.size()]);
-        uint8_t * src = original._data.get(), * dst = _data.get();
-        for (int i = 0, imax = _format.size(); i < imax; ++i) {
-            *dst++ = *src++;
-        }
-    }
+//    void operator << (const Image& original){
+//        _format = original._format;
+//        _data = boost::shared_array<uint8_t>(new uint8_t[_format.size()]);
+//        uint8_t * src = original._data.get(), * dst = _data.get();
+//        for (int i = 0, imax = _format.size(); i < imax; ++i) {
+//            *dst++ = *src++;
+//        }
+//    }
     const ImageFormat& getFormat() const {
-        return _format;
+        return _p->_format;
     }
-    uint8_t* getData() {
-        return _data.get();
+    typename ImageFormat::PixelType* getData() {
+        return _p->_data.get();
     }
 
-    enum DrawLineMethod {
-        DrawLineMethod_DDA,
-        DrawLineMethod_Bresenham,
-        DrawLineMethod_By,
-    };
-    static void drawLine(Image image, const Point& p1,
-            const Point& p2 = Point(),
-            const Color& color = Color(),
-            DrawLineMethod method = DrawLineMethod_DDA);
-
-protected:
-    ImageFormat _format;
-    boost::shared_array<uint8_t> _data;
+//    enum DrawLineMethod {
+//        DrawLineMethod_DDA,
+//        DrawLineMethod_Bresenham,
+//        DrawLineMethod_By,
+//    };
+//    static void drawLine(Image image, const Point& p1,
+//            const Point& p2 = Point(),
+//            const Color& color = Color(),
+//            DrawLineMethod method = DrawLineMethod_DDA);
 };
 
-class Frame: public Image {
+typedef Image<ImageFormatRGB> RGBImage;
+typedef Image<ImageFormatRGBA> RGBAImage;
+typedef Image<ImageFormatBGR> BGRImage;
+typedef Image<ImageFormatBGRA> BGRAImage;
+
+template<typename ImageFormat>
+class Frame: public Image<ImageFormat> {
 public:
     Frame(ImageFormat format = ImageFormat(), TimeStamp timeStamp = 0.0) :
-            Image(format), _timeStamp(timeStamp) {
+            Image<ImageFormat>(format), _timeStamp(timeStamp) {
     }
     virtual ~Frame() {
     }
@@ -177,6 +241,27 @@ public:
 private:
     TimeStamp _timeStamp;
 };
+
+typedef Frame<TypeImageFormat<RGB> > FrameRGB;
+typedef Frame<TypeImageFormat<RGBA> > FrameRGBA;
+typedef Frame<TypeImageFormat<BGR> > FrameBGR;
+typedef Frame<TypeImageFormat<BGRA> > FrameBGRA;
+
+template <typename ImageFormat>
+struct LockedFrame{
+    typedef boost::tuple<
+            boost::shared_ptr<boost::unique_lock<boost::shared_mutex> >,
+            Frame<ImageFormat> > Unique;
+
+    typedef boost::tuple<
+            boost::shared_ptr<boost::shared_lock<boost::shared_mutex> >,
+            Frame<ImageFormat> > Shared;
+};
+
+typedef LockedFrame<TypeImageFormat<RGB> >::Shared FrameSharedLockedRGB;
+typedef LockedFrame<TypeImageFormat<RGBA> >::Shared FrameSharedLockedRGBA;
+typedef LockedFrame<TypeImageFormat<BGR> >::Shared FrameSharedLockedBGR;
+typedef LockedFrame<TypeImageFormat<BGRA> >::Shared FrameSharedLockedBGRA;
 
 }  // namespace hrm
 

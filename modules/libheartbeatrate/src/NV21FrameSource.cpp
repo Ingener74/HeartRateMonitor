@@ -11,18 +11,19 @@
 
 namespace hrm {
 
-hrm::NV21FrameSource::NV21FrameSource() {
+NV21FrameSource::NV21FrameSource() {
 }
 
-hrm::NV21FrameSource::~NV21FrameSource() {
+NV21FrameSource::~NV21FrameSource() {
 }
 
-SharedLockedFrame hrm::NV21FrameSource::getFrame() {
+LockedFrame<BitsPerPixelImageFormat>::Shared NV21FrameSource::getFrame(){
     {
         boost::unique_lock<boost::shared_mutex> lock(_frameMutex);
         _frameCond.wait(lock);
     }
-    SharedLockedFrame lf(boost::shared_ptr<boost::shared_lock<boost::shared_mutex> >(
+    LockedFrame<BitsPerPixelImageFormat>::Shared lf(
+            boost::shared_ptr<boost::shared_lock<boost::shared_mutex> >(
             new boost::shared_lock<boost::shared_mutex>(_frameMutex)), _frame);
     return lf;
 }
@@ -33,8 +34,9 @@ void NV21FrameSource::putFrame(uint16_t rows, uint16_t cols, uint8_t * data,
         boost::unique_lock<boost::shared_mutex> lock(_frameMutex);
 
         ImageRect inputRect = ImageRect(rows, cols);
-        if(_frame.getFormat()._rect != inputRect){
-            _frame = Frame(ImageFormat(inputRect, 12));
+        if(_frame.getFormat().rect != inputRect){
+            _frame = Frame<BitsPerPixelImageFormat>(
+                    BitsPerPixelImageFormat(inputRect, 12));
         }
         /*
          * copy original

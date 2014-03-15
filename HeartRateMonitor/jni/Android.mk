@@ -8,11 +8,11 @@
 # $(info    local path = $(LOCAL_PATH))
 # $(warning local path = $(LOCAL_PATH))
 
-LOCAL_PATH                             := $(call my-dir)
-MY_ROOT                                := $(LOCAL_PATH)
+LOCAL_PATH := $(call my-dir)
+MY_ROOT := $(LOCAL_PATH)
 
 # test_module
-LOCAL_PATH                             := $(MY_ROOT)
+LOCAL_PATH := $(MY_ROOT)
 include $(LOCAL_PATH)/test_module/Android.mk
 
 # heartbeatrate module

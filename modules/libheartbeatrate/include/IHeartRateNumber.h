@@ -10,20 +10,24 @@
 
 #include <stdint.h>
 
+#include <boost/smart_ptr.hpp>
+
 #include "HeartBeatRateTypes.h"
 
 namespace hrm {
 
 class IHeartRateNumber {
 public:
-    virtual ~IHeartRateNumber() {
-    }
+	typedef boost::shared_ptr<IHeartRateNumber> Ptr;
 
-    virtual void setHeartRateNumber(HeartRateValue heartRateNumber) = 0;
+	virtual ~IHeartRateNumber() {
+	}
+
+	virtual void setHeartRateNumber(HeartRateValue heartRateNumber) = 0;
 
 protected:
-    IHeartRateNumber() {
-    }
+	IHeartRateNumber() {
+	}
 };
 
 }  // namespace hrm
