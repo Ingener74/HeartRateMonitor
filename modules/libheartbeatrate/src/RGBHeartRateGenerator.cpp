@@ -11,8 +11,8 @@
 namespace hrm {
 
 RGBHeartRateGenerator::RGBHeartRateGenerator(
-        boost::shared_ptr<RGBFrameSource> rgbFrameSource,
-        boost::shared_ptr<IImageDrawer> debugImageDrawer) :
+        IRGBFrameSource::Ptr rgbFrameSource,
+        IRGBImageDrawer::Ptr debugImageDrawer) :
             _rgbfs(rgbFrameSource), _did(debugImageDrawer){
 }
 
@@ -22,7 +22,7 @@ RGBHeartRateGenerator::~RGBHeartRateGenerator() {
 RawMeasurementGraph RGBHeartRateGenerator::getHeartRate() {
 
     {
-        SharedLockedFrame slf = _rgbfs->getFrame();
+        FrameSharedLockedRGB slf = _rgbfs->getFrame();
         _did->drawImage(slf.get<1>());
     }
 

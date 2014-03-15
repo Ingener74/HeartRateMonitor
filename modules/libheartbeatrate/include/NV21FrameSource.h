@@ -8,6 +8,7 @@
 #ifndef NV21FRAMESOURCE_H_
 #define NV21FRAMESOURCE_H_
 
+#include <boost/smart_ptr.hpp>
 #include <boost/thread.hpp>
 
 #include "INV21FrameSource.h"
@@ -16,6 +17,8 @@ namespace hrm {
 
 class NV21FrameSource: public INV21FrameSource {
 public:
+	typedef boost::shared_ptr<NV21FrameSource> Ptr;
+
     NV21FrameSource();
     virtual ~NV21FrameSource();
 

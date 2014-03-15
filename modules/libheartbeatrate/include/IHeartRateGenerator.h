@@ -10,6 +10,7 @@
 
 #include <vector>
 #include <boost/tuple/tuple.hpp>
+#include <boost/smart_ptr.hpp>
 
 #include "HeartBeatRateTypes.h"
 
@@ -19,14 +20,16 @@ typedef double HeartValue;
 
 class IHeartRateGenerator {
 public:
-    virtual ~IHeartRateGenerator() {
-    }
+	typedef boost::shared_ptr<IHeartRateGenerator> Ptr;
 
-    virtual RawMeasurementGraph getHeartRate() = 0;
+	virtual ~IHeartRateGenerator() {
+	}
+
+	virtual RawMeasurementGraph getHeartRate() = 0;
 
 protected:
-    IHeartRateGenerator() {
-    }
+	IHeartRateGenerator() {
+	}
 };
 
 }  // namespace hrm

@@ -14,11 +14,11 @@
 
 namespace hrm {
 
-hrm::RGBFrameSource::RGBFrameSource(boost::shared_ptr<NV21FrameSource> nv21) :
+RGBFrameSource::RGBFrameSource(INV21FrameSource::Ptr nv21) :
         _nv21(nv21) {
 }
 
-hrm::RGBFrameSource::~RGBFrameSource() {
+RGBFrameSource::~RGBFrameSource() {
 }
 
 FrameSharedLockedRGB RGBFrameSource::getFrame(){

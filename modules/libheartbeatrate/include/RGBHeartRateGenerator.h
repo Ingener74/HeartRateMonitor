@@ -10,8 +10,8 @@
 
 #include <boost/smart_ptr.hpp>
 
-#include "RGBFrameSource.h"
-#include "IImageDrawer.h"
+#include "IRGBFrameSource.h"
+#include "IRGBImageDrawer.h"
 #include "IHeartRateGenerator.h"
 
 namespace hrm {
@@ -19,15 +19,15 @@ namespace hrm {
 class RGBHeartRateGenerator: public IHeartRateGenerator {
 public:
     RGBHeartRateGenerator(
-            boost::shared_ptr<RGBFrameSource> rgbFrameSource,
-            boost::shared_ptr<IImageDrawer> debugImageDrawer);
+            IRGBFrameSource::Ptr rgbFrameSource,
+            IRGBImageDrawer::Ptr debugImageDrawer);
     virtual ~RGBHeartRateGenerator();
 
     virtual RawMeasurementGraph getHeartRate();
 
 private:
-    boost::shared_ptr<RGBFrameSource> _rgbfs;
-    boost::shared_ptr<IImageDrawer> _did;
+    IRGBFrameSource::Ptr _rgbfs;
+    IRGBImageDrawer::Ptr _did;
 };
 
 }  // namespace hrm

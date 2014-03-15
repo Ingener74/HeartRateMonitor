@@ -10,16 +10,16 @@
 
 #include <jni.h>
 
-#include "IImageDrawer.h"
+#include "IRGBImageDrawer.h"
 
 namespace hrm {
 
-class ImageViewImageDrawer: public IImageDrawer {
+class ImageViewImageDrawer: public IRGBImageDrawer {
 public:
     ImageViewImageDrawer(JNIEnv * jniEnv, jobject object_self);
     virtual ~ImageViewImageDrawer();
 
-    virtual void drawImage(Image image);
+    virtual void drawImage(RGBImage image);
 
 private:
     bool _isError;

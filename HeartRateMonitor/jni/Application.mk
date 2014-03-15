@@ -5,5 +5,5 @@ APP_CPPFLAGS += -frtti -fexceptions -DANDROID
 #APP_ABI := armeabi armeabi-v7a x86
 APP_ABI := armeabi-v7a
 APP_MODULES := HeartRateMonitor
-# NDK_TOOLCHAIN_VERSION := 4.6
-NDK_TOOLCHAIN_VERSION := clang3.3
+NDK_TOOLCHAIN_VERSION := 4.8
+#NDK_TOOLCHAIN_VERSION := clang3.3
