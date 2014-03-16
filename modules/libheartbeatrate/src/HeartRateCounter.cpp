@@ -23,7 +23,7 @@ HeartRateCounter::~HeartRateCounter() {
 }
 
 bool HeartRateCounter::start() {
-    _thread = boost::thread([](){
+    _thread = std::thread([this](){
         while(1){
             RawMeasurementGraph hrRawGraph = _hrg->getHeartRate();
             MeasurementGraph hrGraph;

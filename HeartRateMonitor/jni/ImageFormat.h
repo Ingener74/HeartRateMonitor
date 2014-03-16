@@ -10,6 +10,7 @@
 
 #include <string>
 #include <memory>
+#include <map>
 #include <boost/assign/list_of.hpp>
 
 namespace hrm {
@@ -44,13 +45,13 @@ private:
     AndroidImageFormat() {
         std::map<Type, std::string> t = boost::assign::map_list_of
                 (UNKNOWN, "UNKNOWN")
-        (RGB_565, "RGB_565")
-        (NV16, "NV16")
-        (NV21, "NV21")
-        (YUY2, "YUY2")
-        (YUV_420_888, "YUV_420_888")
-        (JPEG, "JPEG")
-        (YV12, "YV12");
+                (RGB_565, "RGB_565")
+                (NV16, "NV16")
+                (NV21, "NV21")
+                (YUY2, "YUY2")
+                (YUV_420_888, "YUV_420_888")
+                (JPEG, "JPEG")
+                (YV12, "YV12");
         _imageFormatTranslations = t;
     }
 

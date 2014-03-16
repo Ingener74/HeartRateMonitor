@@ -14,13 +14,12 @@ include $(CLEAR_VARS)
 
 BOOST_PATH := $(LOCAL_PATH)/../../build_android/3RDPARTY
 
-LOCAL_C_INCLUDES                       := $(LOCAL_PATH)/include \
-                                          $(BOOST_PATH)/include
+LOCAL_C_INCLUDES := \
+	$(LOCAL_PATH)/include \
+	$(BOOST_PATH)/include
 
-LOCAL_MODULE                           := heartbeatrate
+LOCAL_MODULE := heartbeatrate
 
-#src/HeartRateProcessor.cpp \
-	
 LOCAL_SRC_FILES := \
 	src/AndroidLog.cpp \
 	src/HeartBeatRateTypes.cpp \
@@ -34,6 +33,6 @@ LOCAL_SRC_FILES := \
 	src/ImageViewImageDrawer.cpp \
 	src/RGBHeartRateGenerator.cpp
 
-LOCAL_EXPORT_C_INCLUDES                := $(LOCAL_PATH)
+LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
 
 include $(BUILD_STATIC_LIBRARY)

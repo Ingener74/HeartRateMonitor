@@ -167,14 +167,15 @@ template <typename ImageFormat>
 class ImageData{
 public:
     typedef std::shared_ptr<ImageData<ImageFormat> > Ptr;
-    typedef std::shared_ptr<typename ImageFormat::PixelType[]> Array;
+    typedef std::shared_ptr<typename ImageFormat::PixelType> Array;
 
     ImageFormat _format;
     Array _data;
 
     ImageData(ImageFormat if_):
         _format(if_),
-        _data(new typename ImageFormat::PixelType[if_.size()]) {}
+        _data(new typename ImageFormat::PixelType[if_.size()],
+                [](typename ImageFormat::PixelType * p){delete []p;}) {}
 
 };
 
