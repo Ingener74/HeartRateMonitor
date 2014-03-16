@@ -10,7 +10,7 @@
 
 #include <stdint.h>
 
-#include <boost/smart_ptr.hpp>
+#include <memory>
 
 #include "HeartBeatRateTypes.h"
 
@@ -18,7 +18,7 @@ namespace hrm {
 
 class IHeartRateNumber {
 public:
-	typedef boost::shared_ptr<IHeartRateNumber> Ptr;
+	typedef std::shared_ptr<IHeartRateNumber> Ptr;
 
 	virtual ~IHeartRateNumber() {
 	}

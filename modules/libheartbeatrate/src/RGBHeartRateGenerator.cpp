@@ -23,7 +23,7 @@ RawMeasurementGraph RGBHeartRateGenerator::getHeartRate() {
 
     {
         FrameSharedLockedRGB slf = _rgbfs->getFrame();
-        _did->drawImage(slf.get<1>());
+        _did->drawImage(std::get<1>(slf));
     }
 
     RawMeasurementGraph rmg;

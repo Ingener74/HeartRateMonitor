@@ -7,7 +7,6 @@ include_directories(include)
 
 set(SOURCES
     src/HeartBeatRateTypes.cpp
-#    src/HeartRateProcessor.cpp
     src/HeartRateTools.cpp
     src/NV21FrameSource.cpp
     src/RGBFrameSource.cpp
@@ -28,16 +27,3 @@ else()
 endif()
 
 add_library(${PROJECT_NAME} ${SOURCES})
-
-#if(ANDROID)
-#    set(LIBS 
-#        boost_system-gcc-mt-1_55
-#        boost_thread-gcc-mt-1_55
-#        )
-#else()
-#    set(LIBS
-#        boost_system.a
-#        boost_thread.a
-#        )
-#endif()
-#target_link_libraries(${PROJECT_NAME} ${LIBS})

@@ -27,7 +27,7 @@ FrameSharedLockedRGB RGBFrameSource::getFrame(){
 
         boost::unique_lock<boost::shared_mutex> lock(_frameMutex);
 
-        ImageRect r = lockedFrame.get<1>().getFormat().rect;
+        ImageRect r = std::get<1>(lockedFrame).getFormat().rect;
         if(_frame.getFormat().rect != r){
             _frame = FrameRGB(ImageFormatRGB(r));
 //            HeartRateTools::instance()->getLog()->DEBUG((boost::format(
@@ -56,8 +56,8 @@ FrameSharedLockedRGB RGBFrameSource::getFrame(){
          *   Y1   Y2   Y3   Y4   Y5   Y6   Y7   Y8   Y9   Y10  Y11  Y12   Y13  Y14  Y15  Y16  Y17  Y18   Y19  Y20  Y21  Y22  Y23  Y24 ....
          *      U1   V1   U2   V2   U3   V3   U4   V4   U5   V5   U6   V6
          */
-        uint8_t * y = lockedFrame.get<1>().getData();
-        uint8_t * uv = y + lockedFrame.get<1>().getFormat().rect.area();
+        uint8_t * y = std::get<1>(lockedFrame).getData();
+        uint8_t * uv = y + std::get<1>(lockedFrame).getFormat().rect.area();
 
         RGB * rgb = _frame.getData();
 
@@ -92,11 +92,11 @@ FrameSharedLockedRGB RGBFrameSource::getFrame(){
                 YUV2RGB(Y4, U, V, rgb4);
             }
         }
-        _frame.setTimeStamp(lockedFrame.get<1>().getTimeStamp());
+        _frame.setTimeStamp(std::get<1>(lockedFrame).getTimeStamp());
 //        HeartRateTools::instance()->getLog()->DEBUG("rgb frame converted");
     }
     FrameSharedLockedRGB lockedFrame(
-            boost::shared_ptr<boost::shared_lock<boost::shared_mutex> >(
+            std::shared_ptr<boost::shared_lock<boost::shared_mutex> >(
                     new boost::shared_lock<boost::shared_mutex>(_frameMutex)), _frame);
     return lockedFrame;
 }

@@ -8,7 +8,7 @@
 #ifndef IRGBFRAMESOURCE_H_
 #define IRGBFRAMESOURCE_H_
 
-#include <boost/smart_ptr.hpp>
+#include <memory>
 
 #include "HeartBeatRateTypes.h"
 
@@ -16,15 +16,15 @@ namespace hrm {
 
 class IRGBFrameSource {
 public:
-	typedef boost::shared_ptr<IRGBFrameSource> Ptr;
+    typedef std::shared_ptr<IRGBFrameSource> Ptr;
 
-	virtual ~IRGBFrameSource() {
-	}
+    virtual ~IRGBFrameSource() {
+    }
 
-	virtual FrameSharedLockedRGB getFrame() = 0;
+    virtual FrameSharedLockedRGB getFrame() = 0;
 protected:
-	IRGBFrameSource() {
-	}
+    IRGBFrameSource() {
+    }
 };
 
 }  // namespace hrm

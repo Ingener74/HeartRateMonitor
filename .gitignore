@@ -7,5 +7,5 @@ HeartRateMonitor/.settings
 HeartRateMonitor/bin
 HeartRateMonitor/libs
 HeartRateMonitor/obj
-HeartRateMonitor/project.properties
 libs
+.settings

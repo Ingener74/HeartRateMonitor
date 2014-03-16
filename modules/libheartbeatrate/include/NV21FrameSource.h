@@ -8,7 +8,8 @@
 #ifndef NV21FRAMESOURCE_H_
 #define NV21FRAMESOURCE_H_
 
-#include <boost/smart_ptr.hpp>
+#include <memory>
+#include <thread>
 #include <boost/thread.hpp>
 
 #include "INV21FrameSource.h"

@@ -8,7 +8,7 @@
 #ifndef IRGBIMAGEDRAWER_H_
 #define IRGBIMAGEDRAWER_H_
 
-#include <boost/smart_ptr.hpp>
+#include <memory>
 
 #include "HeartBeatRateTypes.h"
 
@@ -16,7 +16,7 @@ namespace hrm {
 
 class IRGBImageDrawer {
 public:
-	typedef boost::shared_ptr<IRGBImageDrawer> Ptr;
+	typedef std::shared_ptr<IRGBImageDrawer> Ptr;
 
 	virtual ~IRGBImageDrawer() {
 	}

@@ -23,7 +23,7 @@ LockedFrame<BitsPerPixelImageFormat>::Shared NV21FrameSource::getFrame(){
         _frameCond.wait(lock);
     }
     LockedFrame<BitsPerPixelImageFormat>::Shared lf(
-            boost::shared_ptr<boost::shared_lock<boost::shared_mutex> >(
+            std::shared_ptr<boost::shared_lock<boost::shared_mutex> >(
             new boost::shared_lock<boost::shared_mutex>(_frameMutex)), _frame);
     return lf;
 }

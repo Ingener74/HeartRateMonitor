@@ -6,17 +6,12 @@
  */
 
 #include <string>
-#include <map>
-#include <list>
-
-#include <boost/lambda/lambda.hpp>
-#include <boost/smart_ptr.hpp>
+#include <memory>
 
 #include <android/bitmap.h>
 
 #include <HeartBeatRateTypes.h>
 #include <HeartBeatRateDefines.h>
-#include <ImageFormat.h>
 #include <RGBFrameSource.h>
 #include <NV21FrameSource.h>
 
@@ -32,10 +27,11 @@
 
 #include <ImageViewImageDrawer.h>
 
+#include "ImageFormat.h"
 #include "HeartRateMonitorPreview.h"
 
-hrm::NV21FrameSource::Ptr nv21;
-boost::shared_ptr<hrm::HeartRateCounter> heartRateCounter;
+hrm::INV21FrameSource::Ptr nv21;
+std::shared_ptr<hrm::HeartRateCounter> heartRateCounter;
 
 jint JNI_OnLoad(JavaVM* vm, void* reserved) {
     LLDEBUG("JNI_OnLoad(JavaVM* vm, void* reserved)");
@@ -55,7 +51,7 @@ jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativeSta
     hrm::TimeCounter::instance();
     hrm::HeartRateTools::instance()->getLog()->INFO("native start");
 
-    nv21 = hrm::NV21FrameSource::Ptr(new hrm::NV21FrameSource());
+    nv21 = hrm::INV21FrameSource::Ptr(new hrm::NV21FrameSource());
     hrm::IRGBFrameSource::Ptr rgbfs(new hrm::RGBFrameSource(nv21));
 
     hrm::IRGBImageDrawer::Ptr debugImageDrawer(
@@ -76,7 +72,7 @@ jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativeSta
     hrVisualizer = hrm::IHeartRateVisualizer::Ptr(
             new hrm::SimpleHeartRateVisualizer());
 
-    heartRateCounter = boost::shared_ptr<hrm::HeartRateCounter>(
+    heartRateCounter = std::shared_ptr<hrm::HeartRateCounter>(
             new hrm::HeartRateCounter(hrGenerator, hrNumber, hrVisualizer));
 
     hrm::HeartRateTools::instance()->getLog()->INFO("native started");
@@ -109,17 +105,15 @@ jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativePas
     /*
      * measure time and pass image in nv21 frame source
      */
-    boost::tuple<hrm::TimeStamp, hrm::ElapsedTime> ts =
+    std::tuple<hrm::TimeStamp, hrm::ElapsedTime> ts =
             hrm::TimeCounter::instance()->getTimeStampExt();
-    LLINFO("current time = %.2f ms, fps = %.1f", ts.get<0>(),
-            1000.0 / ts.get<1>());
+    LLINFO("current time = %.2f ms, fps = %.1f", std::get<0>(ts),
+            1000.0 / std::get<1>(ts));
 
-    LLINFO("%d x %d, type = %s, %p", cols, rows,
-            hrm::AndroidImageFormat::instance()->getImageFormatString(type).c_str(),
-            imageData);
+    hrm::AndroidImageFormat::instance(); // do not delete, error linking
 
-    nv21->putFrame(uint16_t(rows), uint16_t(cols), (uint8_t *) imageData,
-            ts.get<0>());
+    dynamic_cast<hrm::NV21FrameSource&>(*nv21).putFrame(uint16_t(rows), uint16_t(cols), (uint8_t *) imageData,
+            std::get<0>(ts));
 
     JNIEnv_->ReleaseByteArrayElements(data, imageData, 0);
     return false;
