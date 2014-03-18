@@ -11,9 +11,9 @@
 namespace hrm {
 
 HeartRateCounter::HeartRateCounter(
-        boost::shared_ptr<IHeartRateGenerator> hrGenerator,
-        boost::shared_ptr<IHeartRateNumber> hrNumber,
-        boost::shared_ptr<IHeartRateVisualizer> hrVisualizer):
+        IHeartRateGenerator::Ptr hrGenerator,
+        IHeartRateNumber::Ptr hrNumber,
+        IHeartRateVisualizer::Ptr hrVisualizer):
                 _hrg(hrGenerator), _hrn(hrNumber), _hrv(hrVisualizer){
 }
 

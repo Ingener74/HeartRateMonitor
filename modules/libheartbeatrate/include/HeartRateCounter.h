@@ -19,17 +19,18 @@ namespace hrm {
 
 class HeartRateCounter {
 public:
-    HeartRateCounter(boost::shared_ptr<IHeartRateGenerator> hrGenerator,
-            boost::shared_ptr<IHeartRateNumber> hrNumber,
-            boost::shared_ptr<IHeartRateVisualizer> hrVisualizer);
+    HeartRateCounter(
+            IHeartRateGenerator::Ptr hrGenerator,
+            IHeartRateNumber::Ptr hrNumber,
+            IHeartRateVisualizer::Ptr hrVisualizer);
     virtual ~HeartRateCounter();
 
     bool start();
 
 private:
-    boost::shared_ptr<IHeartRateGenerator> _hrg;
-    boost::shared_ptr<IHeartRateNumber> _hrn;
-    boost::shared_ptr<IHeartRateVisualizer> _hrv;
+    IHeartRateGenerator::Ptr _hrg;
+    IHeartRateNumber::Ptr _hrn;
+    IHeartRateVisualizer::Ptr _hrv;
 
     boost::thread _thread;
     void threadBody();
