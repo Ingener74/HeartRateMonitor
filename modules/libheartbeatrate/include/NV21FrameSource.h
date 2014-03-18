@@ -17,7 +17,7 @@ namespace hrm {
 
 class NV21FrameSource: public INV21FrameSource {
 public:
-	typedef boost::shared_ptr<NV21FrameSource> Ptr;
+    typedef boost::shared_ptr<NV21FrameSource> Ptr;
 
     NV21FrameSource();
     virtual ~NV21FrameSource();

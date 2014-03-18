@@ -34,7 +34,7 @@
 
 #include "HeartRateMonitorPreview.h"
 
-hrm::NV21FrameSource::Ptr nv21;
+hrm::INV21FrameSource::Ptr nv21;
 boost::shared_ptr<hrm::HeartRateCounter> heartRateCounter;
 
 jint JNI_OnLoad(JavaVM* vm, void* reserved) {
@@ -55,7 +55,7 @@ jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativeSta
     hrm::TimeCounter::instance();
     hrm::HeartRateTools::instance()->getLog()->INFO("native start");
 
-    nv21 = hrm::NV21FrameSource::Ptr(new hrm::NV21FrameSource());
+    nv21 = hrm::INV21FrameSource::Ptr(new hrm::NV21FrameSource());
     hrm::IRGBFrameSource::Ptr rgbfs(new hrm::RGBFrameSource(nv21));
 
     hrm::IRGBImageDrawer::Ptr debugImageDrawer(
@@ -114,11 +114,9 @@ jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativePas
     LLINFO("current time = %.2f ms, fps = %.1f", ts.get<0>(),
             1000.0 / ts.get<1>());
 
-    LLINFO("%d x %d, type = %s, %p", cols, rows,
-            hrm::AndroidImageFormat::instance()->getImageFormatString(type).c_str(),
-            imageData);
+    hrm::AndroidImageFormat::instance();
 
-    nv21->putFrame(uint16_t(rows), uint16_t(cols), (uint8_t *) imageData,
+    dynamic_cast<hrm::NV21FrameSource&>(*nv21).putFrame(uint16_t(rows), uint16_t(cols), (uint8_t *) imageData,
             ts.get<0>());
 
     JNIEnv_->ReleaseByteArrayElements(data, imageData, 0);
