@@ -1,28 +1,18 @@
 cmake_minimum_required(VERSION 2.8)
 
-include(ExternalProject)
-
-#set(3RDPARTY_BUILD_TYPE Release)
-#set(3RDPARTY_INSTALL ${CMAKE_BINARY_DIR}/3RDPARTY)
-#
-#file(MAKE_DIRECTORY ${3RDPARTY_INSTALL})
-#file(MAKE_DIRECTORY ${3RDPARTY_INSTALL}/lib)
-#file(MAKE_DIRECTORY ${3RDPARTY_INSTALL}/include)
-
-add_subdirectory(boost)
-add_subdirectory(gtest)
-
-set(PREPARE prepare_repository)
 if(ANDROID)
-add_custom_target(
-    ${PREPARE}
-    DEPENDS ext_boost 
-    )
+    set(PREPARE prepare_repository)
+    include(ExternalProject)
+    
+    add_subdirectory(boost)
+    add_subdirectory(gtest)
+    add_custom_target(
+        ${PREPARE}
+        DEPENDS ext_boost 
+        )
 else()
-add_custom_target(
-    ${PREPARE}
-    DEPENDS 
-        ext_gtest 
-        ext_boost
-    )
+
+    find_package(Boost 1.53.0 REQUIRED)
+    find_package(GTest)
+
 endif()

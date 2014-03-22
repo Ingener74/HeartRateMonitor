@@ -18,17 +18,5 @@ if(ANDROID)
             cp -R ${EXT_BOOST_SRCDIR}/build/lib/ ${3RDPARTY_INSTALL}
         )
     set_target_properties(${EXT_BOOST} PROPERTIES EXCLUDE_FROM_ALL "TRUE")
-else()
-    ExternalProject_Add(
-        ${EXT_BOOST}
-        URL http://downloads.sourceforge.net/project/boost/boost/1.55.0/boost_1_55_0.tar.gz
-        CONFIGURE_COMMAND 
-            ${EXT_BOOST_SRCDIR}/bootstrap.sh --prefix=${3RDPARTY_INSTALL}
-        SOURCE_DIR ${EXT_BOOST_SRCDIR}
-        BUILD_COMMAND ${EXT_BOOST_SRCDIR}/b2 install link=static
-        BINARY_DIR ${EXT_BOOST_SRCDIR}
-        INSTALL_COMMAND ""
-        )
-    set_target_properties(${EXT_BOOST} PROPERTIES EXCLUDE_FROM_ALL "TRUE")
 endif()
 
