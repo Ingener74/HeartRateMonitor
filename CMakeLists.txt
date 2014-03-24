@@ -1,5 +1,13 @@
 cmake_minimum_required(VERSION 2.8)
 
+# include modules
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_LIST_DIR}/cmake/")
+if(ANDROID)
+    include(FindAndroidBoost)
+else()
+endif()
+
+# 3rdparty
 set(3RDPARTY_BUILD_TYPE Release)
 set(3RDPARTY_INSTALL ${CMAKE_BINARY_DIR}/3RDPARTY)
 
