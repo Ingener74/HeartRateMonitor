@@ -19,7 +19,7 @@ public class HeartRateMonitorPreview extends SurfaceView implements
 		SurfaceHolder.Callback, PreviewCallback {
 
 	static {
-		System.loadLibrary("HeartRateMonitor");
+		System.loadLibrary("HeartRateMonitor_cpp");
 	}
 	private native boolean hrmNativeStart();
 	private native boolean hrmNativePassImage(int rows, int cols, int type, byte[] data);

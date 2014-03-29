@@ -13,6 +13,7 @@ set(SOURCES
     src/SimpleHeartRateGenerator.cpp
     src/SimpleHeartRateVisualizer.cpp
     src/HeartRateCounter.cpp
+    src/RGBHeartRateGenerator.cpp
     )
 
 if(ANDROID)
@@ -26,3 +27,9 @@ else()
 endif()
 
 add_library(${PROJECT_NAME} ${SOURCES})
+
+if(ANDROID)
+    target_link_libraries(${PROJECT_NAME} ${ABOOST_LIBRARIES})
+else(ANDROID)
+    target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES})
+endif(ANDROID)

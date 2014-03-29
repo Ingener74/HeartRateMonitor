@@ -19,6 +19,8 @@ set(SOURCES
     )
 add_library(${HRM_CPP} SHARED ${SOURCES})
 
+target_link_libraries(${HRM_CPP} ${ABOOST_LIBRARIES} android log jnigraphics)
+
 set(LIBS
     heartbeatrate
     )
@@ -41,10 +43,10 @@ add_custom_command(
     OUTPUT mkdir_libs_dir
     COMMAND mkdir -p ${HRM_LIBS_DIR}
     )
-get_target_property(${HRM_CPP}_ ${HRM_CPP} LOCATION)
+get_target_property(HRM_CPP_ ${HRM_CPP} LOCATION)
 add_custom_command(
     OUTPUT copy_libs
-    COMMAND cp ${HRM_CPP}_ ${HRM_LIBS_DIR}
+    COMMAND cp ${HRM_CPP_} ${HRM_LIBS_DIR}
     )
 add_custom_command(
     OUTPUT update_prj
