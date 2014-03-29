@@ -5,7 +5,7 @@
  *      Author: pavel
  */
 
-#include "SimpleHeartRateVisualizer.h"
+#include "heartratemonitor/SimpleHeartRateVisualizer.h"
 
 namespace hrm {
 

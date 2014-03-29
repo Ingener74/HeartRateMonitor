@@ -8,7 +8,7 @@
 #include <time.h>
 #include <algorithm>
 
-#include "HeartBeatRateTypes.h"
+#include "heartratemonitor/HeartBeatRateTypes.h"
 
 namespace hrm {
 
@@ -31,13 +31,13 @@ TimeStamp TimeCounter::getTimeStamp() {
     return _time;
 }
 
-std::tuple<TimeStamp, ElapsedTime> TimeCounter::getTimeStampExt() {
+boost::tuple<TimeStamp, ElapsedTime> TimeCounter::getTimeStampExt() {
     struct timespec tm;
     clock_gettime(CLOCK_MONOTONIC, &tm);
     TimeStamp time = TimeStamp(tm.tv_sec * 1000 + tm.tv_nsec / 1000000);
     ElapsedTime dt = time - _time;
     _time = time;
-    return std::tuple<TimeStamp, ElapsedTime>(time, dt);
+    return boost::tuple<TimeStamp, ElapsedTime>(time, dt);
 }
 
 //void Image::drawLine(Image image, const Point& p1,

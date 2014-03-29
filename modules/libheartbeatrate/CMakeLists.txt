@@ -13,17 +13,23 @@ set(SOURCES
     src/SimpleHeartRateGenerator.cpp
     src/SimpleHeartRateVisualizer.cpp
     src/HeartRateCounter.cpp
+    src/RGBHeartRateGenerator.cpp
     )
 
 if(ANDROID)
     set(SOURCES ${SOURCES}
-        src/AndroidLog.cpp
-        src/ImageViewHeartRateVisualizer.cpp
+        src/log/AndroidLog.cpp
         )
 else()
     set(SOURCES ${SOURCES}
-        src/LinuxLog.cpp
+        src/log/LinuxLog.cpp
         )
 endif()
 
 add_library(${PROJECT_NAME} ${SOURCES})
+
+if(ANDROID)
+    target_link_libraries(${PROJECT_NAME} ${ABOOST_LIBRARIES})
+else(ANDROID)
+    target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES})
+endif(ANDROID)

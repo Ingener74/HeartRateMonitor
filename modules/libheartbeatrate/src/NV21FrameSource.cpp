@@ -5,9 +5,10 @@
  *      Author: pavel
  */
 
-#include "HeartBeatRateDefines.h"
+#include "heartratemonitor/HeartRateTools.h"
+#include "heartratemonitor/HeartBeatRateDefines.h"
 
-#include "NV21FrameSource.h"
+#include "heartratemonitor/NV21FrameSource.h"
 
 namespace hrm {
 
@@ -22,8 +23,9 @@ LockedFrame<BitsPerPixelImageFormat>::Shared NV21FrameSource::getFrame(){
         boost::unique_lock<boost::shared_mutex> lock(_frameMutex);
         _frameCond.wait(lock);
     }
+
     LockedFrame<BitsPerPixelImageFormat>::Shared lf(
-            std::shared_ptr<boost::shared_lock<boost::shared_mutex> >(
+            boost::shared_ptr<boost::shared_lock<boost::shared_mutex> >(
             new boost::shared_lock<boost::shared_mutex>(_frameMutex)), _frame);
     return lf;
 }

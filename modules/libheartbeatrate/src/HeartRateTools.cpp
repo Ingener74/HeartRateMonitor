@@ -5,15 +5,13 @@
  *      Author: pavel
  */
 
-#include <memory>
-
 #ifdef ANDROID
-#include "AndroidLog.h"
+#include "log/AndroidLog.h"
 #else
-#include "LinuxLog.h"
+#include "log/LinuxLog.h"
 #endif
 
-#include "HeartRateTools.h"
+#include "heartratemonitor/HeartRateTools.h"
 
 namespace hrm {
 
@@ -32,10 +30,10 @@ ILog* HeartRateTools::getLog() {
 HeartRateTools::HeartRateTools() {
 #ifdef ANDROID
 #warning AndroidLog
-    _log = std::shared_ptr<ILog>(new AndroidLog());
+    _log = boost::shared_ptr<ILog>(new AndroidLog());
 #else
 #warning LinuxLog
-    _log = std::shared_ptr<ILog>(new LinuxLog());
+    _log = boost::shared_ptr<ILog>(new LinuxLog());
 #endif
 }
 

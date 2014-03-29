@@ -1,26 +1,26 @@
 cmake_minimum_required(VERSION 2.8)
 
-
-set(3RDPARTY_BUILD_TYPE Release)
-set(3RDPARTY_INSTALL ${CMAKE_BINARY_DIR}/3RDPARTY)
-
-file(MAKE_DIRECTORY ${3RDPARTY_INSTALL})
-file(MAKE_DIRECTORY ${3RDPARTY_INSTALL}/lib)
-file(MAKE_DIRECTORY ${3RDPARTY_INSTALL}/include)
-
-include_directories(${3RDPARTY_INSTALL}/include)
-link_directories(${3RDPARTY_INSTALL}/lib)
+# include modules
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_LIST_DIR}/cmake/")
 if(ANDROID)
+
+    include(FindAndroidBoost)
+    if(ABOOST_FOUND)
+        include_directories(${ABOOST_INCLUDE_DIR})
+        link_directories(${ABOOST_LIB_DIR})
+    endif(ABOOST_FOUND)
+    
     include_directories(${ANDROID_NDK}/platforms/android-${ANDROID_NATIVE_API_LEVEL}/arch-arm/usr/include)
-else()
-endif()
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+else(ANDROID)
 
-add_subdirectory(3rdparty)
+    find_package(Boost 1.53.0 REQUIRED)
+    find_package(GTest)
+    
+endif(ANDROID)
+
+add_definitions(-std=c++11)
 
 add_subdirectory(modules)
 
 add_subdirectory(apps)
-
-add_subdirectory(testing)

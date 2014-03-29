@@ -7,7 +7,7 @@
 
 #include "unistd.h"
 
-#include "SimpleHeartRateGenerator.h"
+#include "heartratemonitor/SimpleHeartRateGenerator.h"
 
 namespace hrm {
 

@@ -5,8 +5,8 @@
  *      Author: pavel
  */
 
-#include "HeartRateTools.h"
-#include "HeartRateCounter.h"
+#include "heartratemonitor/HeartRateTools.h"
+#include "heartratemonitor/HeartRateCounter.h"
 
 namespace hrm {
 
@@ -19,11 +19,18 @@ HeartRateCounter::HeartRateCounter(
 
 HeartRateCounter::~HeartRateCounter() {
     HeartRateTools::instance()->getLog()->DEBUG("HeartRateCounter::~HeartRateCounter()");
+    _thread.interrupt();
     _thread.join();
 }
 
 bool HeartRateCounter::start() {
-    _thread = std::thread([this](){
+    // TODO lambda problem deadlock
+    _thread = boost::thread(boost::bind(&HeartRateCounter::threadFunc, this));
+    return true;
+}
+
+void HeartRateCounter::threadFunc(void) {
+    try {
         while(1){
             RawMeasurementGraph hrRawGraph = _hrg->getHeartRate();
             MeasurementGraph hrGraph;
@@ -33,9 +40,11 @@ bool HeartRateCounter::start() {
 
             _hrn->setHeartRateNumber(hrNumber);
             _hrv->visualizeHeartRate(hrGraph);
+
+            boost::this_thread::interruption_point();
         }
-    });
-    return true;
+    } catch (const boost::thread_interrupted& e) {
+    }
 }
 
 }  // namespace hrm
