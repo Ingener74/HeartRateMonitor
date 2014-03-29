@@ -8,7 +8,7 @@
 #ifndef ILINUXLOG_H_
 #define ILINUXLOG_H_
 
-#include "ILog.h"
+#include "heartratemonitor/ILog.h"
 
 namespace hrm {
 

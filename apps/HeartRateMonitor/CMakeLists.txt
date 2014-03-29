@@ -19,7 +19,7 @@ set(SOURCES
     )
 add_library(${HRM_CPP} SHARED ${SOURCES})
 
-target_link_libraries(${HRM_CPP} ${ABOOST_LIBRARIES} android log jnigraphics)
+target_link_libraries(${HRM_CPP} ${AndroidBoost_LIBRARIES} android log jnigraphics)
 
 set(LIBS
     heartbeatrate
@@ -58,11 +58,19 @@ add_custom_command(
     COMMAND ant debug | grep BUILD
     WORKING_DIRECTORY ${HRM_BIN_DIR}
     )
+add_custom_command(
+    OUTPUT mkdir_apk_output
+    COMMAND mkdir -p ${APK_OUTPUT}
+    )
+add_custom_command(
+    OUTPUT copy_output_apk
+    COMMAND find ${HRM_BIN_DIR} -name *-debug.apk | xargs cp -t ${APK_OUTPUT}
+    )
 
 # linking
 add_custom_target(
     ${HRM}
-    DEPENDS ${HRM_CPP} clean_prj mkdir_bin_dir copy_symlink_tree mkdir_libs_dir copy_libs update_prj build_prj
+    DEPENDS ${HRM_CPP} clean_prj mkdir_bin_dir copy_symlink_tree mkdir_libs_dir copy_libs update_prj build_prj mkdir_apk_output copy_output_apk
     )
 add_custom_target(
     ${HRM}_develop

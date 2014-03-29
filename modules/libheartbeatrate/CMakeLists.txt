@@ -3,7 +3,9 @@ cmake_minimum_required(VERSION 2.8)
 set(PROJECT_NAME heartbeatrate)
 project(${PROJECT_NAME})
 
-include_directories(include)
+include_directories(
+    include
+    )
 
 set(SOURCES
     src/HeartBeatRateTypes.cpp
@@ -29,7 +31,7 @@ endif()
 add_library(${PROJECT_NAME} ${SOURCES})
 
 if(ANDROID)
-    target_link_libraries(${PROJECT_NAME} ${ABOOST_LIBRARIES})
+    target_link_libraries(${PROJECT_NAME} ${AndroidBoost_LIBRARIES})
 else(ANDROID)
     target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES})
 endif(ANDROID)
