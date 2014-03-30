@@ -55,7 +55,7 @@ add_custom_command(
     )
 add_custom_command(
     OUTPUT build_prj
-    COMMAND ant debug | grep BUILD
+    COMMAND ant clean > /dev/null && ant debug | grep BUILD
     WORKING_DIRECTORY ${HRM_BIN_DIR}
     )
 add_custom_command(
@@ -70,7 +70,7 @@ add_custom_command(
 # linking
 add_custom_target(
     ${HRM}
-    DEPENDS ${HRM_CPP} clean_prj mkdir_bin_dir copy_symlink_tree mkdir_libs_dir copy_libs update_prj build_prj mkdir_apk_output copy_output_apk
+    DEPENDS ${HRM_CPP} mkdir_bin_dir copy_symlink_tree mkdir_libs_dir copy_libs update_prj build_prj mkdir_apk_output copy_output_apk
     )
 add_custom_target(
     ${HRM}_develop

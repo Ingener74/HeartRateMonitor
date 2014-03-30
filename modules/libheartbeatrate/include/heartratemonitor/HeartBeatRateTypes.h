@@ -17,6 +17,7 @@
 //#include <mutex>
 
 #include <vector>
+#include <deque>
 
 #include <boost/thread.hpp>
 #include <boost/smart_ptr.hpp>
@@ -27,7 +28,7 @@ namespace hrm {
 typedef double TimeStamp;
 typedef double ElapsedTime;
 
-typedef int32_t NormalizedMeasurementValue;
+typedef double  NormalizedMeasurementValue;
 typedef int32_t HeartRateValue;
 
 typedef int64_t HeartBeatID;
@@ -37,8 +38,8 @@ typedef boost::tuple<TimeStamp, NormalizedMeasurementValue>
 typedef boost::tuple<TimeStamp, NormalizedMeasurementValue, HeartBeatID>
     Measurement;
 
-typedef std::vector<RawMeasurement> RawMeasurementGraph;
-typedef std::vector<Measurement> MeasurementGraph;
+typedef std::deque<RawMeasurement> RawMeasurementGraph;
+typedef std::deque<Measurement>    MeasurementGraph;
 
 class TimeCounter {
 public:
@@ -211,16 +212,6 @@ public:
     typename ImageFormat::PixelType* getData() {
         return _p->_data.get();
     }
-
-//    enum DrawLineMethod {
-//        DrawLineMethod_DDA,
-//        DrawLineMethod_Bresenham,
-//        DrawLineMethod_By,
-//    };
-//    static void drawLine(Image image, const Point& p1,
-//            const Point& p2 = Point(),
-//            const Color& color = Color(),
-//            DrawLineMethod method = DrawLineMethod_DDA);
 };
 
 typedef Image<ImageFormatRGB> RGBImage;
@@ -267,6 +258,70 @@ typedef LockedFrame<TypeImageFormat<RGB> >::Shared FrameSharedLockedRGB;
 typedef LockedFrame<TypeImageFormat<RGBA> >::Shared FrameSharedLockedRGBA;
 typedef LockedFrame<TypeImageFormat<BGR> >::Shared FrameSharedLockedBGR;
 typedef LockedFrame<TypeImageFormat<BGRA> >::Shared FrameSharedLockedBGRA;
+
+/*
+ * draw primitives
+ */
+template <typename ImageFormat>
+void circle(Image<ImageFormat> image, const Point& center, int radius, const typename ImageFormat::PixelType& color){
+
+    typename ImageFormat::PixelType* p = image.getData();
+    ImageRect ir = image.getFormat().rect;
+    int x0 = center.x;
+    int y0 = center.y;
+#define setPixel(x, y)( *(p + ir._cols*(y) + (x)) = color )
+
+    int x = radius;
+    int y = 0;
+    int radiusError = 1 - x;
+    while (x >= y) {
+        setPixel(x + x0, y + y0);
+        setPixel(y + x0, x + y0);
+        setPixel(-x + x0, y + y0);
+        setPixel(-y + x0, x + y0);
+        setPixel(-x + x0, -y + y0);
+        setPixel(-y + x0, -x + y0);
+        setPixel(x + x0, -y + y0);
+        setPixel(y + x0, -x + y0);
+        y++;
+        if (radiusError < 0) {
+            radiusError += 2 * y + 1;
+        } else {
+            x--;
+            radiusError += 2 * (y - x + 1);
+        }
+    }
+}
+template <typename ImageFormat>
+void line(Image<ImageFormat> image, const Point& p1, const Point& p2, const typename ImageFormat::PixelType& color){
+
+    typename ImageFormat::PixelType* p = image.getData();
+    ImageRect ir = image.getFormat().rect;
+    int x1 = p1.x, x2 = p2.x, y1 = p1.y, y2 = p2.y;
+#define setPixel(x, y)( *(p + ir._cols*(y) + (x)) = color )
+
+    const int deltaX = abs(x2 - x1);
+    const int deltaY = abs(y2 - y1);
+    const int signX = x1 < x2 ? 1 : -1;
+    const int signY = y1 < y2 ? 1 : -1;
+    //
+    int error = deltaX - deltaY;
+    //
+    setPixel(x2, y2);
+    while (x1 != x2 || y1 != y2) {
+        setPixel(x1, y1);
+        const int error2 = error * 2;
+        //
+        if (error2 > -deltaY) {
+            error -= deltaY;
+            x1 += signX;
+        }
+        if (error2 < deltaX) {
+            error += deltaX;
+            y1 += signY;
+        }
+    }
+}
 
 }  // namespace hrm
 

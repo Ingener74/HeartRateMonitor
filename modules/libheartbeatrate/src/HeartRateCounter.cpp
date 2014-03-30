@@ -38,6 +38,10 @@ void HeartRateCounter::threadFunc(void) {
 
             /* calculate heart rate */
 
+            for(const RawMeasurement& r: hrRawGraph){
+                hrGraph.push_back(Measurement(r.get<0>(), r.get<1>(), 0));
+            }
+
             _hrn->setHeartRateNumber(hrNumber);
             _hrv->visualizeHeartRate(hrGraph);
 

@@ -12,19 +12,19 @@
 
 #include <heartratemonitor/HeartBeatRateTypes.h>
 #include <heartratemonitor/HeartBeatRateDefines.h>
-#include <heartratemonitor/RGBFrameSource.h>
 #include <heartratemonitor/NV21FrameSource.h>
-
-#include <heartratemonitor/HeartRateCounter.h>
-#include <heartratemonitor/SimpleHeartRateNumber.h>
-#include <heartratemonitor/HeartRateTools.h>
-
-#include <heartratemonitor/SimpleHeartRateVisualizer.h>
-#include <ImageViewHeartRateVisualizer.h>
-
-#include <heartratemonitor/SimpleHeartRateGenerator.h>
+#include <heartratemonitor/RGBFrameSource.h>
 #include <heartratemonitor/RGBHeartRateGenerator.h>
 
+#include <heartratemonitor/HeartRateCounter.h>
+#include <heartratemonitor/HeartRateTools.h>
+
+#include <heartratemonitor/SimpleHeartRateNumber.h>
+#include <heartratemonitor/SimpleHeartRateVisualizer.h>
+#include <heartratemonitor/SimpleHeartRateGenerator.h>
+
+
+#include <ImageViewHeartRateVisualizer.h>
 #include <ImageViewImageDrawer.h>
 
 #include "HeartRateMonitorPreview.h"
@@ -62,14 +62,14 @@ jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativeSta
 //    hrGenerator = boost::shared_ptr<hrm::IHeartRateGenerator>(
 //            new hrm::SimpleHeartRateGenerator());
     hrGenerator = hrm::IHeartRateGenerator::Ptr(
-            new hrm::RGBHeartRateGenerator(rgbfs, debugImageDrawer));
+            new hrm::RGBHeartRateGenerator(rgbfs/*, debugImageDrawer*/));
 
     hrm::IHeartRateNumber::Ptr hrNumber(new hrm::SimpleHeartRateNumber());
 
-//    hrVisualizer = boost::shared_ptr<hrm::IHeartRateVisualizer>(
-//            new hrm::ImageViewHeartRateVisualizer(JNIEnv_, self));
-    hrVisualizer = hrm::IHeartRateVisualizer::Ptr(
-            new hrm::SimpleHeartRateVisualizer());
+    hrVisualizer = boost::shared_ptr<hrm::IHeartRateVisualizer>(
+            new hrm::ImageViewHeartRateVisualizer(JNIEnv_, self));
+//    hrVisualizer = hrm::IHeartRateVisualizer::Ptr(
+//            new hrm::SimpleHeartRateVisualizer());
 
     heartRateCounter = boost::shared_ptr<hrm::HeartRateCounter>(
             new hrm::HeartRateCounter(hrGenerator, hrNumber, hrVisualizer));
