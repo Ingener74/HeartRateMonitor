@@ -19,15 +19,17 @@ namespace hrm {
 class RGBHeartRateGenerator: public IHeartRateGenerator {
 public:
     RGBHeartRateGenerator(
-            IRGBFrameSource::Ptr rgbFrameSource,
-            IRGBImageDrawer::Ptr debugImageDrawer);
+            IRGBFrameSource::Ptr rgbFrameSource/*,
+            IRGBImageDrawer::Ptr debugImageDrawer*/);
     virtual ~RGBHeartRateGenerator();
 
     virtual RawMeasurementGraph getHeartRate();
 
 private:
     IRGBFrameSource::Ptr _rgbfs;
-    IRGBImageDrawer::Ptr _did;
+//    IRGBImageDrawer::Ptr _did;
+
+    RawMeasurementGraph _rawGraph;
 };
 
 }  // namespace hrm

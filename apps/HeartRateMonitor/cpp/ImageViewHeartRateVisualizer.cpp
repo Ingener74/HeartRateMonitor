@@ -71,13 +71,28 @@ void ImageViewHeartRateVisualizer::visualizeHeartRate(
 
     RGB * dst = testImage.getData();
     for (int i = 0, imax = testImage.getFormat().rect._rows; i < imax; ++i) {
-        for (int j = 0, jmax = testImage.getFormat().rect._cols; j < jmax; ++j, dst += 3) {
-            if(i >= rows / 2 || j >= rows / 2)
-                continue;
-            dst->r = i % 255;
-            dst->g = j % 255;
-            dst->b = 0;
+        for (int j = 0, jmax = testImage.getFormat().rect._cols; j < jmax; ++j, ++dst) {
+            dst->r = 50;
+            dst->g = 30;
+            dst->b = 10;
         }
+    }
+
+    Measurement
+        f = heartRateMeasuredGraph.front(),
+        l = heartRateMeasuredGraph.back();
+
+    TimeStamp allTime = l.get<0>() - f.get<0>();
+
+    for (int i = 0, imax = heartRateMeasuredGraph.size() - 1; i < imax; ++i) {
+        Measurement
+            m1 = heartRateMeasuredGraph[i],
+            m2 = heartRateMeasuredGraph[i + 1];
+
+        line(testImage,
+                Point(cols * (m1.get<0>() - f.get<0>()) / allTime, rows * m1.get<1>()),
+                Point(cols * (m2.get<0>() - f.get<0>()) / allTime, rows * m2.get<1>()),
+                {255, 0, 0});
     }
 
     jclass class_Bitmap = (jclass)jniEnv->FindClass("android/graphics/Bitmap");

@@ -62,7 +62,12 @@ void ImageViewImageDrawer::drawImage(RGBImage image) {
         return;
     }
 
-//    Image::drawLine(image, Point(10, 10), Point(50, 50), Color(0, 255, 0));
+    line(image, Point( 10,  10), Point( 10, 100), {0, 255, 0});
+    line(image, Point( 10, 100), Point(100, 100), {0, 0, 255});
+    line(image, Point(100, 100), Point(100,  10), {255, 0, 0});
+    line(image, Point(100,  10), Point( 10,  10), {0, 255, 0});
+
+    circle(image, Point(50, 50), 30, {125, 0, 125});
 
     JNIEnv * jniEnv = 0;
     jint res = 0;
