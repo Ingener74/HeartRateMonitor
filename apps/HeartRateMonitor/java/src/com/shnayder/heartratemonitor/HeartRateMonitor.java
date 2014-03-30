@@ -21,7 +21,6 @@ public class HeartRateMonitor extends Activity {
 	private Camera _camera = null;
 	private ImageView _imageView = null;
 	private HeartRateMonitorPreview _cameraPreview = null;
-	private FrameLayout _previewFrameLayout = null;
 
 	private boolean checkCamera(Context context) {
 		if (!context.getPackageManager().hasSystemFeature(
@@ -46,13 +45,13 @@ public class HeartRateMonitor extends Activity {
 		Log.i(HRM_TAG, "onCreate");
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
+		_imageView = (ImageView) findViewById(R.id.imageViewHeartRate);
 	}
 
 	@Override
 	protected void onStart() {
 		Log.i(HRM_TAG, "onStart");
 		super.onStart();
-		_imageView = (ImageView) findViewById(R.id.imageViewHeartRate);
 	}
 
 	@Override
@@ -65,13 +64,13 @@ public class HeartRateMonitor extends Activity {
 	protected void onResume() {
 		Log.i(HRM_TAG, "onResume");
 		super.onResume();
-		if(_camera == null)
+		if (_camera == null)
 			_camera = getCameraInstance();
 
-		if(_cameraPreview == null){
-			_cameraPreview = new HeartRateMonitorPreview(this, _camera, _imageView);
-			_previewFrameLayout = (FrameLayout) findViewById(R.id.previewFrame);
-			_previewFrameLayout.addView(_cameraPreview);
+		if (_cameraPreview == null) {
+			_cameraPreview = new HeartRateMonitorPreview(this, _camera,
+					_imageView);
+			_cameraPreview.start();
 		}
 	}
 
@@ -79,14 +78,14 @@ public class HeartRateMonitor extends Activity {
 	protected void onPause() {
 		Log.i(HRM_TAG, "onPause");
 		super.onPause();
-		if(_camera != null){
+		if (_cameraPreview != null) {
+			_cameraPreview.stop();
+			_cameraPreview = null;
+		}
+		if (_camera != null) {
 			_camera.stopPreview();
 			_camera.release();
 			_camera = null;
-		}
-		if(_previewFrameLayout != null){
-			_previewFrameLayout.removeView(_cameraPreview);
-			_cameraPreview = null;
 		}
 	}
 
