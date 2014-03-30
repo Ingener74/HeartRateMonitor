@@ -15,10 +15,10 @@ namespace hrm {
 
 class HeartRateTools {
 public:
-    static HeartRateTools* instance();
+    static boost::shared_ptr<HeartRateTools> instance();
     virtual ~HeartRateTools();
 
-    virtual ILog* getLog();
+    virtual ILog::Ptr getLog();
 
 private:
     HeartRateTools();

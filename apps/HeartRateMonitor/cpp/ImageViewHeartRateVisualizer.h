@@ -25,12 +25,8 @@ private:
     bool _isError;
 
     JavaVM * _javaVM;
-    jobject _object_self;
-    jclass _class_self;
+    jobject _object_global_self;
     jmethodID _method_self_drawBitmap;
-
-    jfieldID _field_ImageView;
-    jobject _object_ImageView;
 };
 
 }  // namespace hrm

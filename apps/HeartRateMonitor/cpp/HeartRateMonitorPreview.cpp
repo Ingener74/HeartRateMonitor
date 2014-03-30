@@ -23,7 +23,6 @@
 #include <heartratemonitor/SimpleHeartRateVisualizer.h>
 #include <heartratemonitor/SimpleHeartRateGenerator.h>
 
-
 #include <ImageViewHeartRateVisualizer.h>
 #include <ImageViewImageDrawer.h>
 
@@ -53,8 +52,8 @@ jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativeSta
     nv21 = hrm::INV21FrameSource::Ptr(new hrm::NV21FrameSource());
     hrm::IRGBFrameSource::Ptr rgbfs(new hrm::RGBFrameSource(nv21));
 
-    hrm::IRGBImageDrawer::Ptr debugImageDrawer(
-            new hrm::ImageViewImageDrawer(JNIEnv_, self));
+//    hrm::IRGBImageDrawer::Ptr debugImageDrawer(
+//            new hrm::ImageViewImageDrawer(JNIEnv_, self));
 
     hrm::IHeartRateVisualizer::Ptr hrVisualizer;
     hrm::IHeartRateGenerator::Ptr hrGenerator;

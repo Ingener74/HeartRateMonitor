@@ -5,6 +5,10 @@
  *      Author: pavel
  */
 
+#include <limits>
+
+#include <boost/format.hpp>
+
 #include "heartratemonitor/HeartRateTools.h"
 #include "heartratemonitor/HeartRateCounter.h"
 
@@ -38,8 +42,23 @@ void HeartRateCounter::threadFunc(void) {
 
             /* calculate heart rate */
 
+            NormalizedMeasurementValue
+                minValue = std::numeric_limits<NormalizedMeasurementValue>().max(),
+                maxValue = std::numeric_limits<NormalizedMeasurementValue>().min();
             for(const RawMeasurement& r: hrRawGraph){
-                hrGraph.push_back(Measurement(r.get<0>(), r.get<1>(), 0));
+                minValue = std::min(r.get<1>(), minValue);
+                maxValue = std::max(r.get<1>(), maxValue);
+            }
+
+            NormalizedMeasurementValue diff = maxValue - minValue;
+
+            HeartRateTools::instance()->getLog()->DEBUG((boost::format(
+                    "min %1%, max %2%, diff %3%") % minValue % maxValue % diff
+                    ).str());
+
+            for(const RawMeasurement& r: hrRawGraph){
+                hrGraph.push_back(Measurement(r.get<0>(),
+                        ((r.get<1>() - minValue) / diff), 0));
             }
 
             _hrn->setHeartRateNumber(hrNumber);

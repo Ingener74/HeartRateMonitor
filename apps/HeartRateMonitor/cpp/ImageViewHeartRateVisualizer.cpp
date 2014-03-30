@@ -5,6 +5,7 @@
  *      Author: pavel
  */
 
+#include <algorithm>
 #include <android/bitmap.h>
 
 #include <heartratemonitor/HeartRateTools.h>
@@ -12,6 +13,9 @@
 #include "ImageViewHeartRateVisualizer.h"
 
 namespace hrm {
+
+using std::min;
+using std::max;
 
 #define CHECK(condition, error_message){ if(_isError)return; if (condition) { \
     HeartRateTools::instance()->getLog()->ERROR(error_message); \
@@ -21,35 +25,29 @@ ImageViewHeartRateVisualizer::ImageViewHeartRateVisualizer(JNIEnv * jniEnv,
         jobject object_self) :
         _isError(false),
         _javaVM(0),
-        _object_self(0),
-        _class_self(0),
-        _method_self_drawBitmap(0),
-        _field_ImageView(0),
-        _object_ImageView(0) {
+        _object_global_self(0),
+        _method_self_drawBitmap(0) {
 
     jint res = jniEnv->GetJavaVM(&_javaVM);
     CHECK(res != JNI_OK, "can't get java vm");
 
-    _class_self = jniEnv->FindClass(
-            "com/shnayder/heartratemonitor/HeartRateMonitorPreview");
-    CHECK(!_class_self, "can't find self class");
+    jclass class_self = jniEnv->GetObjectClass(object_self);
+    CHECK(!class_self, "can't get self class");
 
-    _object_self= jniEnv->NewGlobalRef(object_self);
-    CHECK(!_object_self, "can't create global ref self class");
+    _object_global_self= jniEnv->NewGlobalRef(object_self);
+    CHECK(!_object_global_self, "can't create global ref self class");
 
     _method_self_drawBitmap = jniEnv->GetMethodID(
-            _class_self, "drawBitmap", "(Landroid/graphics/Bitmap;)V");
+            class_self, "drawBitmap", "(Landroid/graphics/Bitmap;)V");
     CHECK(!_method_self_drawBitmap, "can't get drawBigmap method");
 
-    _field_ImageView = jniEnv->GetFieldID(_class_self, "_imageView", "Landroid/widget/ImageView;");
-    CHECK(!_field_ImageView, "can't get image view field id");
-
-    _object_ImageView = jniEnv->GetObjectField(object_self, _field_ImageView);
-    CHECK(!_object_ImageView, "can't get image view object field");
+    jniEnv->DeleteLocalRef(class_self);
 }
 
 ImageViewHeartRateVisualizer::~ImageViewHeartRateVisualizer() {
     /* todo attach current thread and delete global ref */
+    HeartRateTools::instance()->getLog()->DEBUG(
+            "ImageViewHeartRateVisualizer::~ImageViewHeartRateVisualizer()");
 }
 
 void ImageViewHeartRateVisualizer::visualizeHeartRate(
@@ -90,8 +88,14 @@ void ImageViewHeartRateVisualizer::visualizeHeartRate(
             m2 = heartRateMeasuredGraph[i + 1];
 
         line(testImage,
-                Point(cols * (m1.get<0>() - f.get<0>()) / allTime, rows * m1.get<1>()),
-                Point(cols * (m2.get<0>() - f.get<0>()) / allTime, rows * m2.get<1>()),
+                Point(
+                        max<int>(0, min<int>(cols * (m1.get<0>() - f.get<0>()) / allTime, cols)),
+                        max<int>(0, min<int>(rows * m1.get<1>(), rows))
+                ),
+                Point(
+                        max<int>(0, min<int>(cols * (m2.get<0>() - f.get<0>()) / allTime, cols)),
+                        max<int>(0, min<int>(rows * m2.get<1>(), rows))
+                ),
                 {255, 0, 0});
     }
 
@@ -144,7 +148,7 @@ void ImageViewHeartRateVisualizer::visualizeHeartRate(
         CHECK(res != ANDROID_BITMAP_RESULT_SUCCESS, "can't unlock pixels");
     }
 
-    jniEnv->CallVoidMethod(_object_self, _method_self_drawBitmap, object_Bitmap);
+    jniEnv->CallVoidMethod(_object_global_self, _method_self_drawBitmap, object_Bitmap);
 
     /* clean up */
     jniEnv->DeleteLocalRef(class_Bitmap);

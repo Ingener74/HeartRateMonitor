@@ -15,25 +15,23 @@
 
 namespace hrm {
 
-HeartRateTools* HeartRateTools::instance() {
+boost::shared_ptr<HeartRateTools> HeartRateTools::instance() {
     static boost::shared_ptr<HeartRateTools> self(new HeartRateTools());
-    return self.get();
+    return self;
 }
 
 HeartRateTools::~HeartRateTools() {
 }
 
-ILog* HeartRateTools::getLog() {
-    return _log.get();
+ILog::Ptr HeartRateTools::getLog() {
+    return _log;
 }
 
 HeartRateTools::HeartRateTools() {
 #ifdef ANDROID
-#warning AndroidLog
-    _log = boost::shared_ptr<ILog>(new AndroidLog());
+    _log = ILog::Ptr(new AndroidLog());
 #else
-#warning LinuxLog
-    _log = boost::shared_ptr<ILog>(new LinuxLog());
+    _log = ILog::Ptr(new LinuxLog());
 #endif
 }
 
