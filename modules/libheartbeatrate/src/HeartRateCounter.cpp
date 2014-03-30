@@ -52,10 +52,6 @@ void HeartRateCounter::threadFunc(void) {
 
             NormalizedMeasurementValue diff = maxValue - minValue;
 
-            HeartRateTools::instance()->getLog()->DEBUG((boost::format(
-                    "min %1%, max %2%, diff %3%") % minValue % maxValue % diff
-                    ).str());
-
             for(const RawMeasurement& r: hrRawGraph){
                 hrGraph.push_back(Measurement(r.get<0>(),
                         ((r.get<1>() - minValue) / diff), 0));

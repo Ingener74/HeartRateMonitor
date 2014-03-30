@@ -6,7 +6,6 @@
  */
 
 #include <string>
-#include <memory>
 
 #include <android/bitmap.h>
 
@@ -29,7 +28,7 @@
 #include "HeartRateMonitorPreview.h"
 
 hrm::INV21FrameSource::Ptr nv21;
-boost::shared_ptr<hrm::HeartRateCounter> heartRateCounter;
+hrm::HeartRateCounter::Ptr heartRateCounter;
 
 jint JNI_OnLoad(JavaVM* vm, void* reserved) {
     LLDEBUG("JNI_OnLoad(JavaVM* vm, void* reserved)");
@@ -46,34 +45,28 @@ void JNI_OnUnload(JavaVM* vm, void* reserved) {
 jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativeStart(
         JNIEnv* JNIEnv_, jobject self) {
 
-    hrm::TimeCounter::instance();
-    hrm::HeartRateTools::instance()->getLog()->INFO("native start");
+    using namespace hrm;
 
-    nv21 = hrm::INV21FrameSource::Ptr(new hrm::NV21FrameSource());
-    hrm::IRGBFrameSource::Ptr rgbfs(new hrm::RGBFrameSource(nv21));
+    TimeCounter::instance();
+    HeartRateTools::instance()->getLog()->INFO("native start");
 
-//    hrm::IRGBImageDrawer::Ptr debugImageDrawer(
-//            new hrm::ImageViewImageDrawer(JNIEnv_, self));
+    nv21 = INV21FrameSource::Ptr(new NV21FrameSource());
+    IRGBFrameSource::Ptr rgbfs(new RGBFrameSource(nv21));
 
-    hrm::IHeartRateVisualizer::Ptr hrVisualizer;
-    hrm::IHeartRateGenerator::Ptr hrGenerator;
+    IHeartRateVisualizer::Ptr hrVisualizer;
+    IHeartRateGenerator::Ptr hrGenerator;
 
-//    hrGenerator = boost::shared_ptr<hrm::IHeartRateGenerator>(
-//            new hrm::SimpleHeartRateGenerator());
-    hrGenerator = hrm::IHeartRateGenerator::Ptr(
-            new hrm::RGBHeartRateGenerator(rgbfs/*, debugImageDrawer*/));
+    hrGenerator = IHeartRateGenerator::Ptr(new RGBHeartRateGenerator(rgbfs));
 
-    hrm::IHeartRateNumber::Ptr hrNumber(new hrm::SimpleHeartRateNumber());
+    IHeartRateNumber::Ptr hrNumber(new SimpleHeartRateNumber());
 
-    hrVisualizer = boost::shared_ptr<hrm::IHeartRateVisualizer>(
-            new hrm::ImageViewHeartRateVisualizer(JNIEnv_, self));
-//    hrVisualizer = hrm::IHeartRateVisualizer::Ptr(
-//            new hrm::SimpleHeartRateVisualizer());
+    hrVisualizer = IHeartRateVisualizer::Ptr(
+            new ImageViewHeartRateVisualizer(JNIEnv_, self));
 
-    heartRateCounter = boost::shared_ptr<hrm::HeartRateCounter>(
-            new hrm::HeartRateCounter(hrGenerator, hrNumber, hrVisualizer));
+    heartRateCounter = HeartRateCounter::Ptr(
+            new HeartRateCounter(hrGenerator, hrNumber, hrVisualizer));
 
-    hrm::HeartRateTools::instance()->getLog()->INFO("native started");
+    HeartRateTools::instance()->getLog()->INFO("native started");
 
     return heartRateCounter->start();
 }
@@ -98,12 +91,11 @@ jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativePas
     /*
      * measure time and pass image in nv21 frame source
      */
-    boost::tuple<hrm::TimeStamp, hrm::ElapsedTime> ts =
-            hrm::TimeCounter::instance()->getTimeStampExt();
-//    LLINFO("current time = %.2f ms, fps = %.1f", boost::get<0>(ts),
-//            1000.0 / boost::get<1>(ts));
+    using namespace hrm;
+    boost::tuple<TimeStamp, ElapsedTime> ts =
+            TimeCounter::instance()->getTimeStampExt();
 
-    dynamic_cast<hrm::NV21FrameSource&>(*nv21).putFrame(uint16_t(rows), uint16_t(cols), (uint8_t *) imageData,
+    dynamic_cast<NV21FrameSource&>(*nv21).putFrame(uint16_t(rows), uint16_t(cols), (uint8_t *) imageData,
             ts.get<0>());
 
     JNIEnv_->ReleaseByteArrayElements(data, imageData, 0);
