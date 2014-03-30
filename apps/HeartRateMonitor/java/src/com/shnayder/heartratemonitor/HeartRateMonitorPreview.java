@@ -18,12 +18,18 @@ import android.widget.ImageView;
 public class HeartRateMonitorPreview extends SurfaceView implements
 		SurfaceHolder.Callback, PreviewCallback {
 
+	/**
+	 * Native part
+	 */
 	static {
 		System.loadLibrary("HeartRateMonitor_cpp");
 	}
 	private native boolean hrmNativeStart();
 	private native boolean hrmNativePassImage(int rows, int cols, int type, byte[] data);
 	private native void hrmNativeStop();
+	/**
+	 * end
+	 */
 
 	private SurfaceHolder _holder;
 	private Camera _camera;
@@ -50,6 +56,9 @@ public class HeartRateMonitorPreview extends SurfaceView implements
 	private void drawBitmap(final Bitmap bitmap){
 		if(bitmap.getWidth() == 0 || bitmap.getHeight() == 0)
 			return;
+		if(_imageView == null){
+			return;
+		}
 		_imageView.post(new Runnable() {
 			
 			@Override
@@ -71,7 +80,6 @@ public class HeartRateMonitorPreview extends SurfaceView implements
 		_holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 		
 		_imageView = imageView;
-//		_outputBitmap = Bitmap.createBitmap(0, 0, Bitmap.Config.ARGB_8888);
 	}
 	
 	@Override
@@ -94,6 +102,7 @@ public class HeartRateMonitorPreview extends SurfaceView implements
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
 			int height) {
 		
+		Log.d(HeartRateMonitor.HRM_TAG, "surfaceChanged( ... ) begin");
 		hrmNativeStop();
 		
 		if(_holder.getSurface() == null){
@@ -117,18 +126,19 @@ public class HeartRateMonitorPreview extends SurfaceView implements
 		if(!hrmNativeStart()){
 			Log.e(HeartRateMonitor.HRM_TAG, "native service restart fail");
 		}
+		Log.d(HeartRateMonitor.HRM_TAG, "surfaceChanged( ... ) end");
 	}
 
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		hrmNativeStop();
 		try {
-			_camera.setPreviewCallback(null);
-			_camera.stopPreview();
+			_holder.removeCallback(this);
 		} catch (Exception e) {
 			Log.e(HeartRateMonitor.HRM_TAG, "camera destroy preview fail: " + e.getMessage());
 		}
-		_camera.release();
+		
+		Log.d(HeartRateMonitor.HRM_TAG, "surfaceDestroyed(SurfaceHolder holder)");
 	}
 
 	@Override
