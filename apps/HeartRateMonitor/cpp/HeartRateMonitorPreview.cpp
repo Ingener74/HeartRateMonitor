@@ -53,14 +53,12 @@ jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativeSta
     nv21 = INV21FrameSource::Ptr(new NV21FrameSource());
     IRGBFrameSource::Ptr rgbfs(new RGBFrameSource(nv21));
 
-    IHeartRateVisualizer::Ptr hrVisualizer;
-    IHeartRateGenerator::Ptr hrGenerator;
-
-    hrGenerator = IHeartRateGenerator::Ptr(new RGBHeartRateGenerator(rgbfs));
+    IHeartRateGenerator::Ptr hrGenerator = IHeartRateGenerator::Ptr(
+            new RGBHeartRateGenerator(rgbfs));
 
     IHeartRateNumber::Ptr hrNumber(new SimpleHeartRateNumber());
 
-    hrVisualizer = IHeartRateVisualizer::Ptr(
+    IHeartRateVisualizer::Ptr hrVisualizer = IHeartRateVisualizer::Ptr(
             new ImageViewHeartRateVisualizer(JNIEnv_, self));
 
     heartRateCounter = HeartRateCounter::Ptr(
@@ -95,8 +93,8 @@ jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativePas
     boost::tuple<TimeStamp, ElapsedTime> ts =
             TimeCounter::instance()->getTimeStampExt();
 
-    dynamic_cast<NV21FrameSource&>(*nv21).putFrame(uint16_t(rows), uint16_t(cols), (uint8_t *) imageData,
-            ts.get<0>());
+    dynamic_cast<NV21FrameSource&>(*nv21).putFrame(uint16_t(rows),
+            uint16_t(cols), (uint8_t *) imageData, ts.get<0>());
 
     JNIEnv_->ReleaseByteArrayElements(data, imageData, 0);
     return false;

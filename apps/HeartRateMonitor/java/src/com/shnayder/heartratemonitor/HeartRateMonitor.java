@@ -1,18 +1,11 @@
 package com.shnayder.heartratemonitor;
 
-//import android.R;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Bitmap.Config;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 public class HeartRateMonitor extends Activity {
@@ -22,7 +15,8 @@ public class HeartRateMonitor extends Activity {
 	private ImageView _imageView = null;
 	private HeartRateMonitorPreview _cameraPreview = null;
 
-	private boolean checkCamera(Context context) {
+	@SuppressWarnings("unused")
+	private boolean checkCamera(final Context context) {
 		if (!context.getPackageManager().hasSystemFeature(
 				PackageManager.FEATURE_CAMERA)) {
 			return false;

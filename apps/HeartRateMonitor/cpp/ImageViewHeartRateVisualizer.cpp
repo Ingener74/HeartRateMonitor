@@ -70,9 +70,9 @@ void ImageViewHeartRateVisualizer::visualizeHeartRate(
     RGB * dst = testImage.getData();
     for (int i = 0, imax = testImage.getFormat().rect._rows; i < imax; ++i) {
         for (int j = 0, jmax = testImage.getFormat().rect._cols; j < jmax; ++j, ++dst) {
-            dst->r = 50;
-            dst->g = 30;
-            dst->b = 10;
+            dst->r = 84;
+            dst->g = 170;
+            dst->b = 232;
         }
     }
 
