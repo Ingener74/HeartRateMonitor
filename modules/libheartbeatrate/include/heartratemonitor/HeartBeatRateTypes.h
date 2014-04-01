@@ -11,19 +11,19 @@
 #include <stdint.h>
 #include <cmath>
 
-//#include <memory>
-//#include <tuple>
-//#include <thread>
-//#include <mutex>
-
 #include <vector>
 #include <deque>
 
 #include <boost/thread.hpp>
 #include <boost/smart_ptr.hpp>
 #include <boost/tuple/tuple.hpp>
+#include <boost/format.hpp>
 
 namespace hrm {
+
+using boost::shared_ptr;
+using boost::shared_array;
+using boost::format;
 
 typedef double TimeStamp;
 typedef double ElapsedTime;
@@ -170,8 +170,8 @@ class Image;
 template <typename ImageFormat>
 class ImageData{
 public:
-    typedef boost::shared_ptr<ImageData<ImageFormat> > Ptr;
-    typedef boost::shared_array<typename ImageFormat::PixelType> Array;
+    typedef shared_ptr<ImageData<ImageFormat> > Ptr;
+    typedef shared_array<typename ImageFormat::PixelType> Array;
 
     ImageFormat _format;
     Array _data;
@@ -200,7 +200,7 @@ public:
     }
 //    void operator << (const Image& original){
 //        _format = original._format;
-//        _data = boost::shared_array<uint8_t>(new uint8_t[_format.size()]);
+//        _data = shared_array<uint8_t>(new uint8_t[_format.size()]);
 //        uint8_t * src = original._data.get(), * dst = _data.get();
 //        for (int i = 0, imax = _format.size(); i < imax; ++i) {
 //            *dst++ = *src++;
@@ -246,11 +246,11 @@ typedef Frame<TypeImageFormat<BGRA> > FrameBGRA;
 template <typename ImageFormat>
 struct LockedFrame{
     typedef boost::tuple<
-            boost::shared_ptr<boost::unique_lock<boost::shared_mutex> >,
+            shared_ptr<boost::unique_lock<boost::shared_mutex> >,
             Frame<ImageFormat> > Unique;
 
     typedef boost::tuple<
-            boost::shared_ptr<boost::shared_lock<boost::shared_mutex> >,
+            shared_ptr<boost::shared_lock<boost::shared_mutex> >,
             Frame<ImageFormat> > Shared;
 };
 

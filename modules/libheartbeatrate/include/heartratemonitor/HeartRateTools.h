@@ -8,17 +8,22 @@
 #ifndef HEARTRATETOOLS_H_
 #define HEARTRATETOOLS_H_
 
-#include <boost/smart_ptr.hpp>
+#include "HeartBeatRateTypes.h"
 #include "ILog.h"
 
 namespace hrm {
 
 class HeartRateTools {
 public:
-    static boost::shared_ptr<HeartRateTools> instance();
+    typedef shared_ptr<HeartRateTools> Ptr;
+
+    static Ptr instance();
     virtual ~HeartRateTools();
 
-    virtual ILog::Ptr getLog();
+    void setLog(ILog::Ptr log);
+    ILog::Ptr getLog();
+
+    static int32_t rountUpToNextPowerOfTwo(int32_t x);
 
 private:
     HeartRateTools();
@@ -26,7 +31,5 @@ private:
 };
 
 }  // namespace hrm
-
-
 
 #endif /* HEARTRATETOOLS_H_ */
