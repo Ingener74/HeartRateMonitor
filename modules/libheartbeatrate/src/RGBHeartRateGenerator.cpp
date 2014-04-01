@@ -7,8 +7,6 @@
 
 #include <algorithm>
 
-#include <boost/format.hpp>
-
 #include "heartratemonitor/HeartRateTools.h"
 #include "heartratemonitor/RGBHeartRateGenerator.h"
 
@@ -49,7 +47,16 @@ RawMeasurementGraph RGBHeartRateGenerator::getHeartRate() {
 
         TimeStamp diff = back.get<0>() - front.get<0>();
 
-        if( diff > 2000.0){
+//        int32_t next2_1 = HeartRateTools::rountUpToNextPowerOfTwo(_rawGraph.size() - 1);
+//        int32_t next2_2 = HeartRateTools::rountUpToNextPowerOfTwo(_rawGraph.size());
+//        HeartRateTools::instance()->getLog()->DEBUG((format
+//                ("rgb heart rate next power of two = %1% - %2%, current = %3%") % next2_1 % next2_2 % int(_rawGraph.size())
+//                ).str());
+
+        if( diff > 2000.0 && (
+                HeartRateTools::rountUpToNextPowerOfTwo(_rawGraph.size() - 1) !=
+                HeartRateTools::rountUpToNextPowerOfTwo(_rawGraph.size())   )
+                ){
             _rawGraph.pop_front();
         }else{
             break;

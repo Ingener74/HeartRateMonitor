@@ -8,8 +8,7 @@
 #ifndef RGBHEARTRATEGENERATOR_H_
 #define RGBHEARTRATEGENERATOR_H_
 
-#include <boost/smart_ptr.hpp>
-
+#include "HeartBeatRateTypes.h"
 #include "IRGBFrameSource.h"
 #include "IRGBImageDrawer.h"
 #include "IHeartRateGenerator.h"
@@ -18,15 +17,13 @@ namespace hrm {
 
 class RGBHeartRateGenerator: public IHeartRateGenerator {
 public:
-    RGBHeartRateGenerator(
-            IRGBFrameSource::Ptr rgbFrameSource);
+    RGBHeartRateGenerator(IRGBFrameSource::Ptr rgbFrameSource);
     virtual ~RGBHeartRateGenerator();
 
     virtual RawMeasurementGraph getHeartRate();
 
 private:
     IRGBFrameSource::Ptr _rgbfs;
-
     RawMeasurementGraph _rawGraph;
 };
 

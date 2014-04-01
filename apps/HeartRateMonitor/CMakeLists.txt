@@ -55,7 +55,7 @@ add_custom_command(
     )
 add_custom_command(
     OUTPUT build_prj
-    COMMAND ant clean > /dev/null && ant debug | grep BUILD
+    COMMAND ant clean debug | grep BUILD
     WORKING_DIRECTORY ${HRM_BIN_DIR}
     )
 add_custom_command(
