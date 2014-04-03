@@ -6,3 +6,7 @@ project(${PROJECT_NAME})
 set(SOURCES 
     src/main.cpp
     )
+
+add_executable(${PROJECT_NAME} ${SOURCES})
+
+target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES} heartbeatrate)

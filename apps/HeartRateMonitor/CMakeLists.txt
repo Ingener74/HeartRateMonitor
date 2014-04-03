@@ -19,7 +19,7 @@ set(SOURCES
     )
 add_library(${HRM_CPP} SHARED ${SOURCES})
 
-target_link_libraries(${HRM_CPP} ${AndroidBoost_LIBRARIES} android log jnigraphics)
+target_link_libraries(${HRM_CPP} ${Boost_LIBRARIES} android log jnigraphics)
 
 set(LIBS
     heartbeatrate
