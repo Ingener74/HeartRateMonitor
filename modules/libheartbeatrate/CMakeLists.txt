@@ -34,13 +34,9 @@ else()
         )
 endif()
 
-add_library(${PROJECT_NAME} ${SOURCES})
+add_library(${PROJECT_NAME} STATIC ${SOURCES})
 
-if(ANDROID)
-    set(LIBS ${AndroidBoost_LIBRARIES})
-else(ANDROID)
-    set(LIBS ${Boost_LIBRARIES})
-endif(ANDROID)
+set(LIBS ${Boost_LIBRARIES})
 
 if(PNG_FOUND)
     set(LIBS ${LIBS} ${PNG_LIBRARIES})
