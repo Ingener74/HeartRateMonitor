@@ -18,8 +18,13 @@ else(ANDROID)
 
     find_package(Boost 1.53.0 REQUIRED)
     find_package(GTest)
-    
+
 endif(ANDROID)
+
+find_package(PNG)
+if(PNG_FOUND)
+    include_directories(${PNG_INCLUDE_DIRS})
+endif(PNG_FOUND)
 
 add_definitions(-std=c++11)
 

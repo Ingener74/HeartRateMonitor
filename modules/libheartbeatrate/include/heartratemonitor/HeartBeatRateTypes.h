@@ -13,17 +13,31 @@
 
 #include <vector>
 #include <deque>
+#include <exception>
 
 #include <boost/thread.hpp>
 #include <boost/smart_ptr.hpp>
 #include <boost/tuple/tuple.hpp>
 #include <boost/format.hpp>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
 
 namespace hrm {
 
 using boost::shared_ptr;
 using boost::shared_array;
 using boost::format;
+using namespace boost::property_tree;
+
+class drawError: public std::runtime_error {
+public:
+    drawError(const std::string& mes) :
+            runtime_error(mes) {
+    }
+    virtual ~drawError() {
+    }
+private:
+};
 
 typedef double TimeStamp;
 typedef double ElapsedTime;

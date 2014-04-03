@@ -18,6 +18,12 @@ set(SOURCES
     src/RGBHeartRateGenerator.cpp
     )
 
+if(PNG_FOUND)
+    set(SOURCES ${SOURCES}
+        src/RGB2PNGDataBaseFrameDrawer.cpp
+        )
+endif(PNG_FOUND)
+
 if(ANDROID)
     set(SOURCES ${SOURCES}
         src/log/AndroidLog.cpp
@@ -31,7 +37,13 @@ endif()
 add_library(${PROJECT_NAME} ${SOURCES})
 
 if(ANDROID)
-    target_link_libraries(${PROJECT_NAME} ${AndroidBoost_LIBRARIES})
+    set(LIBS ${AndroidBoost_LIBRARIES})
 else(ANDROID)
-    target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES})
+    set(LIBS ${Boost_LIBRARIES})
 endif(ANDROID)
+
+if(PNG_FOUND)
+    set(LIBS ${LIBS} ${PNG_LIBRARIES})
+endif(PNG_FOUND)
+
+target_link_libraries(${PROJECT_NAME} ${LIBS})
