@@ -2,24 +2,27 @@ cmake_minimum_required(VERSION 2.8)
 
 # include modules
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_LIST_DIR}/cmake/")
+
 if(ANDROID)
 
     include(Android)
 
-    find_package(AndroidBoost REQUIRED)
-    if(AndroidBoost_FOUND)
-        include_directories(${AndroidBoost_INCLUDE_DIR})
-        link_directories(${AndroidBoost_LIB_DIR})
-    endif(AndroidBoost_FOUND)
-    
-    include_directories(${ANDROID_NDK}/platforms/android-${ANDROID_NATIVE_API_LEVEL}/arch-arm/usr/include)
-
-else(ANDROID)
-
-    find_package(Boost 1.53.0 REQUIRED)
-    find_package(GTest)
-    
 endif(ANDROID)
+
+# find boost
+set(Boost_USE_STATIC_LIBS    ON)
+set(Boost_USE_MULTITHREADED  ON)
+set(Boost_COMPILER -gcc)
+find_package(Boost 1.53.0 REQUIRED COMPONENTS system thread)
+if(Boost_FOUND)
+    include_directories(${Boost_INCLUDE_DIRS})
+    message(STATUS "  boost include dir ${Boost_INCLUDE_DIRS}")
+    message(STATUS "  boost library dir ${Boost_LIBRARY_DIRS}")
+    message(STATUS "  boost libraries   ${Boost_LIBRARIES}")
+endif(Boost_FOUND)
+
+# find gtest
+find_package(GTest)
 
 add_definitions(-std=c++11)
 

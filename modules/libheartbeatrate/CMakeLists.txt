@@ -28,10 +28,6 @@ else()
         )
 endif()
 
-add_library(${PROJECT_NAME} ${SOURCES})
+add_library(${PROJECT_NAME} STATIC ${SOURCES})
 
-if(ANDROID)
-    target_link_libraries(${PROJECT_NAME} ${AndroidBoost_LIBRARIES})
-else(ANDROID)
-    target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES})
-endif(ANDROID)
+target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES})
