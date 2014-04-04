@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
 
 # include modules
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_LIST_DIR}/cmake/")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_LIST_DIR}/cmake/Modules")
 
 if(ANDROID)
 
@@ -20,6 +20,9 @@ if(Boost_FOUND)
     message(STATUS "  boost library dir ${Boost_LIBRARY_DIRS}")
     message(STATUS "  boost libraries   ${Boost_LIBRARIES}")
 endif(Boost_FOUND)
+
+# find fftw
+find_package(FFTW)
 
 # find gtest
 find_package(GTest)
