@@ -24,19 +24,25 @@
 
 namespace hrm {
 
-using boost::shared_ptr;
-using boost::shared_array;
-using boost::format;
-using namespace boost::property_tree;
+//using boost::shared_ptr;
+//using boost::shared_array;
+//using boost::format;
+//using namespace boost::property_tree;
+//using boost::shared_mutex;
+//using boost::thread;
 
-class drawError: public std::runtime_error {
+using namespace boost;
+
+template <typename Mutex>
+using unique_lock = boost::unique_lock<Mutex>;
+
+class DrawError: std::runtime_error {
 public:
-    drawError(const std::string& mes) :
+    DrawError(const std::string& mes) :
             runtime_error(mes) {
     }
-    virtual ~drawError() {
+    virtual ~DrawError() {
     }
-private:
 };
 
 typedef double TimeStamp;
@@ -178,8 +184,8 @@ struct BitsPerPixelImageFormat {
 //    ImageRect _rect;
 //};
 
-template <typename ImageFormat>
-class Image;
+//template <typename ImageFormat>
+//class Image;
 
 template <typename ImageFormat>
 class ImageData{
@@ -192,7 +198,7 @@ public:
 
     ImageData(ImageFormat if_):
         _format(if_),
-        _data(new typename ImageFormat::PixelType[if_.size()]) {}
+        _data(new typename ImageFormat::PixelType[if_.size()]) {} // FIXME
 
 };
 

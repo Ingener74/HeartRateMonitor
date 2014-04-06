@@ -14,10 +14,10 @@ namespace hrm {
 
 class RGB2PNGDataBaseFrameDrawer: public IRGBFrameDrawer {
 public:
-    RGB2PNGDataBaseFrameDrawer(const std::string& dataBaseDir);
+    RGB2PNGDataBaseFrameDrawer(const std::string& dataBaseDir = std::string());
     virtual ~RGB2PNGDataBaseFrameDrawer();
 
-    virtual void drawFrame(FrameRGB frame) throw (drawError);
+    virtual void drawFrame(FrameRGB frame) throw (DrawError);
 
 private:
     std::string _dataBaseDir;

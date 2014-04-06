@@ -10,14 +10,16 @@
 
 #include "HeartBeatRateTypes.h"
 #include "IRGBFrameSource.h"
-#include "IRGBImageDrawer.h"
 #include "IHeartRateGenerator.h"
+#include "IRGBFrameDrawer.h"
 
 namespace hrm {
 
 class RGBHeartRateGenerator: public IHeartRateGenerator {
 public:
-    RGBHeartRateGenerator(IRGBFrameSource::Ptr rgbFrameSource);
+    RGBHeartRateGenerator(
+            IRGBFrameSource::Ptr rgbFrameSource,
+            IRGBFrameDrawer::Ptr rgbFrameDrawer);
     virtual ~RGBHeartRateGenerator();
 
     virtual RawMeasurementGraph getHeartRate();
@@ -25,6 +27,8 @@ public:
 private:
     IRGBFrameSource::Ptr _rgbfs;
     RawMeasurementGraph _rawGraph;
+
+    IRGBFrameDrawer::Ptr _rgbfd;
 };
 
 }  // namespace hrm

@@ -14,16 +14,19 @@
 #include <heartratemonitor/NV21FrameSource.h>
 #include <heartratemonitor/RGBFrameSource.h>
 #include <heartratemonitor/RGBHeartRateGenerator.h>
+#include <heartratemonitor/RGB2PNGDataBaseFrameDrawer.h>
 
 #include <heartratemonitor/HeartRateCounter.h>
 #include <heartratemonitor/HeartRateTools.h>
 
-#include <heartratemonitor/SimpleHeartRateNumber.h>
-#include <heartratemonitor/SimpleHeartRateVisualizer.h>
-#include <heartratemonitor/SimpleHeartRateGenerator.h>
+#include <heartratemonitor/dummys/SimpleHeartRateNumber.h>
+#include <heartratemonitor/dummys/SimpleHeartRateVisualizer.h>
+#include <heartratemonitor/dummys/SimpleHeartRateGenerator.h>
+#include <heartratemonitor/dummys/DummyRGBFrameSource.h>
+#include <heartratemonitor/dummys/DummyNV21FrameSource.h>
 
 #include <ImageViewHeartRateVisualizer.h>
-#include <ImageViewImageDrawer.h>
+#include <ImageViewFrameDrawer.h>
 
 #include "HeartRateMonitorPreview.h"
 
@@ -47,25 +50,44 @@ jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativeSta
 
     using namespace hrm;
 
-    TimeCounter::instance();
-    HeartRateTools::instance()->getLog()->INFO("native start");
+    try {
 
-    nv21 = INV21FrameSource::Ptr(new NV21FrameSource());
-    IRGBFrameSource::Ptr rgbfs(new RGBFrameSource(nv21));
+        TimeCounter::instance();
+        HeartRateTools::instance()->getLog()->INFO("native start");
 
-    IHeartRateGenerator::Ptr hrGenerator = IHeartRateGenerator::Ptr(
-            new RGBHeartRateGenerator(rgbfs));
+        nv21 = INV21FrameSource::Ptr(
+                new NV21FrameSource()
+//                new dummys::DummyNV21FrameSource()
+        );
+        IRGBFrameSource::Ptr rgbfs(
+                new RGBFrameSource(nv21)
+//                new DummyRGBFrameSource()
+        );
 
-    IHeartRateNumber::Ptr hrNumber(new SimpleHeartRateNumber());
+        IHeartRateGenerator::Ptr hrGenerator(new RGBHeartRateGenerator(
+                rgbfs,
+                IRGBFrameDrawer::Ptr(new RGB2PNGDataBaseFrameDrawer("/sdcard/test_db"))
+//                IRGBFrameDrawer::Ptr(new ImageViewFrameDrawer(JNIEnv_, self))
+                ));
 
-    IHeartRateVisualizer::Ptr hrVisualizer = IHeartRateVisualizer::Ptr(
-            new ImageViewHeartRateVisualizer(JNIEnv_, self));
+        IHeartRateNumber::Ptr hrNumber(new SimpleHeartRateNumber());
 
-    heartRateCounter = HeartRateCounter::Ptr(
-            new HeartRateCounter(hrGenerator, hrNumber, hrVisualizer));
+        IHeartRateVisualizer::Ptr hrVisualizer = IHeartRateVisualizer::Ptr(
+    //            new ImageViewHeartRateVisualizer(JNIEnv_, self)
+                new SimpleHeartRateVisualizer()
+        );
 
-    HeartRateTools::instance()->getLog()->INFO("native started");
+        heartRateCounter = HeartRateCounter::Ptr(
+                new HeartRateCounter(hrGenerator, hrNumber, hrVisualizer));
 
+        HeartRateTools::instance()->getLog()->INFO("native started");
+
+    } catch (const std::runtime_error& e) {
+        HeartRateTools::instance()->getLog()->ERROR((
+                format("runtime error in hrm native start: %1%") % e.what()
+                ).str());
+        return false;
+    }
     return heartRateCounter->start();
 }
 
@@ -79,6 +101,8 @@ jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativePas
         JNIEnv* JNIEnv_, jobject self, jint rows, jint cols, jint type,
         jbyteArray data) {
 
+//    return false;
+
     if (!nv21) {
         return false;
     }
@@ -90,11 +114,28 @@ jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativePas
      * measure time and pass image in nv21 frame source
      */
     using namespace hrm;
-    boost::tuple<TimeStamp, ElapsedTime> ts =
-            TimeCounter::instance()->getTimeStampExt();
+    try {
+//        HeartRateTools::instance()->getLog()->DEBUG((
+//                format("type = %1%") % type
+//                ).str());
 
-    dynamic_cast<NV21FrameSource&>(*nv21).putFrame(uint16_t(rows),
-            uint16_t(cols), (uint8_t *) imageData, ts.get<0>());
+        boost::tuple<TimeStamp, ElapsedTime> ts =
+                TimeCounter::instance()->getTimeStampExt();
+
+        dynamic_cast<NV21FrameSource&>(*nv21).putFrame(
+                static_cast<uint16_t>(rows),
+                static_cast<uint16_t>(cols),
+                reinterpret_cast<uint8_t *>(imageData),
+                ts.get<0>()
+                );
+
+    } catch (const std::runtime_error& e) {
+        hrm::HeartRateTools::instance()->getLog()->ERROR((
+                format("put frame error: %1%") % e.what()
+        ).str());
+    } catch (...) {
+        hrm::HeartRateTools::instance()->getLog()->ERROR("fatal error");
+    }
 
     JNIEnv_->ReleaseByteArrayElements(data, imageData, 0);
     return false;

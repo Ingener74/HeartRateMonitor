@@ -12,10 +12,12 @@ set(SOURCES
     src/HeartRateTools.cpp
     src/NV21FrameSource.cpp
     src/RGBFrameSource.cpp
-    src/SimpleHeartRateGenerator.cpp
-    src/SimpleHeartRateVisualizer.cpp
     src/HeartRateCounter.cpp
     src/RGBHeartRateGenerator.cpp
+    src/dummys/SimpleHeartRateGenerator.cpp
+    src/dummys/SimpleHeartRateVisualizer.cpp
+    src/dummys/DummyRGBFrameSource.cpp
+    src/dummys/DummyNV21FrameSource.cpp
     )
 
 if(PNG_FOUND)

@@ -19,7 +19,7 @@ public:
     virtual ~IRGBFrameDrawer() {
     }
 
-    virtual void drawFrame(FrameRGB frame) throw (drawError)= 0;
+    virtual void drawFrame(FrameRGB frame) throw (DrawError)= 0;
 
 protected:
     IRGBFrameDrawer() {
