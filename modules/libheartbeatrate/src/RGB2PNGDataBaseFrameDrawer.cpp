@@ -74,13 +74,6 @@ void RGB2PNGDataBaseFrameDrawer::drawFrame(FrameRGB frame) throw (DrawError) {
        png_infop info_ptr = NULL;
        size_t x, y;
        png_byte ** row_pointers = NULL;
-       /* "status" contains the return value of this function. At first
-        it is set to a value which means 'failure'. When the routine
-        has finished its work, it is set to a value which means
-        'success'. */
-       /* The following number is set by trial and error only. I cannot
-        see where it it is documented in the libpng manual.
-        */
        int pixel_size = 3;
        int depth = 8;
 
