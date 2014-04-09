@@ -8,15 +8,13 @@
 #ifndef IRGBIMAGEDRAWER_H_
 #define IRGBIMAGEDRAWER_H_
 
-#include <memory>
-
 #include "HeartBeatRateTypes.h"
 
 namespace hrm {
 
 class IRGBImageDrawer {
 public:
-	typedef boost::shared_ptr<IRGBImageDrawer> Ptr;
+	typedef shared_ptr<IRGBImageDrawer> Ptr;
 
 	virtual ~IRGBImageDrawer() {
 	}

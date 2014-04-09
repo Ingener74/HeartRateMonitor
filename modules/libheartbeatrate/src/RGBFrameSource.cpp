@@ -30,11 +30,13 @@ FrameSharedLockedRGB RGBFrameSource::getFrame(){
         ImageRect r = lockedFrame.get<1>().getFormat().rect;
         if(_frame.getFormat().rect != r){
             _frame = FrameRGB(ImageFormatRGB(r));
-//            HeartRateTools::instance()->getLog()->DEBUG((boost::format(
-//                    "rgb frame resized %1% x %2%")
-//            % _frame.getFormat()._rect._rows
-//            % _frame.getFormat()._rect._cols).str());
+            HeartRateTools::instance()->getLog()->DEBUG((
+                    format("rgb frame resized %1% x %2%")
+                    % _frame.getFormat().rect._rows
+                    % _frame.getFormat().rect._cols
+                    ).str());
         }
+
         /* Internet sources
          *
          * http://ru.wikipedia.org/wiki/YUV
@@ -60,9 +62,7 @@ FrameSharedLockedRGB RGBFrameSource::getFrame(){
         uint8_t * uv = y + lockedFrame.get<1>().getFormat().rect.area();
 
         RGB * rgb = _frame.getData();
-
         for (uint32_t i = 0, imax = _frame.getFormat().rect._rows; i < imax; i += 2){
-
             for (uint32_t j = 0, jmax = _frame.getFormat().rect._cols; j < jmax; j += 2){
 
                 int Y1 = int(*(y +  i     *jmax +  j      )) - 16;
@@ -73,10 +73,10 @@ FrameSharedLockedRGB RGBFrameSource::getFrame(){
                 int U = int(*uv++) - 128;
                 int V = int(*uv++) - 128;
 
-                RGB* rgb1 = rgb +  i     *jmax +  j      ;
-                RGB* rgb2 = rgb +  i     *jmax + (j + 1) ;
-                RGB* rgb3 = rgb + (i + 1)*jmax +  j      ;
-                RGB* rgb4 = rgb + (i + 1)*jmax + (j + 1) ;
+                RGB* rgb1 = (rgb +  i     *jmax +  j      );
+                RGB* rgb2 = (rgb +  i     *jmax + (j + 1) );
+                RGB* rgb3 = (rgb + (i + 1)*jmax +  j      );
+                RGB* rgb4 = (rgb + (i + 1)*jmax + (j + 1) );
 
 #define YUV2RGB(Y, U, V, pRGB){                             \
                 int r = 1.164 * Y              + 2.018 * U; \
@@ -93,7 +93,6 @@ FrameSharedLockedRGB RGBFrameSource::getFrame(){
             }
         }
         _frame.setTimeStamp(lockedFrame.get<1>().getTimeStamp());
-//        HeartRateTools::instance()->getLog()->DEBUG("rgb frame converted");
     }
     FrameSharedLockedRGB lockedFrame(
             boost::shared_ptr<boost::shared_lock<boost::shared_mutex> >(

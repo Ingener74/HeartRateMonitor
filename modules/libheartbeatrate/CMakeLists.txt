@@ -12,11 +12,19 @@ set(SOURCES
     src/HeartRateTools.cpp
     src/NV21FrameSource.cpp
     src/RGBFrameSource.cpp
-    src/SimpleHeartRateGenerator.cpp
-    src/SimpleHeartRateVisualizer.cpp
     src/HeartRateCounter.cpp
     src/RGBHeartRateGenerator.cpp
+    src/dummys/SimpleHeartRateGenerator.cpp
+    src/dummys/SimpleHeartRateVisualizer.cpp
+    src/dummys/DummyRGBFrameSource.cpp
+    src/dummys/DummyNV21FrameSource.cpp
     )
+
+if(PNG_FOUND)
+    set(SOURCES ${SOURCES}
+        src/RGB2PNGDataBaseFrameDrawer.cpp
+        )
+endif(PNG_FOUND)
 
 if(ANDROID)
     set(SOURCES ${SOURCES}
@@ -30,4 +38,10 @@ endif()
 
 add_library(${PROJECT_NAME} STATIC ${SOURCES})
 
-target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES})
+set(LIBS ${Boost_LIBRARIES})
+
+if(PNG_FOUND)
+    set(LIBS ${LIBS} ${PNG_LIBRARIES})
+endif(PNG_FOUND)
+
+target_link_libraries(${PROJECT_NAME} ${LIBS})

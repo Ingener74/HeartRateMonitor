@@ -13,11 +13,14 @@
 namespace hrm {
 
 RGBHeartRateGenerator::RGBHeartRateGenerator(
-        IRGBFrameSource::Ptr rgbFrameSource) :
-        _rgbfs(rgbFrameSource) {
+        IRGBFrameSource::Ptr rgbFrameSource,
+        IRGBFrameDrawer::Ptr rgbFrameDrawer) :
+        _rgbfs(rgbFrameSource), _rgbfd(rgbFrameDrawer){
 }
 
 RGBHeartRateGenerator::~RGBHeartRateGenerator() {
+    HeartRateTools::instance()->getLog()->DEBUG(
+            "RGBHeartRateGenerator::~RGBHeartRateGenerator()");
 }
 
 RawMeasurementGraph RGBHeartRateGenerator::getHeartRate() {
@@ -26,6 +29,14 @@ RawMeasurementGraph RGBHeartRateGenerator::getHeartRate() {
 
     {
         FrameSharedLockedRGB slf = _rgbfs->getFrame();
+
+        try {
+            _rgbfd->drawFrame(slf.get<1>());
+        } catch (const DrawError& e) {
+            HeartRateTools::instance()->getLog()->ERROR((
+                    format("rgb frame drawer")/* % e.what()*/
+            ).str());
+        }
 
         RGB* p = slf.get<1>().getData();
 

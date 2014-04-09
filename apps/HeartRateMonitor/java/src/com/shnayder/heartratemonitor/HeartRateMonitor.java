@@ -1,30 +1,35 @@
 package com.shnayder.heartratemonitor;
 
+//import android.R;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Bitmap.Config;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 public class HeartRateMonitor extends Activity {
 	public static String HRM_TAG = "Heart Rate Monitor Java";
 
 	private Camera _camera = null;
-	private ImageView _imageView = null;
 	private HeartRateMonitorPreview _cameraPreview = null;
-
-	@SuppressWarnings("unused")
-	private boolean checkCamera(final Context context) {
-		if (!context.getPackageManager().hasSystemFeature(
-				PackageManager.FEATURE_CAMERA)) {
+	private FrameLayout _previewFrameLayout = null;
+	
+	private boolean checkCamera(Context context){
+		if(!context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)){
 			return false;
 		}
 		return true;
 	}
-
-	private static Camera getCameraInstance() {
+	
+	private static Camera getCameraInstance(){
 		Camera c = null;
 		try {
 			c = Camera.open();
@@ -39,7 +44,15 @@ public class HeartRateMonitor extends Activity {
 		Log.i(HRM_TAG, "onCreate");
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-		_imageView = (ImageView) findViewById(R.id.imageViewHeartRate);
+		
+		ImageView iv1 = (ImageView)findViewById(R.id.imageViewHeartRate);
+		
+		_camera = getCameraInstance();
+		
+		_cameraPreview = new HeartRateMonitorPreview(this, _camera, iv1);
+		_previewFrameLayout = (FrameLayout)findViewById(R.id.previewFrame);
+		_previewFrameLayout.addView(_cameraPreview);
+		
 	}
 
 	@Override
@@ -58,29 +71,12 @@ public class HeartRateMonitor extends Activity {
 	protected void onResume() {
 		Log.i(HRM_TAG, "onResume");
 		super.onResume();
-		if (_camera == null)
-			_camera = getCameraInstance();
-
-		if (_cameraPreview == null) {
-			_cameraPreview = new HeartRateMonitorPreview(this, _camera,
-					_imageView);
-			_cameraPreview.start();
-		}
 	}
 
 	@Override
 	protected void onPause() {
 		Log.i(HRM_TAG, "onPause");
 		super.onPause();
-		if (_cameraPreview != null) {
-			_cameraPreview.stop();
-			_cameraPreview = null;
-		}
-		if (_camera != null) {
-			_camera.stopPreview();
-			_camera.release();
-			_camera = null;
-		}
 	}
 
 	@Override

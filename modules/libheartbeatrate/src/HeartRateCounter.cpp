@@ -63,6 +63,13 @@ void HeartRateCounter::threadFunc(void) {
             boost::this_thread::interruption_point();
         }
     } catch (const boost::thread_interrupted& e) {
+    } catch (const std::runtime_error& e){
+        HeartRateTools::instance()->getLog()->ERROR((
+                format("runtime error in heart rate counter: %1%") % e.what()
+                ).str());
+    } catch (...){
+        HeartRateTools::instance()->getLog()->ERROR(
+                "fatal error in heart rate counter");
     }
 }
 

@@ -24,6 +24,12 @@ endif(Boost_FOUND)
 # find gtest
 find_package(GTest)
 
+# find png
+find_package(PNG)
+if(PNG_FOUND)
+    include_directories(${PNG_INCLUDE_DIRS})
+endif(PNG_FOUND)
+
 add_definitions(-std=c++11)
 
 add_subdirectory(modules)

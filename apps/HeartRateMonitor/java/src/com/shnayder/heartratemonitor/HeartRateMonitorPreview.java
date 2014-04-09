@@ -18,18 +18,12 @@ import android.widget.ImageView;
 public class HeartRateMonitorPreview extends SurfaceView implements
 		SurfaceHolder.Callback, PreviewCallback {
 
-	/**
-	 * Native part
-	 */
 	static {
 		System.loadLibrary("HeartRateMonitor_cpp");
 	}
 	private native boolean hrmNativeStart();
 	private native boolean hrmNativePassImage(int rows, int cols, int type, byte[] data);
 	private native void hrmNativeStop();
-	/**
-	 * end
-	 */
 
 	private SurfaceHolder _holder;
 	private Camera _camera;
@@ -56,9 +50,6 @@ public class HeartRateMonitorPreview extends SurfaceView implements
 	private void drawBitmap(final Bitmap bitmap){
 		if(bitmap.getWidth() == 0 || bitmap.getHeight() == 0)
 			return;
-		if(_imageView == null){
-			return;
-		}
 		_imageView.post(new Runnable() {
 			
 			@Override
@@ -80,9 +71,12 @@ public class HeartRateMonitorPreview extends SurfaceView implements
 		_holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 		
 		_imageView = imageView;
+//		_outputBitmap = Bitmap.createBitmap(0, 0, Bitmap.Config.ARGB_8888);
 	}
 	
-	public void start(){
+	@Override
+	public void surfaceCreated(SurfaceHolder holder) {
+		
 		if(!hrmNativeStart()){
 			Log.e(HeartRateMonitor.HRM_TAG, "native service start fail");
 		}
@@ -91,35 +85,50 @@ public class HeartRateMonitorPreview extends SurfaceView implements
 			_camera.setPreviewCallback(this);
 			_camera.startPreview();
 		} catch (IOException e) {
-			Log.e(HeartRateMonitor.HRM_TAG, "camera start fail: " + e.getMessage());
+			Log.e(HeartRateMonitor.HRM_TAG, "camera start preview fail: " + e.getMessage());
 		}
 		setMinResAndFlashOn();
-	}
-	public void stop(){
-		hrmNativeStop();
-		try {
-			_holder.removeCallback(this);
-			_camera.setPreviewCallback(null);
-			_camera.setPreviewDisplay(null);
-		} catch (Exception e) {
-			Log.e(HeartRateMonitor.HRM_TAG, "camera stop fail: " + e.getMessage());
-		}
-	}
-	
-	@Override
-	public void surfaceCreated(SurfaceHolder holder) {
-		Log.e(HeartRateMonitor.HRM_TAG, "called empty surfaceCreated(SurfaceHolder holder)");
 	}
 	
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
 			int height) {
-		Log.e(HeartRateMonitor.HRM_TAG, "called empty surfaceChanged()");
+		
+		hrmNativeStop();
+		
+		if(_holder.getSurface() == null){
+			return;
+		}
+		try {
+			_camera.stopPreview();
+		} catch (Exception e) {
+			Log.e(HeartRateMonitor.HRM_TAG, "camera stop preview fail: " + e.getMessage());
+		}
+		try {
+			_camera.setPreviewDisplay(_holder);
+			_camera.setPreviewCallback(this);
+			_camera.startPreview();
+		} catch (Exception e) {
+			Log.e(HeartRateMonitor.HRM_TAG, "camera restart preview fail: " + e.getMessage());
+		}
+		
+		setMinResAndFlashOn();
+		
+		if(!hrmNativeStart()){
+			Log.e(HeartRateMonitor.HRM_TAG, "native service restart fail");
+		}
 	}
 
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
-		Log.e(HeartRateMonitor.HRM_TAG, "called empty surfaceDestroyed(SurfaceHolder holder)");
+		hrmNativeStop();
+		try {
+			_camera.setPreviewCallback(null);
+			_camera.stopPreview();
+		} catch (Exception e) {
+			Log.e(HeartRateMonitor.HRM_TAG, "camera destroy preview fail: " + e.getMessage());
+		}
+		_camera.release();
 	}
 
 	@Override

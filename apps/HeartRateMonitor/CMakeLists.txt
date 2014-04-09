@@ -15,7 +15,7 @@ include_directories(
 set(SOURCES
     cpp/HeartRateMonitorPreview.cpp
     cpp/ImageViewHeartRateVisualizer.cpp
-    cpp/ImageViewImageDrawer.cpp
+    cpp/ImageViewFrameDrawer.cpp
     )
 add_library(${HRM_CPP} SHARED ${SOURCES})
 
