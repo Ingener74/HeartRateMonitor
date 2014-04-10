@@ -22,11 +22,11 @@ using std::max;
     _isError = true; return;} }
 
 ImageViewHeartRateVisualizer::ImageViewHeartRateVisualizer(JNIEnv * jniEnv,
-        jobject object_self) :
+        jobject object_self, const std::string& methodName) :
         _isError(false),
-        _javaVM(0),
-        _object_global_self(0),
-        _method_self_drawBitmap(0) {
+        _javaVM(nullptr),
+        _object_global_self(nullptr),
+        _method_self_drawBitmap(nullptr) {
 
     jint res = jniEnv->GetJavaVM(&_javaVM);
     CHECK(res != JNI_OK, "can't get java vm");
@@ -38,7 +38,7 @@ ImageViewHeartRateVisualizer::ImageViewHeartRateVisualizer(JNIEnv * jniEnv,
     CHECK(!_object_global_self, "can't create global ref self class");
 
     _method_self_drawBitmap = jniEnv->GetMethodID(
-            class_self, "drawBitmap", "(Landroid/graphics/Bitmap;)V");
+            class_self, methodName.c_str(), "(Landroid/graphics/Bitmap;)V");
     CHECK(!_method_self_drawBitmap, "can't get drawBigmap method");
 
     jniEnv->DeleteLocalRef(class_self);

@@ -14,18 +14,16 @@ namespace hrm {
 
 class ImageViewFrameDrawer: public IRGBFrameDrawer {
 public:
-    ImageViewFrameDrawer(JNIEnv * jniEnv, jobject object_self);
+    ImageViewFrameDrawer(JNIEnv * jniEnv, jobject object_self, const std::string& methodName);
     virtual ~ImageViewFrameDrawer();
 
     virtual void drawFrame(FrameRGB frame) throw (DrawError);
 private:
-    JavaVM * _javaVM;
-    jobject _object_self;
-    jclass _class_self;
-    jmethodID _method_self_drawBitmap;
+    bool _isError;
 
-    jfieldID _field_ImageView;
-    jobject _object_ImageView;
+    JavaVM * _javaVM;
+    jobject _object_global_self;
+    jmethodID _method_self_drawBitmap;
 };
 
 } /* namespace hrm */
