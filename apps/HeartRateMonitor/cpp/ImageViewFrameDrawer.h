@@ -14,7 +14,8 @@ namespace hrm {
 
 class ImageViewFrameDrawer: public IRGBFrameDrawer {
 public:
-    ImageViewFrameDrawer(JNIEnv * jniEnv, jobject object_self, const std::string& methodName);
+    ImageViewFrameDrawer(JNIEnv * jniEnv, jobject object_self,
+            const std::string& methodName);
     virtual ~ImageViewFrameDrawer();
 
     virtual void drawFrame(FrameRGB frame) throw (DrawError);
