@@ -1,6 +1,8 @@
 package com.shnayder.heartratemonitor;
 
 //import android.R;
+import java.io.IOException;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -20,16 +22,19 @@ public class HeartRateMonitor extends Activity {
 
 	private Camera _camera = null;
 	private HeartRateMonitorPreview _cameraPreview = null;
-	private FrameLayout _previewFrameLayout = null;
-	
-	private boolean checkCamera(Context context){
-		if(!context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)){
+
+	private ImageView _imageViewHeartRatePreview = null;
+	private ImageView _imageViewCameraPreview = null;
+
+	private boolean checkCamera(Context context) {
+		if (!context.getPackageManager().hasSystemFeature(
+				PackageManager.FEATURE_CAMERA)) {
 			return false;
 		}
 		return true;
 	}
-	
-	private static Camera getCameraInstance(){
+
+	private static Camera getCameraInstance() {
 		Camera c = null;
 		try {
 			c = Camera.open();
@@ -44,15 +49,9 @@ public class HeartRateMonitor extends Activity {
 		Log.i(HRM_TAG, "onCreate");
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-		
-		ImageView iv1 = (ImageView)findViewById(R.id.imageViewHeartRate);
-		
-		_camera = getCameraInstance();
-		
-		_cameraPreview = new HeartRateMonitorPreview(this, _camera, iv1);
-		_previewFrameLayout = (FrameLayout)findViewById(R.id.previewFrame);
-		_previewFrameLayout.addView(_cameraPreview);
-		
+
+		_imageViewHeartRatePreview = (ImageView) findViewById(R.id.imageViewHeartRate);
+		_imageViewCameraPreview = (ImageView) findViewById(R.id.imageViewCameraPreview);
 	}
 
 	@Override
@@ -71,12 +70,31 @@ public class HeartRateMonitor extends Activity {
 	protected void onResume() {
 		Log.i(HRM_TAG, "onResume");
 		super.onResume();
+
+		_camera = getCameraInstance();
+		_cameraPreview = new HeartRateMonitorPreview(this, _camera,
+				_imageViewHeartRatePreview, _imageViewCameraPreview);
+		try {
+			_cameraPreview.start();
+		} catch (IOException e) {
+			Log.e(HRM_TAG, "camera start error: " + e.getMessage());
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	protected void onPause() {
 		Log.i(HRM_TAG, "onPause");
 		super.onPause();
+		try {
+			_cameraPreview.stop();
+			_camera.stopPreview();
+			_camera.release();
+			_camera = null;
+		} catch (IOException e) {
+			Log.e(HRM_TAG, "camera stop error: " + e.getMessage());
+			e.printStackTrace();
+		}
 	}
 
 	@Override

@@ -16,7 +16,8 @@ namespace hrm {
 
 class ImageViewHeartRateVisualizer: public IHeartRateVisualizer {
 public:
-    ImageViewHeartRateVisualizer(JNIEnv * jniEnv, jobject object_self);
+    ImageViewHeartRateVisualizer(JNIEnv * jniEnv, jobject object_self,
+            const std::string& methodName);
     virtual ~ImageViewHeartRateVisualizer();
 
     virtual void visualizeHeartRate(MeasurementGraph heartRateMeasuredGraph);

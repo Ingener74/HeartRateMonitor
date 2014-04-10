@@ -19,62 +19,57 @@ namespace hrm {
         format("runtime error: %1%") % error_message \
         ).str());}
 
-ImageViewFrameDrawer::ImageViewFrameDrawer(JNIEnv* jniEnv, jobject object_self) :
-        _javaVM(nullptr),
-        _object_self(nullptr),
-        _class_self(nullptr),
-        _method_self_drawBitmap(nullptr),
-        _field_ImageView(nullptr),
-        _object_ImageView(nullptr) {
+ImageViewFrameDrawer::ImageViewFrameDrawer(JNIEnv * jniEnv, jobject object_self,
+        const std::string& methodName) :
+        _isError(false), _javaVM(nullptr), _object_global_self(nullptr), _method_self_drawBitmap(
+                nullptr) {
 
     jint res = jniEnv->GetJavaVM(&_javaVM);
     CHECK(res != JNI_OK, "can't get java vm");
 
-    _class_self = jniEnv->FindClass(
-            "com/shnayder/heartratemonitor/HeartRateMonitorPreview");
-    CHECK(!_class_self, "can't find self class");
+    jclass class_self = jniEnv->GetObjectClass(object_self);
+    CHECK(!class_self, "can't get self class");
 
-    _object_self= jniEnv->NewGlobalRef(object_self);
-    CHECK(!_object_self, "can't create global ref self class");
+    _object_global_self = jniEnv->NewGlobalRef(object_self);
+    CHECK(!_object_global_self, "can't create global ref self class");
 
-    _method_self_drawBitmap = jniEnv->GetMethodID(
-            _class_self, "drawBitmap", "(Landroid/graphics/Bitmap;)V");
+    _method_self_drawBitmap = jniEnv->GetMethodID(class_self,
+            methodName.c_str(), "(Landroid/graphics/Bitmap;)V");
     CHECK(!_method_self_drawBitmap, "can't get drawBigmap method");
 
-    _field_ImageView = jniEnv->GetFieldID(_class_self, "_imageView", "Landroid/widget/ImageView;");
-    CHECK(!_field_ImageView, "can't get image view field id");
-
-    _object_ImageView = jniEnv->GetObjectField(object_self, _field_ImageView);
-    CHECK(!_object_ImageView, "can't get image view object field");
-
+    jniEnv->DeleteLocalRef(class_self);
 }
 
 ImageViewFrameDrawer::~ImageViewFrameDrawer() {
 }
 
 void ImageViewFrameDrawer::drawFrame(FrameRGB frame) throw (DrawError) {
-    if(!frame){
+    if (!frame) {
         HeartRateTools::instance()->getLog()->ERROR("image is empty");
         return;
     }
 
-    line(frame, Point( 10,  10), Point( 10, 100), {0, 255, 0});
-    line(frame, Point( 10, 100), Point(100, 100), {0, 0, 255});
-    line(frame, Point(100, 100), Point(100,  10), {255, 0, 0});
-    line(frame, Point(100,  10), Point( 10,  10), {0, 255, 0});
-
-    circle(frame, Point(50, 50), 30, {125, 0, 125});
+    if (_isError) {
+        HeartRateTools::instance()->getLog()->ERROR("is error");
+        return;
+    }
 
     JNIEnv * jniEnv = 0;
     jint res = 0;
     res = _javaVM->AttachCurrentThread(reinterpret_cast<JNIEnv **>(&jniEnv),
-            NULL);
+    NULL);
     CHECK(res != JNI_OK, "can't attach current thread");
 
-    jclass class_Bitmap = (jclass)jniEnv->FindClass("android/graphics/Bitmap");
+    line(frame, Point(10, 10), Point(10, 100), { 0, 255, 0 });
+    line(frame, Point(10, 100), Point(100, 100), { 0, 0, 255 });
+    line(frame, Point(100, 100), Point(100, 10), { 255, 0, 0 });
+    line(frame, Point(100, 10), Point(10, 10), { 0, 255, 0 });
+
+    circle(frame, Point(50, 50), 30, { 125, 0, 125 });
+
+    jclass class_Bitmap = (jclass) jniEnv->FindClass("android/graphics/Bitmap");
     jmethodID method_Bitmap_createBitmap = jniEnv->GetStaticMethodID(
-            class_Bitmap,
-            "createBitmap",
+            class_Bitmap, "createBitmap",
             "(IILandroid/graphics/Bitmap$Config;)Landroid/graphics/Bitmap;");
 
     jstring string_Config_Name = jniEnv->NewStringUTF("ARGB_8888");
@@ -86,29 +81,27 @@ void ImageViewFrameDrawer::drawFrame(FrameRGB frame) throw (DrawError) {
 
     jobject object_Bitmap_Config = jniEnv->CallStaticObjectMethod(
             class_Bitmap_Config,
-            jniEnv->GetStaticMethodID(
-                    class_Bitmap_Config,
-                    "valueOf",
+            jniEnv->GetStaticMethodID(class_Bitmap_Config, "valueOf",
                     "(Ljava/lang/String;)Landroid/graphics/Bitmap$Config;"),
-                    string_Config_Name);
+            string_Config_Name);
     CHECK(!object_Bitmap_Config, "can't create bitmap config object");
 
-    jobject object_Bitmap = jniEnv->CallStaticObjectMethod(
-            class_Bitmap,
-            method_Bitmap_createBitmap,
-            frame.getFormat().rect._cols, frame.getFormat().rect._rows,
-            object_Bitmap_Config);
+    jobject object_Bitmap = jniEnv->CallStaticObjectMethod(class_Bitmap,
+            method_Bitmap_createBitmap, frame.getFormat().rect._cols,
+            frame.getFormat().rect._rows, object_Bitmap_Config);
 
     uint8_t *data = 0;
-    res = AndroidBitmap_lockPixels(jniEnv, object_Bitmap, reinterpret_cast<void **>(&data));
+    res = AndroidBitmap_lockPixels(jniEnv, object_Bitmap,
+            reinterpret_cast<void **>(&data));
     CHECK(res != ANDROID_BITMAP_RESULT_SUCCESS, "can't lock pixels");
 
-    if(data){
+    if (data) {
 
         RGB * src = frame.getData();
         uint8_t *dst = data;
         for (int i = 0, imax = frame.getFormat().rect._rows; i < imax; ++i) {
-            for (int j = 0, jmax = frame.getFormat().rect._cols; j < jmax; ++j, ++src) {
+            for (int j = 0, jmax = frame.getFormat().rect._cols; j < jmax;
+                    ++j, ++src) {
                 *dst++ = src->r;
                 *dst++ = src->g;
                 *dst++ = src->b;
@@ -120,7 +113,8 @@ void ImageViewFrameDrawer::drawFrame(FrameRGB frame) throw (DrawError) {
         CHECK(res != ANDROID_BITMAP_RESULT_SUCCESS, "can't unlock pixels");
     }
 
-    jniEnv->CallVoidMethod(_object_self, _method_self_drawBitmap, object_Bitmap);
+    jniEnv->CallVoidMethod(_object_global_self, _method_self_drawBitmap,
+            object_Bitmap);
 
     /* clean up */
     jniEnv->DeleteLocalRef(class_Bitmap);

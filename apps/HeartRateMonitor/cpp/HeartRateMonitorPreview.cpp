@@ -66,15 +66,15 @@ jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativeSta
 
         IHeartRateGenerator::Ptr hrGenerator(new RGBHeartRateGenerator(
                 rgbfs,
-                IRGBFrameDrawer::Ptr(new RGB2PNGDataBaseFrameDrawer("/sdcard/test_db"))
-//                IRGBFrameDrawer::Ptr(new ImageViewFrameDrawer(JNIEnv_, self))
+//                IRGBFrameDrawer::Ptr(new RGB2PNGDataBaseFrameDrawer("/sdcard/test_db"))
+                IRGBFrameDrawer::Ptr(new ImageViewFrameDrawer(JNIEnv_, self, "drawCameraPreview"))
                 ));
 
         IHeartRateNumber::Ptr hrNumber(new SimpleHeartRateNumber());
 
         IHeartRateVisualizer::Ptr hrVisualizer = IHeartRateVisualizer::Ptr(
-    //            new ImageViewHeartRateVisualizer(JNIEnv_, self)
-                new SimpleHeartRateVisualizer()
+                new ImageViewHeartRateVisualizer(JNIEnv_, self, "drawHeartRate")
+//                new SimpleHeartRateVisualizer()
         );
 
         heartRateCounter = HeartRateCounter::Ptr(
