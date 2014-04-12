@@ -9,4 +9,4 @@ set(SOURCES
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 
-target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES} heartbeatrate)
+target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES} heartrate)
