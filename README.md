@@ -1,5 +1,10 @@
-HeartRateMonitor
-================
-Many people in world suffer with problem with heart. Including me.
+# HeartRateMonitor
+Множество людей в мире страдают сердечными заболеваниями, включая меня. 
+Поэтому мне захотелось создать такую программу. Это будет web сервис и мобильное
+приложение для Android смартфонов с камерой оснащённой вспышкой.
 
-I want to create online service for monitoring heart rate using your own smartphone.
+## Build dependencies
+```
+./bootstrap
+./b2 install
+```
