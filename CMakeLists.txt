@@ -14,15 +14,12 @@ set(Boost_USE_STATIC_LIBS    ON)
 set(Boost_USE_MULTITHREADED  ON)
 set(Boost_COMPILER -gcc)
 find_package(Boost 1.53.0 REQUIRED COMPONENTS system thread)
-if(Boost_FOUND)
-    include_directories(${Boost_INCLUDE_DIRS})
-    message(STATUS "  boost include dir ${Boost_INCLUDE_DIRS}")
-    message(STATUS "  boost library dir ${Boost_LIBRARY_DIRS}")
-    message(STATUS "  boost libraries   ${Boost_LIBRARIES}")
-endif(Boost_FOUND)
 
 # find fftw
 find_package(FFTW)
+
+# find OpenCV
+find_package(OpenCV COMPONENTS core imgproc highgui)
 
 # find gtest
 find_package(GTest)
@@ -30,8 +27,14 @@ find_package(GTest)
 # find png
 find_package(PNG)
 if(PNG_FOUND)
-    include_directories(${PNG_INCLUDE_DIRS})
+    add_definitions(-DPNG_FOUND)
 endif(PNG_FOUND)
+
+include_directories(
+    ${Boost_INCLUDE_DIRS}
+    ${OpenCV_INCLUDE_DIRS}
+    ${PNG_INCLUDE_DIRS}
+)
 
 add_definitions(-std=c++11)
 

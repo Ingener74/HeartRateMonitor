@@ -33,9 +33,12 @@
  */
 #include <heartrate/HeartRateCounter.h>
 #include <heartrate/NV21FrameSource.h>
-#include <heartrate/RGB2PNGDataBaseFrameDrawer.h>
 #include <heartrate/RGBFrameSource.h>
 #include <heartrate/RGBHeartRateGenerator.h>
+
+#ifdef PNG_FOUND
+#include <heartrate/RGB2PNGDataBaseFrameDrawer.h>
+#endif
 
 /*
  * Mock classes
