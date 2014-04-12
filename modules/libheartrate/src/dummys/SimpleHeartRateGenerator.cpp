@@ -5,8 +5,6 @@
  *      Author: pavel
  */
 
-#include "unistd.h"
-
 #include <heartrate/dummys/SimpleHeartRateGenerator.h>
 
 namespace hrm {

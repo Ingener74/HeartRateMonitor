@@ -8,7 +8,7 @@
 #ifndef HEARTRATETOOLS_H_
 #define HEARTRATETOOLS_H_
 
-#include <heartrate/HeartBeatRateTypes.h>
+#include <heartrate/HeartRateCommon.h>
 #include <heartrate/ILog.h>
 
 namespace hrm {

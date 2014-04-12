@@ -5,12 +5,8 @@
  *      Author: pavel
  */
 
-#include <algorithm>
-#include <boost/format.hpp>
-
 #include <heartrate/HeartRateTools.h>
 #include <heartrate/RGBFrameSource.h>
-#include <heartrate/HeartBeatRateDefines.h>
 
 namespace hrm {
 

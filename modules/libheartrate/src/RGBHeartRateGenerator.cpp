@@ -5,8 +5,6 @@
  *      Author: ingener
  */
 
-#include <algorithm>
-
 #include <heartrate/HeartRateTools.h>
 #include <heartrate/RGBHeartRateGenerator.h>
 

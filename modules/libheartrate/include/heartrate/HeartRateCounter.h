@@ -8,9 +8,6 @@
 #ifndef HEARTRATECOUNTER_H_
 #define HEARTRATECOUNTER_H_
 
-#include <boost/smart_ptr.hpp>
-#include <boost/thread.hpp>
-
 #include <heartrate/IHeartRateGenerator.h>
 #include <heartrate/IHeartRateNumber.h>
 #include <heartrate/IHeartRateVisualizer.h>

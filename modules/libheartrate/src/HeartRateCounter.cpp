@@ -5,10 +5,6 @@
  *      Author: pavel
  */
 
-#include <limits>
-
-#include <boost/format.hpp>
-
 #include <heartrate/HeartRateTools.h>
 #include <heartrate/HeartRateCounter.h>
 

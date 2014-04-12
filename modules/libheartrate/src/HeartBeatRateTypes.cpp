@@ -5,9 +5,6 @@
  *      Author: pavel
  */
 
-#include <time.h>
-#include <algorithm>
-
 #include <heartrate/HeartBeatRateTypes.h>
 
 namespace hrm {

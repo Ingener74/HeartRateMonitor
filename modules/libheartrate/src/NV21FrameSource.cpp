@@ -6,8 +6,6 @@
  */
 
 #include <heartrate/HeartRateTools.h>
-#include <heartrate/HeartBeatRateDefines.h>
-
 #include <heartrate/NV21FrameSource.h>
 
 namespace hrm {

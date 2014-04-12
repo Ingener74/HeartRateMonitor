@@ -8,30 +8,9 @@
 #ifndef TYPES_H_
 #define TYPES_H_
 
-#include <stdint.h>
-#include <cmath>
-
-#include <vector>
-#include <deque>
-#include <exception>
-
-#include <boost/thread.hpp>
-#include <boost/smart_ptr.hpp>
-#include <boost/tuple/tuple.hpp>
-#include <boost/format.hpp>
-#include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/json_parser.hpp>
+#include <heartrate/HeartRateCommon.h>
 
 namespace hrm {
-
-//using boost::shared_ptr;
-//using boost::shared_array;
-//using boost::format;
-//using namespace boost::property_tree;
-//using boost::shared_mutex;
-//using boost::thread;
-
-using namespace boost;
 
 template <typename Mutex>
 using unique_lock = boost::unique_lock<Mutex>;

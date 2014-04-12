@@ -10,7 +10,7 @@
 
 #include <jni.h>
 
-#include <heartratemonitor/IHeartRateVisualizer.h>
+#include <heartrate/HeartRate.h>
 
 namespace hrm {
 

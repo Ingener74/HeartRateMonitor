@@ -8,7 +8,7 @@
 #ifndef HEARTRATEEXCEPTIONS_H_
 #define HEARTRATEEXCEPTIONS_H_
 
-#include <exception>
+#include <heartrate/HeartRateCommon.h>
 
 namespace hrm {
 

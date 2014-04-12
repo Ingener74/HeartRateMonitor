@@ -8,9 +8,6 @@
 #ifndef IHEARTRATEGENERATOR_H_
 #define IHEARTRATEGENERATOR_H_
 
-#include <memory>
-#include <vector>
-
 #include <heartrate/HeartBeatRateTypes.h>
 
 namespace hrm {
@@ -19,7 +16,7 @@ typedef double HeartValue;
 
 class IHeartRateGenerator {
 public:
-	typedef boost::shared_ptr<IHeartRateGenerator> Ptr;
+	typedef shared_ptr<IHeartRateGenerator> Ptr;
 
 	virtual ~IHeartRateGenerator() {
 	}

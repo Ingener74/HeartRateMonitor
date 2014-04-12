@@ -5,10 +5,6 @@
  *      Author: ingener
  */
 
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
-
 #include <png.h>
 
 #include <heartrate/HeartRateTools.h>

@@ -9,21 +9,7 @@
 
 #include <android/bitmap.h>
 
-#include <heartratemonitor/HeartBeatRateTypes.h>
-#include <heartratemonitor/HeartBeatRateDefines.h>
-#include <heartratemonitor/NV21FrameSource.h>
-#include <heartratemonitor/RGBFrameSource.h>
-#include <heartratemonitor/RGBHeartRateGenerator.h>
-#include <heartratemonitor/RGB2PNGDataBaseFrameDrawer.h>
-
-#include <heartratemonitor/HeartRateCounter.h>
-#include <heartratemonitor/HeartRateTools.h>
-
-#include <heartratemonitor/dummys/SimpleHeartRateNumber.h>
-#include <heartratemonitor/dummys/SimpleHeartRateVisualizer.h>
-#include <heartratemonitor/dummys/SimpleHeartRateGenerator.h>
-#include <heartratemonitor/dummys/DummyRGBFrameSource.h>
-#include <heartratemonitor/dummys/DummyNV21FrameSource.h>
+#include <heartrate/HeartRate.h>
 
 #include <ImageViewHeartRateVisualizer.h>
 #include <ImageViewFrameDrawer.h>

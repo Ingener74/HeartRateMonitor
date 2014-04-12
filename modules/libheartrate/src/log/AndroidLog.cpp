@@ -5,9 +5,6 @@
  *      Author: pavel
  */
 
-#include <android/log.h>
-
-#include <heartrate/HeartBeatRateDefines.h>
 #include "AndroidLog.h"
 
 namespace hrm {

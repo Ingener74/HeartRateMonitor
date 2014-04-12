@@ -21,7 +21,7 @@ public:
     virtual FrameSharedLockedRGB getFrame();
 private:
     FrameRGB _frame;
-    boost::shared_mutex _frameMutex;
+    shared_mutex _frameMutex;
     INV21FrameSource::Ptr _nv21;
 };
 

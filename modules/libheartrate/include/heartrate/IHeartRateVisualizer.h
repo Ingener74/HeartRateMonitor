@@ -14,7 +14,7 @@ namespace hrm {
 
 class IHeartRateVisualizer {
 public:
-	typedef boost::shared_ptr<IHeartRateVisualizer> Ptr;
+	typedef shared_ptr<IHeartRateVisualizer> Ptr;
 
 	virtual ~IHeartRateVisualizer() {
 	}

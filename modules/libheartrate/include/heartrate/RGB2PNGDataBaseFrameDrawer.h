@@ -22,7 +22,7 @@ public:
 private:
     std::string _dataBaseDir;
     int _counter;
-    boost::property_tree::ptree _dataBase;
+    property_tree::ptree _dataBase;
 };
 
 } /* namespace hrm */
