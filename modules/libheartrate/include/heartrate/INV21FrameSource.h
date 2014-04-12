@@ -10,7 +10,7 @@
 
 #include <boost/smart_ptr.hpp>
 
-#include "HeartBeatRateTypes.h"
+#include <heartrate/HeartBeatRateTypes.h>
 
 namespace hrm {
 

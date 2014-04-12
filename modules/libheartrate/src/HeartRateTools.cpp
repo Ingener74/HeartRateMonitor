@@ -11,7 +11,7 @@
 #include "log/LinuxLog.h"
 #endif
 
-#include "heartratemonitor/HeartRateTools.h"
+#include <heartrate/HeartRateTools.h>
 
 namespace hrm {
 

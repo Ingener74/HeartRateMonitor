@@ -8,9 +8,9 @@
 #include <algorithm>
 #include <boost/format.hpp>
 
-#include "heartratemonitor/HeartRateTools.h"
-#include "heartratemonitor/RGBFrameSource.h"
-#include "heartratemonitor/HeartBeatRateDefines.h"
+#include <heartrate/HeartRateTools.h>
+#include <heartrate/RGBFrameSource.h>
+#include <heartrate/HeartBeatRateDefines.h>
 
 namespace hrm {
 

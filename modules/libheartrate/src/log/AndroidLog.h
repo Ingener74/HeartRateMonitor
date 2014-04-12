@@ -8,7 +8,7 @@
 #ifndef ANDROIDLOG_H_
 #define ANDROIDLOG_H_
 
-#include "heartratemonitor/ILog.h"
+#include <heartrate/ILog.h>
 
 namespace hrm {
 

@@ -11,7 +11,7 @@
 #include <memory>
 #include <vector>
 
-#include "HeartBeatRateTypes.h"
+#include <heartrate/HeartBeatRateTypes.h>
 
 namespace hrm {
 

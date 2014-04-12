@@ -11,8 +11,8 @@
 
 #include <png.h>
 
-#include "heartratemonitor/HeartRateTools.h"
-#include "heartratemonitor/RGB2PNGDataBaseFrameDrawer.h"
+#include <heartrate/HeartRateTools.h>
+#include <heartrate/RGB2PNGDataBaseFrameDrawer.h>
 
 namespace hrm {
 

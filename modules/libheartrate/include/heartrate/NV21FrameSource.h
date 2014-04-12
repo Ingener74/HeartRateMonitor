@@ -11,7 +11,7 @@
 #include <boost/smart_ptr.hpp>
 #include <boost/thread.hpp>
 
-#include "INV21FrameSource.h"
+#include <heartrate/INV21FrameSource.h>
 
 namespace hrm {
 

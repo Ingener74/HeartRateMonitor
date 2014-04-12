@@ -8,8 +8,8 @@
 #ifndef RGBFRAMESOURCE_H_
 #define RGBFRAMESOURCE_H_
 
-#include "IRGBFrameSource.h"
-#include "INV21FrameSource.h"
+#include <heartrate/IRGBFrameSource.h>
+#include <heartrate/INV21FrameSource.h>
 
 namespace hrm {
 

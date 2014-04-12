@@ -8,7 +8,7 @@
 #ifndef RGB2PNGDATABASEFRAMEDRAWER_H_
 #define RGB2PNGDATABASEFRAMEDRAWER_H_
 
-#include "IRGBFrameDrawer.h"
+#include <heartrate/IRGBFrameDrawer.h>
 
 namespace hrm {
 

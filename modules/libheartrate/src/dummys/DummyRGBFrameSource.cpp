@@ -7,7 +7,7 @@
 
 #include <unistd.h>
 
-#include "heartratemonitor/dummys/DummyRGBFrameSource.h"
+#include <heartrate/dummys/DummyRGBFrameSource.h>
 
 namespace hrm {
 

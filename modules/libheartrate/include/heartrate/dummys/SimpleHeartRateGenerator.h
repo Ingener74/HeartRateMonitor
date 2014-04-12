@@ -8,7 +8,7 @@
 #ifndef SIMPLEHEARTRATEGENERATOR_H_
 #define SIMPLEHEARTRATEGENERATOR_H_
 
-#include "heartratemonitor/IHeartRateGenerator.h"
+#include <heartrate/IHeartRateGenerator.h>
 
 namespace hrm {
 

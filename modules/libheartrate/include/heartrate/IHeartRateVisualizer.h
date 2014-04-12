@@ -8,9 +8,7 @@
 #ifndef IHEARTRATEVISUALIZER_H_
 #define IHEARTRATEVISUALIZER_H_
 
-#include <memory>
-
-#include "HeartBeatRateTypes.h"
+#include <heartrate/HeartBeatRateTypes.h>
 
 namespace hrm {
 

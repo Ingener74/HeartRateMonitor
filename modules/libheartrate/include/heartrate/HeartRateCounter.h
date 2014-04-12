@@ -11,9 +11,9 @@
 #include <boost/smart_ptr.hpp>
 #include <boost/thread.hpp>
 
-#include "heartratemonitor/IHeartRateGenerator.h"
-#include "heartratemonitor/IHeartRateNumber.h"
-#include "heartratemonitor/IHeartRateVisualizer.h"
+#include <heartrate/IHeartRateGenerator.h>
+#include <heartrate/IHeartRateNumber.h>
+#include <heartrate/IHeartRateVisualizer.h>
 
 namespace hrm {
 

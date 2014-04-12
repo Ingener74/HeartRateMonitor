@@ -12,7 +12,7 @@
 
 #include <memory>
 
-#include "HeartBeatRateTypes.h"
+#include <heartrate/HeartBeatRateTypes.h>
 
 namespace hrm {
 

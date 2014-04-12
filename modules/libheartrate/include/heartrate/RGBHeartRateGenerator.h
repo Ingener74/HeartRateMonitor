@@ -8,10 +8,10 @@
 #ifndef RGBHEARTRATEGENERATOR_H_
 #define RGBHEARTRATEGENERATOR_H_
 
-#include "HeartBeatRateTypes.h"
-#include "IRGBFrameSource.h"
-#include "IHeartRateGenerator.h"
-#include "IRGBFrameDrawer.h"
+#include <heartrate/HeartBeatRateTypes.h>
+#include <heartrate/IRGBFrameSource.h>
+#include <heartrate/IHeartRateGenerator.h>
+#include <heartrate/IRGBFrameDrawer.h>
 
 namespace hrm {
 
