@@ -9,7 +9,7 @@ set(HRM_LIBS_DIR ${HRM_BIN_DIR}/libs/armeabi-v7a)
 # HeartRateMonitor native part
 include_directories(
     cpp
-    ../../modules/libheartbeatrate/include
+    ../../modules/libheartrate/include
     )
 
 set(SOURCES
@@ -19,10 +19,10 @@ set(SOURCES
     )
 add_library(${HRM_CPP} SHARED ${SOURCES})
 
-target_link_libraries(${HRM_CPP} ${Boost_LIBRARIES} android log jnigraphics)
-
 set(LIBS
-    heartbeatrate
+	${Boost_LIBRARIES} 
+	android log jnigraphics
+    heartrate
     )
 target_link_libraries(${HRM_CPP} ${LIBS})
 
