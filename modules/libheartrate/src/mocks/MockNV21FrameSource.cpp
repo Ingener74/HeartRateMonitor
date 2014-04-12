@@ -1,24 +1,22 @@
 /*
- * DummyNV21FrameSource.cpp
+ * MockNV21FrameSource.cpp
  *
- *  Created on: Apr 6, 2014
+ *  Created on: Apr 12, 2014
  *      Author: ingener
  */
 
-#include <heartrate/dummys/DummyNV21FrameSource.h>
+#include <heartrate/mocks/MockNV21FrameSource.h>
 
 namespace hrm {
-namespace dummys {
+namespace mock {
 
 const int TEST_ROWS = 144;
 const int TEST_COLS = 176;
 const int TEST_BITS_PER_PIXEL = 12;
 const int TEST_ROW = 100;
 
-DummyNV21FrameSource::DummyNV21FrameSource() :
-        _frame(BitsPerPixelImageFormat(ImageRect(TEST_ROWS, TEST_COLS),
-                        TEST_BITS_PER_PIXEL)) {
-
+MockNV21FrameSource::MockNV21FrameSource(): _frame(BitsPerPixelImageFormat(ImageRect(TEST_ROWS, TEST_COLS),
+        TEST_BITS_PER_PIXEL)) {
     uint8_t * data = _frame.getData();
     for (int i = 0, imax = _frame.getFormat().size(); i < imax; ++i) {
         *data++ = 0;
@@ -29,34 +27,28 @@ DummyNV21FrameSource::DummyNV21FrameSource() :
             *(data + i * _frame.getFormat().rect._cols + j) = i;
         }
     }
-
-    using namespace boost;
-
 //    _thread = thread(bind(&DummyNV21FrameSource::threadFunc, this));
 }
 
-DummyNV21FrameSource::~DummyNV21FrameSource() {
+MockNV21FrameSource::~MockNV21FrameSource() {
 //    _thread.interrupt();
 //    _thread.join();
 }
 
-LockedFrame<BitsPerPixelImageFormat>::Shared DummyNV21FrameSource::getFrame() {
+LockedFrame<BitsPerPixelImageFormat>::Shared MockNV21FrameSource::getFrame() {
+    //    unique_lock<shared_mutex> lock(_frameMutex);
+    //    _frameCond.wait(lock);
 
-    using namespace boost;
+        this_thread::sleep(posix_time::milliseconds(30));
 
-//    unique_lock<shared_mutex> lock(_frameMutex);
-//    _frameCond.wait(lock);
-
-    this_thread::sleep(posix_time::milliseconds(30));
-
-    LockedFrame<BitsPerPixelImageFormat>::Shared lf(
-            boost::shared_ptr<boost::shared_lock<boost::shared_mutex> >(
-                    new boost::shared_lock<boost::shared_mutex>(_frameMutex)),
-            _frame);
-    return lf;
+        LockedFrame<BitsPerPixelImageFormat>::Shared lf(
+                boost::shared_ptr<boost::shared_lock<boost::shared_mutex> >(
+                        new boost::shared_lock<boost::shared_mutex>(_frameMutex)),
+                _frame);
+        return lf;
 }
 
-void hrm::dummys::DummyNV21FrameSource::threadFunc() {
+void MockNV21FrameSource::threadFunc() {
     using namespace boost;
 
     try {
@@ -77,6 +69,5 @@ void hrm::dummys::DummyNV21FrameSource::threadFunc() {
     }
 }
 
-} /* namespace dummys */
+} /* namespace mock */
 } /* namespace hrm */
-
