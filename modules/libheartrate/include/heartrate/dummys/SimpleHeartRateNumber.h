@@ -8,8 +8,8 @@
 #ifndef SIMPLEHEARTRATENUMBER_H_
 #define SIMPLEHEARTRATENUMBER_H_
 
-#include <heartratemonitor/HeartRateTools.h>
-#include <heartratemonitor/IHeartRateNumber.h>
+#include <heartrate/HeartRateTools.h>
+#include <heartrate/IHeartRateNumber.h>
 
 namespace hrm {
 

@@ -8,7 +8,7 @@
 #ifndef DUMMYNV21FRAMESOURCE_H_
 #define DUMMYNV21FRAMESOURCE_H_
 
-#include <heartratemonitor/INV21FrameSource.h>
+#include <heartrate/INV21FrameSource.h>
 
 namespace hrm {
 namespace dummys {

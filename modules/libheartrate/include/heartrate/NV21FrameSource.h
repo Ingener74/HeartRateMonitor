@@ -8,16 +8,13 @@
 #ifndef NV21FRAMESOURCE_H_
 #define NV21FRAMESOURCE_H_
 
-#include <boost/smart_ptr.hpp>
-#include <boost/thread.hpp>
-
-#include "INV21FrameSource.h"
+#include <heartrate/INV21FrameSource.h>
 
 namespace hrm {
 
 class NV21FrameSource: public INV21FrameSource {
 public:
-    typedef boost::shared_ptr<NV21FrameSource> Ptr;
+    typedef shared_ptr<NV21FrameSource> Ptr;
 
     NV21FrameSource();
     virtual ~NV21FrameSource();
@@ -29,8 +26,8 @@ public:
 
 private:
     Frame<BitsPerPixelImageFormat> _frame;
-    boost::shared_mutex _frameMutex;
-    boost::condition_variable_any _frameCond;
+    shared_mutex _frameMutex;
+    condition_variable_any _frameCond;
 };
 
 }  // namespace hrm

@@ -8,7 +8,7 @@
 #ifndef IRGBIMAGEDRAWER_H_
 #define IRGBIMAGEDRAWER_H_
 
-#include "HeartBeatRateTypes.h"
+#include <heartrate/HeartBeatRateTypes.h>
 
 namespace hrm {
 

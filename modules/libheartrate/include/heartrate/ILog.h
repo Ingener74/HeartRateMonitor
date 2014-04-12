@@ -8,8 +8,7 @@
 #ifndef ILOG_H_
 #define ILOG_H_
 
-#include <string>
-#include <boost/smart_ptr.hpp>
+#include <heartrate/HeartRateCommon.h>
 
 namespace hrm {
 

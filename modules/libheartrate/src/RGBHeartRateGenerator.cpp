@@ -5,10 +5,8 @@
  *      Author: ingener
  */
 
-#include <algorithm>
-
-#include "heartratemonitor/HeartRateTools.h"
-#include "heartratemonitor/RGBHeartRateGenerator.h"
+#include <heartrate/HeartRateTools.h>
+#include <heartrate/RGBHeartRateGenerator.h>
 
 namespace hrm {
 

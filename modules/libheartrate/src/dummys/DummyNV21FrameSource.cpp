@@ -5,9 +5,7 @@
  *      Author: ingener
  */
 
-#include <unistd.h>
-
-#include <heartratemonitor/dummys/DummyNV21FrameSource.h>
+#include <heartrate/dummys/DummyNV21FrameSource.h>
 
 namespace hrm {
 namespace dummys {

@@ -5,14 +5,10 @@
  *      Author: ingener
  */
 
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
-
 #include <png.h>
 
-#include "heartratemonitor/HeartRateTools.h"
-#include "heartratemonitor/RGB2PNGDataBaseFrameDrawer.h"
+#include <heartrate/HeartRateTools.h>
+#include <heartrate/RGB2PNGDataBaseFrameDrawer.h>
 
 namespace hrm {
 

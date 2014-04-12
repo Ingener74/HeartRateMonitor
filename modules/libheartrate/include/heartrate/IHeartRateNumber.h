@@ -8,17 +8,13 @@
 #ifndef IHEARTRATENUMBER_H_
 #define IHEARTRATENUMBER_H_
 
-#include <stdint.h>
-
-#include <memory>
-
-#include "HeartBeatRateTypes.h"
+#include <heartrate/HeartBeatRateTypes.h>
 
 namespace hrm {
 
 class IHeartRateNumber {
 public:
-	typedef boost::shared_ptr<IHeartRateNumber> Ptr;
+	typedef shared_ptr<IHeartRateNumber> Ptr;
 
 	virtual ~IHeartRateNumber() {
 	}

@@ -1,12 +1,34 @@
 /*
- * hrm_defines.h
+ * HeartRateCommon.h
  *
- *  Created on: 26 нояб. 2013 г.
- *      Author: pavel
+ *  Created on: Apr 12, 2014
+ *      Author: ingener
  */
 
-#ifndef HRM_DEFINES_H_
-#define HRM_DEFINES_H_
+#ifndef HEARTRATECOMMON_H_
+#define HEARTRATECOMMON_H_
+
+#include <stdint.h>
+#include <unistd.h>
+#include <time.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <stdio.h>
+
+#include <limits>
+#include <cmath>
+#include <vector>
+#include <deque>
+#include <exception>
+#include <algorithm>
+#include <string>
+
+#include <boost/thread.hpp>
+#include <boost/smart_ptr.hpp>
+#include <boost/tuple/tuple.hpp>
+#include <boost/format.hpp>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
 
 #include <unistd.h>
 
@@ -31,6 +53,10 @@
 
 #endif // For all platform
 
-#define mySleep(ms){ usleep(ms * 1000); }
+namespace hrm {
 
-#endif /* HRM_DEFINES_H_ */
+using namespace boost;
+
+}  // namespace hrm
+
+#endif /* HEARTRATECOMMON_H_ */

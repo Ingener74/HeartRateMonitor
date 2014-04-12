@@ -8,15 +8,13 @@
 #ifndef INV21FRAMESOURCE_H_
 #define INV21FRAMESOURCE_H_
 
-#include <boost/smart_ptr.hpp>
-
-#include "HeartBeatRateTypes.h"
+#include <heartrate/HeartBeatRateTypes.h>
 
 namespace hrm {
 
 class INV21FrameSource {
 public:
-	typedef boost::shared_ptr<INV21FrameSource> Ptr;
+	typedef shared_ptr<INV21FrameSource> Ptr;
 
     virtual ~INV21FrameSource() {
     }

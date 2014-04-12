@@ -8,7 +8,6 @@
 #include <jni.h>
 #include <android/bitmap.h>
 
-#include <heartratemonitor/HeartRateTools.h>
 #include "ImageViewFrameDrawer.h"
 
 namespace hrm {

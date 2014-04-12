@@ -5,12 +5,8 @@
  *      Author: pavel
  */
 
-#include <limits>
-
-#include <boost/format.hpp>
-
-#include "heartratemonitor/HeartRateTools.h"
-#include "heartratemonitor/HeartRateCounter.h"
+#include <heartrate/HeartRateTools.h>
+#include <heartrate/HeartRateCounter.h>
 
 namespace hrm {
 

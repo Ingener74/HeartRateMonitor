@@ -8,8 +8,8 @@
 #ifndef RGBFRAMESOURCE_H_
 #define RGBFRAMESOURCE_H_
 
-#include "IRGBFrameSource.h"
-#include "INV21FrameSource.h"
+#include <heartrate/IRGBFrameSource.h>
+#include <heartrate/INV21FrameSource.h>
 
 namespace hrm {
 
@@ -21,7 +21,7 @@ public:
     virtual FrameSharedLockedRGB getFrame();
 private:
     FrameRGB _frame;
-    boost::shared_mutex _frameMutex;
+    shared_mutex _frameMutex;
     INV21FrameSource::Ptr _nv21;
 };
 

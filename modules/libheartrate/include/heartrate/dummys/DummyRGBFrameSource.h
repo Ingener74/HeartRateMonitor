@@ -8,7 +8,7 @@
 #ifndef DUMMYRGBFRAMESOURCE_H_
 #define DUMMYRGBFRAMESOURCE_H_
 
-#include "heartratemonitor/IRGBFrameSource.h"
+#include <heartrate/IRGBFrameSource.h>
 
 namespace hrm {
 

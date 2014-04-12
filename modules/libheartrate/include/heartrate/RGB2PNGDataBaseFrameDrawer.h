@@ -8,7 +8,7 @@
 #ifndef RGB2PNGDATABASEFRAMEDRAWER_H_
 #define RGB2PNGDATABASEFRAMEDRAWER_H_
 
-#include "IRGBFrameDrawer.h"
+#include <heartrate/IRGBFrameDrawer.h>
 
 namespace hrm {
 
@@ -22,7 +22,7 @@ public:
 private:
     std::string _dataBaseDir;
     int _counter;
-    boost::property_tree::ptree _dataBase;
+    property_tree::ptree _dataBase;
 };
 
 } /* namespace hrm */

@@ -8,7 +8,7 @@
 #ifndef IMAGEVIEWFRAMEDRAWER_H_
 #define IMAGEVIEWFRAMEDRAWER_H_
 
-#include <heartratemonitor/IRGBFrameDrawer.h>
+#include <heartrate/HeartRate.h>
 
 namespace hrm {
 

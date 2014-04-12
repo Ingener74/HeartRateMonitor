@@ -5,10 +5,8 @@
  *      Author: pavel
  */
 
-#include "heartratemonitor/HeartRateTools.h"
-#include "heartratemonitor/HeartBeatRateDefines.h"
-
-#include "heartratemonitor/NV21FrameSource.h"
+#include <heartrate/HeartRateTools.h>
+#include <heartrate/NV21FrameSource.h>
 
 namespace hrm {
 

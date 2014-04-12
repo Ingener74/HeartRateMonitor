@@ -8,8 +8,6 @@
 #include <algorithm>
 #include <android/bitmap.h>
 
-#include <heartratemonitor/HeartRateTools.h>
-
 #include "ImageViewHeartRateVisualizer.h"
 
 namespace hrm {

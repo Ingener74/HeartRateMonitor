@@ -8,7 +8,7 @@
 #ifndef SIMPLEHEARTRATEVISUALIZER_H_
 #define SIMPLEHEARTRATEVISUALIZER_H_
 
-#include "heartratemonitor/IHeartRateVisualizer.h"
+#include <heartrate/IHeartRateVisualizer.h>
 
 namespace hrm {
 
