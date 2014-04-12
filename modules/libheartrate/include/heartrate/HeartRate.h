@@ -40,10 +40,10 @@
 /*
  * Mock classes
  */
-#include <heartrate/dummys/DummyNV21FrameSource.h>
-#include <heartrate/dummys/DummyRGBFrameSource.h>
-#include <heartrate/dummys/SimpleHeartRateGenerator.h>
-#include <heartrate/dummys/SimpleHeartRateNumber.h>
-#include <heartrate/dummys/SimpleHeartRateVisualizer.h>
+#include <heartrate/mocks/MockNV21FrameSource.h>
+#include <heartrate/mocks/MockRGBFrameSource.h>
+#include <heartrate/mocks/MockHeartRateGenerator.h>
+#include <heartrate/mocks/MockHeartRateNumber.h>
+#include <heartrate/mocks/MockHeartRateVisualizer.h>
 
 #endif /* HEARTRATE_H_ */

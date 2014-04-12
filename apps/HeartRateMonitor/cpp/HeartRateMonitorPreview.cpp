@@ -56,7 +56,7 @@ jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativeSta
                 IRGBFrameDrawer::Ptr(new ImageViewFrameDrawer(JNIEnv_, self, "drawCameraPreview"))
                 ));
 
-        IHeartRateNumber::Ptr hrNumber(new SimpleHeartRateNumber());
+        IHeartRateNumber::Ptr hrNumber(new mock::MockHeartRateNumber());
 
         IHeartRateVisualizer::Ptr hrVisualizer = IHeartRateVisualizer::Ptr(
                 new ImageViewHeartRateVisualizer(JNIEnv_, self, "drawHeartRate")
