@@ -8,6 +8,7 @@
 #ifndef IRGBFRAMESOURCE_H_
 #define IRGBFRAMESOURCE_H_
 
+#include <heartrate/types/Exception.h>
 #include <heartrate/HeartBeatRateTypes.h>
 
 namespace hrm {
@@ -19,7 +20,7 @@ public:
     virtual ~IRGBFrameSource() {
     }
 
-    virtual FrameSharedLockedRGB getFrame() = 0;
+    virtual FrameSharedLockedRGB getFrame() throw (HRFrameSourceException) = 0;
 protected:
     IRGBFrameSource() {
     }

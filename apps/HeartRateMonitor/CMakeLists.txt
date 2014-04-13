@@ -9,7 +9,6 @@ set(HRM_LIBS_DIR ${HRM_BIN_DIR}/libs/armeabi-v7a)
 # HeartRateMonitor native part
 include_directories(
     cpp
-    ../../modules/libheartrate/include
     )
 
 set(SOURCES

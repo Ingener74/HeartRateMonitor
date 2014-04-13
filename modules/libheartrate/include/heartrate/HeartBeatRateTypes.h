@@ -40,6 +40,9 @@ typedef boost::tuple<TimeStamp, NormalizedMeasurementValue, HeartBeatID>
 typedef std::deque<RawMeasurement> RawMeasurementGraph;
 typedef std::deque<Measurement>    MeasurementGraph;
 
+typedef double Frequency;
+typedef std::vector<Frequency>     FrequencyGraph;
+
 class TimeCounter {
 public:
     static TimeCounter * instance();

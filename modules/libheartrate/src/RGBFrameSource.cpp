@@ -17,7 +17,7 @@ RGBFrameSource::RGBFrameSource(INV21FrameSource::Ptr nv21) :
 RGBFrameSource::~RGBFrameSource() {
 }
 
-FrameSharedLockedRGB RGBFrameSource::getFrame(){
+FrameSharedLockedRGB RGBFrameSource::getFrame() throw (HRFrameSourceException) {
     {
         LockedFrame<BitsPerPixelImageFormat>::Shared lockedFrame = _nv21->getFrame();
 

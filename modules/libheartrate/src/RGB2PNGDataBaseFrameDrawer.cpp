@@ -21,18 +21,17 @@ typedef struct  {
 RGB2PNGDataBaseFrameDrawer::RGB2PNGDataBaseFrameDrawer(
         const std::string& dataBaseDir) :
         _dataBaseDir(dataBaseDir), _counter(0) {
-    HeartRateTools::instance()->getLog()->DEBUG((
-            format("data base dir %1%") % _dataBaseDir
-            ).str());
+    HRM_DEBUG((format("data base dir %1%") % _dataBaseDir).str());
 }
 
 RGB2PNGDataBaseFrameDrawer::~RGB2PNGDataBaseFrameDrawer() {
-    HeartRateTools::instance()->getLog()->DEBUG(
-            "RGB2PNGDataBaseFrameDrawer::~RGB2PNGDataBaseFrameDrawer()");
+
+    HRM_DEBUG("RGB2PNGDataBaseFrameDrawer::~RGB2PNGDataBaseFrameDrawer()");
+
     try {
         write_json(_dataBaseDir + "/database.json", _dataBase);
     } catch (const property_tree::json_parser_error& e) {
-        HeartRateTools::instance()->getLog()->ERROR((
+        HRM_ERROR((
                 format("error in rgb to png data base frame drawer: %1%") % e.what()
                 ).str());
     }

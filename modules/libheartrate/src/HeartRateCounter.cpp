@@ -12,9 +12,13 @@ namespace hrm {
 
 HeartRateCounter::HeartRateCounter(
         IHeartRateGenerator::Ptr hrGenerator,
+        IHeartRateRecognizer::Ptr hrRecognizer,
         IHeartRateNumber::Ptr hrNumber,
-        IHeartRateVisualizer::Ptr hrVisualizer):
-                _hrg(hrGenerator), _hrn(hrNumber), _hrv(hrVisualizer){
+        IHeartRateVisualizer::Ptr hrVisualizer) :
+                _hrg(hrGenerator),
+                _hrr(hrRecognizer),
+                _hrn(hrNumber),
+                _hrv(hrVisualizer) {
 }
 
 HeartRateCounter::~HeartRateCounter() {
@@ -37,6 +41,8 @@ void HeartRateCounter::threadFunc(void) {
             HeartRateValue hrNumber = 70;
 
             /* calculate heart rate */
+
+            hrNumber = _hrr->recognizeHeartRateValue(hrRawGraph);
 
             NormalizedMeasurementValue
                 minValue = std::numeric_limits<NormalizedMeasurementValue>().max(),
