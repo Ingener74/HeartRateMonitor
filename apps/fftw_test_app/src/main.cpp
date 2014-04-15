@@ -58,13 +58,21 @@ int main(int argc, char **argv) {
 
         using namespace boost;
 
-        const int N = 256;
-//        const int N = 2048;
+//        const int N = 256;
+        const int N = 2048;
 //        const int N = 2048*2;
 
         std::vector<double> in(N), out(N);
 
         double f1 = -M_PI, f2 = M_PI, fs = (f2 - f1) / N;
+
+        /*
+         * http://stackoverflow.com/questions/4364823/how-to-get-frequency-from-fft-result
+         *
+         */
+        double sampleFreq = 1 / fs;
+        std::cout << "sample freq = " << sampleFreq << std::endl;
+        std::cout << "fft prec = " << sampleFreq / N << std::endl;
 
         for(int i = 0; i < N; ++i){
 //            in[i] = sin(f1 + fs*i*16) + 1.7*cos(f1 + fs*i*32);
@@ -103,10 +111,10 @@ int main(int argc, char **argv) {
         cv::Mat freq(H, W, CV_8UC3, cv::Scalar(0, 0, 0));
         draw_vector(out, freq, cv::Scalar(0, 255, 0));
 
-        cv::imshow("signal", input);
-        cv::imshow("freq",   freq);
-
-        cv::waitKey(-1);
+//        cv::imshow("signal", input);
+//        cv::imshow("freq",   freq);
+//
+//        cv::waitKey(-1);
 
     } catch (const std::exception& e) {
         std::cerr << "exception: " << e.what() << std::endl;
