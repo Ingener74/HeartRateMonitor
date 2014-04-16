@@ -37,6 +37,11 @@ typedef boost::tuple<TimeStamp, NormalizedMeasurementValue>
 typedef boost::tuple<TimeStamp, NormalizedMeasurementValue, HeartBeatID>
     Measurement;
 
+using HrRawMeasurement = double;
+using HrMeasurementSampleRate = double;
+using HrRawMeasurementGraph =
+                tuple<HrMeasurementSampleRate, std::deque<HrRawMeasurement> >;
+
 typedef std::deque<RawMeasurement> RawMeasurementGraph;
 typedef std::deque<Measurement>    MeasurementGraph;
 
