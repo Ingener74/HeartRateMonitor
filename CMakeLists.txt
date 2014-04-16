@@ -1,23 +1,43 @@
 cmake_minimum_required(VERSION 2.8)
 
-set(3RDPARTY_BUILD_TYPE Release)
-set(3RDPARTY_INSTALL ${CMAKE_BINARY_DIR}/3RDPARTY)
+# include modules
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_LIST_DIR}/cmake/Modules")
 
-file(MAKE_DIRECTORY ${3RDPARTY_INSTALL})
-file(MAKE_DIRECTORY ${3RDPARTY_INSTALL}/lib)
-file(MAKE_DIRECTORY ${3RDPARTY_INSTALL}/include)
-
-include_directories(${3RDPARTY_INSTALL}/include)
-link_directories(${3RDPARTY_INSTALL}/lib)
 if(ANDROID)
-    include_directories(${ANDROID_NDK}/platforms/android-${ANDROID_NATIVE_API_LEVEL}/arch-arm/usr/include)
-else()
-endif()
 
-add_subdirectory(3rdparty)
+    include(Android)
+
+endif(ANDROID)
+
+# find boost
+set(Boost_USE_STATIC_LIBS    ON)
+set(Boost_USE_MULTITHREADED  ON)
+set(Boost_COMPILER -gcc)
+find_package(Boost 1.53.0 REQUIRED COMPONENTS system thread)
+
+# find fftw
+find_package(FFTW)
+
+# find OpenCV
+find_package(OpenCV COMPONENTS core imgproc highgui)
+
+# find gtest
+find_package(GTest)
+
+# find png
+find_package(PNG)
+if(PNG_FOUND)
+    add_definitions(-DPNG_FOUND)
+endif(PNG_FOUND)
+
+include_directories(
+    ${Boost_INCLUDE_DIRS}
+    ${OpenCV_INCLUDE_DIRS}
+    ${PNG_INCLUDE_DIRS}
+)
+
+add_definitions(-std=c++11)
 
 add_subdirectory(modules)
 
 add_subdirectory(apps)
-
-add_subdirectory(testing)
