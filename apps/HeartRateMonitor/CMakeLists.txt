@@ -69,7 +69,7 @@ add_custom_command(
 
 # linking
 add_custom_target(
-    ${HRM}
+    ${HRM} ALL
     DEPENDS ${HRM_CPP} mkdir_bin_dir copy_symlink_tree mkdir_libs_dir copy_libs update_prj build_prj mkdir_apk_output copy_output_apk
     )
 add_custom_target(
