@@ -19,63 +19,58 @@ set(SOURCES
 add_library(${HRM_CPP} SHARED ${SOURCES})
 
 set(LIBS
-	${Boost_LIBRARIES} 
-	android log jnigraphics
+    ${Boost_LIBRARIES} 
+    android log jnigraphics
     heartrate
     )
 target_link_libraries(${HRM_CPP} ${LIBS})
 
 # HeartRateMonitor android java part
-add_custom_command(
-    OUTPUT clean_prj
-    COMMAND rm -rf ${HRM_BIN_DIR}
-    )
-add_custom_command(
-    OUTPUT mkdir_bin_dir
-    COMMAND mkdir -p ${HRM_BIN_DIR}
-    )
-add_custom_command(
-    OUTPUT copy_symlink_tree
-    COMMAND ls ${HRM_SRC_DIR} | xargs -I {} cp -rsf ${HRM_SRC_DIR}/{} ${HRM_BIN_DIR}
-    )
-add_custom_command(
-    OUTPUT mkdir_libs_dir
-    COMMAND mkdir -p ${HRM_LIBS_DIR}
-    )
 get_target_property(HRM_CPP_ ${HRM_CPP} LOCATION)
-add_custom_command(
-    OUTPUT copy_libs
-    COMMAND cp ${HRM_CPP_} ${HRM_LIBS_DIR}
-    )
-add_custom_command(
-    OUTPUT update_prj
-    COMMAND android update project -p . -s -t android-17 > /dev/null
-    WORKING_DIRECTORY ${HRM_BIN_DIR}
-    )
-add_custom_command(
-    OUTPUT build_prj
-    COMMAND ant clean debug | grep BUILD
-    WORKING_DIRECTORY ${HRM_BIN_DIR}
-    )
-add_custom_command(
-    OUTPUT mkdir_apk_output
-    COMMAND mkdir -p ${APK_OUTPUT}
-    )
-add_custom_command(
-    OUTPUT copy_output_apk
-    COMMAND find ${HRM_BIN_DIR} -name *-debug.apk | xargs cp -t ${APK_OUTPUT}
-    )
 
-# linking
 add_custom_target(
     ${HRM} ALL
-    DEPENDS ${HRM_CPP} mkdir_bin_dir copy_symlink_tree mkdir_libs_dir copy_libs update_prj build_prj mkdir_apk_output copy_output_apk
-    )
+    COMMAND 
+
+        # mkdir all project dirs
+        mkdir -p ${HRM_BIN_DIR} ${HRM_LIBS_DIR} &&
+        
+        # copy symbolic link tree to binary directory
+        ls ${HRM_SRC_DIR} | xargs -I {} cp -rsf ${HRM_SRC_DIR}/{} ${HRM_BIN_DIR} &&
+        
+        # copy native library to libs dir
+        cp ${HRM_CPP_} ${HRM_LIBS_DIR} &&
+        
+        # update android library project 
+        android update project -p ${HRM_BIN_DIR} -s -t android-17 > /dev/null &&
+        
+        # go to project directory 
+        cd ${HRM_BIN_DIR} && 
+        
+        # and build it
+        ant clean debug | grep BUILD
+    
+    DEPENDS ${HRM_CPP}
+)
+
 add_custom_target(
-    ${HRM}_develop
-    DEPENDS ${HRM_CPP} mkdir_bin_dir copy_symlink_tree mkdir_libs_dir copy_libs update_prj
-    )
+    ${HRM}_output_apk
+    COMMAND 
+    
+        # mkdir all project dirs
+        mkdir -p ${APK_OUTPUT} &&
+        
+        # output apk
+        find ${HRM_BIN_DIR} -name *-debug.apk | xargs cp -t ${APK_OUTPUT}
+    
+    DEPENDS ${HRM}
+)
+
 add_custom_target(
     ${HRM}_clean
-    DEPENDS clean_prj
-    )
+    COMMAND 
+
+        # mkdir all project dirs
+        rm -rf ${HRM_BIN_DIR}
+
+)
