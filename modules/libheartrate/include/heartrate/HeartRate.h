@@ -55,5 +55,7 @@
 #include <heartrate/mocks/MockHeartRateGenerator.h>
 #include <heartrate/mocks/MockHeartRateNumber.h>
 #include <heartrate/mocks/MockHeartRateVisualizer.h>
+#include <heartrate/mocks/MockHeartRateRecognizer.h>
+#include <heartrate/mocks/MockHeartRateFrequencyVisualizer.h>
 
 #endif /* HEARTRATE_H_ */

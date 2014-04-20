@@ -16,6 +16,7 @@ set(SOURCES
     src/mocks/MockNV21FrameSource.cpp
     src/mocks/MockRGBFrameSource.cpp
     src/mocks/MockHeartRateFrequencyVisualizer.cpp
+    src/mocks/MockHeartRateRecognizer.cpp
     )
 
 if(PNG_FOUND)

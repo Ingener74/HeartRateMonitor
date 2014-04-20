@@ -12,6 +12,7 @@
 #include <stdexcept>
 
 #include <boost/smart_ptr.hpp>
+#include <boost/format.hpp>
 
 #include <fftw3.h>
 
@@ -83,9 +84,9 @@ int main(int argc, char **argv) {
 
         cout.precision(5);
         cout << "sample rate = " << setw(20) << sample_rate << " sample per second" << endl;
-        cout << "frequency   = " << setw(20) << frequency << " Hz" << endl;
-        cout << "freq prec   = " << setw(20) << freq_prec << " Hz in one fft output bin" << endl;
-        cout << "sample len  = " << setw(20) << sample_len << " second" << endl;
+        cout << "frequency   = " << setw(20) << frequency   << " Hz" << endl;
+        cout << "freq prec   = " << setw(20) << freq_prec   << " Hz in one fft output bin" << endl;
+        cout << "sample len  = " << setw(20) << sample_len  << " second" << endl;
 
         vector<double> in(N), out(N);
         double f1 = -M_PI, f2 = M_PI, fs = (f2 - f1) / N;
@@ -122,7 +123,8 @@ int main(int argc, char **argv) {
                     fftout.get()[i][0]*fftout.get()[i][0] +
                     fftout.get()[i][1]*fftout.get()[i][1]);
 
-            cout << setw(4) << i << ") " << setw(10) << ds << " - " << setw(10) << (ds + freq_prec) << " -> " << setw(15) << out[i] << endl;
+            cout << format("%1$4d) < %2$10d - %3$10d > --- %4$10d") % i % ds % (ds + freq_prec) % out[i] << std::endl;
+//            cout << setw(4) << i << ") " << setw(10) << ds << " - " << setw(10) << (ds + freq_prec) << " -> " << setw(15) << out[i] << endl;
             ds += freq_prec;
         }
 

@@ -23,6 +23,9 @@ find_package(Boost 1.53.0 REQUIRED
 find_package(FFTW3)
 if(FFTW3_FOUND)
     add_definitions(-DFFTW3_FOUND)
+    include_directories(
+        ${FFTW3_INCLUDE_DIRS}
+    )
 endif(FFTW3_FOUND)
 
 # find OpenCV
@@ -45,7 +48,6 @@ endif(PNG_FOUND)
 # include dependencies
 include_directories(
     ${Boost_INCLUDE_DIRS}
-    ${FFTW3_INCLUDE_DIRS}
     ${OpenCV_INCLUDE_DIRS}
     ${PNG_INCLUDE_DIRS}
 )

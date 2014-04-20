@@ -22,6 +22,7 @@
 #include <exception>
 #include <algorithm>
 #include <string>
+#include <sstream>
 
 #include <boost/thread.hpp>
 #include <boost/smart_ptr.hpp>

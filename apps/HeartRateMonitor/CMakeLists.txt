@@ -48,7 +48,7 @@ add_custom_target(
         cd ${HRM_BIN_DIR} && 
         
         # and build it
-        ant clean debug | grep BUILD
+        ant clean debug > /dev/null # | grep BUILD
     
     DEPENDS ${HRM_CPP}
 )
