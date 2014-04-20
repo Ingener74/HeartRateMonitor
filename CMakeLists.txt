@@ -58,7 +58,7 @@ include_directories(
 )
 
 add_definitions(
-    -std=c++11
+    -std=c++11 -pedantic # -Wall -Wextra
     ${PNG_DEFINITIONS}
 )
 

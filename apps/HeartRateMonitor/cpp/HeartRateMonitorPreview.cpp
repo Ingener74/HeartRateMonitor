@@ -43,20 +43,14 @@ jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativeSta
 
         nv21 = make_shared<NV21FrameSource>();
 
-        IRGBFrameSource::Ptr rgbfs = make_shared<RGBFrameSource>(nv21);
-
 //      IRGBFrameDrawer::Ptr(new RGB2PNGDataBaseFrameDrawer("/sdcard/test_db"))
-        IHeartRateGenerator::Ptr hrGenerator = make_shared<RGBHeartRateGenerator>(
-                rgbfs,
-                make_shared<ImageViewFrameDrawer>(JNIEnv_, self, "drawCameraPreview")
-                );
+        auto hrGenerator = make_shared<RGBHeartRateGenerator>(
+                make_shared<RGBFrameSource>(nv21),
+                make_shared<ImageViewFrameDrawer>(JNIEnv_, self, "drawCameraPreview"));
 
-        IHeartRateNumber::Ptr hrNumber = make_shared<mock::MockHeartRateNumber>();
-
-        IHeartRateVisualizer::Ptr hrVisualizer =
-                make_shared<ImageViewHeartRateVisualizer>(JNIEnv_, self, "drawHeartRate");
-
-        IHeartRateRecognizer::Ptr hrRecog = make_shared<mock::MockHeartRateRecognizer>();
+        auto hrNumber = make_shared<mock::MockHeartRateNumber>();
+        auto hrVisualizer = make_shared<ImageViewHeartRateVisualizer>(JNIEnv_, self, "drawHeartRate");
+        auto hrRecog = make_shared<mock::MockHeartRateRecognizer>();
 
         heartRateCounter = make_shared<HeartRateCounter>(
                 hrGenerator, hrRecog, hrNumber, hrVisualizer);
@@ -98,8 +92,7 @@ jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativePas
 //                format("type = %1%") % type
 //                ).str());
 
-        boost::tuple<TimeStamp, ElapsedTime> ts =
-                TimeCounter::instance()->getTimeStampExt();
+        auto ts = TimeCounter::instance()->getTimeStampExt();
 
         dynamic_cast<NV21FrameSource&>(*nv21).putFrame(
                 static_cast<uint16_t>(rows),
@@ -110,8 +103,6 @@ jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativePas
 
     } catch (const std::runtime_error& e) {
         HRM_ERROR(format("put frame error: %1%") % e.what());
-    } catch (...) {
-        HRM_ERROR("fatal error");
     }
 
     JNIEnv_->ReleaseByteArrayElements(data, imageData, 0);

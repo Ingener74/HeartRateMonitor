@@ -20,14 +20,15 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
-void draw_vector(const std::vector<double>& vector, cv::Mat& image, cv::Scalar color){
+void draw_vector(const std::vector<double>& vector, cv::Mat& image,
+        cv::Scalar color)
+{
 
-    double
-    mx = std::numeric_limits<double>::min(),
-    mn = std::numeric_limits<double>::max(),
-    diff;
+    double mx = std::numeric_limits<double>::min(), mn = std::numeric_limits<
+            double>::max(), diff;
 
-    for(const double& x: vector){
+    for (const double& x : vector)
+    {
         mx = std::max(mx, x);
         mn = std::min(mn, x);
     }
@@ -40,10 +41,12 @@ void draw_vector(const std::vector<double>& vector, cv::Mat& image, cv::Scalar c
 
     std::cout << "mx " << mx << ", mn " << mn << ", diff " << diff << std::endl;
 
-    for (int i = 0, imax = vector.size() - 1; i < imax; ++i) {
-        cv::Point
-        p1(image.cols *  i      / double(vector.size()), image.rows - image.rows * ( (vector[i]     - mn) / diff )),
-        p2(image.cols * (i + 1) / double(vector.size()), image.rows - image.rows * ( (vector[i + 1] - mn) / diff ));
+    for (int i = 0, imax = vector.size() - 1; i < imax; ++i)
+    {
+        cv::Point p1(image.cols * i / double(vector.size()),
+                image.rows - image.rows * ((vector[i] - mn) / diff)), p2(
+                image.cols * (i + 1) / double(vector.size()),
+                image.rows - image.rows * ((vector[i + 1] - mn) / diff));
 
         cv::line(image, p1, p2, color, 1);
     }
@@ -54,12 +57,35 @@ void draw_vector(const std::vector<double>& vector, cv::Mat& image, cv::Scalar c
 //            cv::Scalar(0, 145, 136), 1);
 }
 
-int main(int argc, char **argv) {
+class TestClass
+{
+public:
+    TestClass()
+    {
+    }
+    virtual ~TestClass()
+    {
+    }
 
-    try {
+private:
 
+    int a = 10;
+    std::string b = "test string";
+    std::vector<int> c =
+    { 1, 2, 100, 200 };
+
+};
+
+int main(int argc, char **argv)
+{
+    try
+    {
         using namespace boost;
         using namespace std;
+
+        auto x = [](int i){ return i += 20; }(10);
+
+        cout << "x from lambda " << x << endl;
 
         /*
          * Nyquist frequency
@@ -72,7 +98,7 @@ int main(int argc, char **argv) {
          * edit at higher sample rates and then convert down if needed.
          */
 
-        const int N = 128;
+        const int N = 512;
 
         const double sample_rate = 44100 /* sample per second */;
 
@@ -82,23 +108,32 @@ int main(int argc, char **argv) {
 
         const double sample_len = N / sample_rate;
 
+        const double set_cur_freq = 3.0;
+
+        const double cur_freq = 1 / (sample_len / set_cur_freq);
+
+//        stringstream sout;
+
         cout.precision(5);
-        cout << "sample rate = " << setw(20) << sample_rate << " sample per second" << endl;
-        cout << "frequency   = " << setw(20) << frequency   << " Hz" << endl;
-        cout << "freq prec   = " << setw(20) << freq_prec   << " Hz in one fft output bin" << endl;
-        cout << "sample len  = " << setw(20) << sample_len  << " second" << endl;
+        cout << "sample rate       = " << setw(20) << sample_rate << " sample per second" << endl;
+        cout << "frequency         = " << setw(20) << frequency   << " Hz" << endl;
+        cout << "freq prec         = " << setw(20) << freq_prec   << " Hz in one fft output bin" << endl;
+        cout << "sample len        = " << setw(20) << sample_len  << " second" << endl;
+        cout << "current frequency = " << setw(20) << cur_freq    << " Hz" << endl;
 
         vector<double> in(N), out(N);
         double f1 = -M_PI, f2 = M_PI, fs = (f2 - f1) / N;
 
-        for(int i = 0; i < N; ++i){
-            in[i] = sin(f1 + fs*i*2);
+        for (int i = 0; i < N; ++i)
+        {
+            in[i] = sin(f1 + fs * i * set_cur_freq);
         }
 
-        boost::shared_ptr<fftw_complex[]> fftin(new fftw_complex[N]);
-        boost::shared_ptr<fftw_complex[]> fftout(new fftw_complex[N]);
+        auto fftin  = boost::make_shared<fftw_complex[]>(N);
+        auto fftout = boost::make_shared<fftw_complex[]>(N);
 
-        for(int i = 0; i < N; ++i){
+        for (int i = 0; i < N; ++i)
+        {
             fftin.get()[i][0] = in[i];
             fftin.get()[i][1] = in[i];
 
@@ -106,7 +141,8 @@ int main(int argc, char **argv) {
             fftout.get()[i][1] = 0;
         }
 
-        fftw_plan plan = fftw_plan_dft_1d(N, fftin.get(), fftout.get(), FFTW_FORWARD, FFTW_ESTIMATE);
+        fftw_plan plan = fftw_plan_dft_1d(N, fftin.get(), fftout.get(),
+                FFTW_FORWARD, FFTW_ESTIMATE);
 
         fftw_execute(plan);
 
@@ -118,13 +154,11 @@ int main(int argc, char **argv) {
         draw_vector(in, input, cv::Scalar(255, 0, 0));
 
         double ds = 0.0;
-        for(int i = 0; i < N; ++i){
-            out[i] = sqrt(
-                    fftout.get()[i][0]*fftout.get()[i][0] +
-                    fftout.get()[i][1]*fftout.get()[i][1]);
+        for (int i = 0; i < N; ++i)
+        {
+            out[i] = sqrt(fftout.get()[i][0] * fftout.get()[i][0] + fftout.get()[i][1] * fftout.get()[i][1]);
 
-            cout << format("%1$4d) < %2$10d - %3$10d > --- %4$10d") % i % ds % (ds + freq_prec) % out[i] << std::endl;
-//            cout << setw(4) << i << ") " << setw(10) << ds << " - " << setw(10) << (ds + freq_prec) << " -> " << setw(15) << out[i] << endl;
+            cout << format("%1$4d) < %2$10d Hz - %3$10d Hz > --- %4$10d") % i % ds % (ds + freq_prec) % out[i] << std::endl;
             ds += freq_prec;
         }
 
@@ -132,11 +166,13 @@ int main(int argc, char **argv) {
         draw_vector(out, freq, cv::Scalar(0, 255, 0));
 
         cv::imshow("signal", input);
-        cv::imshow("freq",   freq);
+        cv::imshow("freq", freq);
 
         cv::waitKey(-1);
 
-    } catch (const std::exception& e) {
+    }
+    catch (const std::exception& e)
+    {
         std::cerr << "exception: " << e.what() << std::endl;
     }
 

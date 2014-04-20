@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
 
 # Cpp part
-set(HRL_CPP HeartRate_cpp)
+set(HRL_CPP HeartRateLibrary_cpp)
 
 set(SOURCES
     android_cpp/src/HeartRate.cpp
