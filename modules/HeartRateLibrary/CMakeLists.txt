@@ -30,7 +30,7 @@ add_custom_target(
         # rm -rf ${HRL_BIN_DIR} && 
         
         # mkdir all project dirs
-        mkdir -p ${HRL_BIN_DIR} ${HRL_LIBS_DIR} ${HRL_BIN_DIR}/src && 
+        mkdir -p ${HRL_BIN_DIR} ${HRL_LIBS_DIR} && #${HRL_BIN_DIR}/src && 
         
         # copy symbolic link tree to binary directory
         ls ${HRL_SRC_DIR} | xargs -I {} cp -rsf ${HRL_SRC_DIR}/{} ${HRL_BIN_DIR} && 
