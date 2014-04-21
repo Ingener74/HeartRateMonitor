@@ -28,18 +28,17 @@ enum class ImageType {
     BGR,
     RGBA,
     BGRA,
-    NV21,
 
-    END,
+    NV21,
 };
-const static BitsPerPixel bitsPerPixels[ImageType::END] = {
+
+const static BitsPerPixel bitsPerPixels[] = {
         24, /* RGB  */
         24, /* BGR  */
         32, /* RGBA */
         32, /* BGRA */
-        12, /* NV21 */
 
-        0
+        12, /* NV21 */
 };
 
 class ImageRect {
@@ -86,7 +85,7 @@ public:
     ImageRect _rect;
     ImageType _imageType;
 
-    static uint16_t getBitsPerPixel(ImageType imageType) {
+    static BitsPerPixel getBitsPerPixel(ImageType imageType) {
         return bitsPerPixels[imageType];
     }
 };
@@ -104,6 +103,10 @@ public:
 
     void unlock() {
         _imageMutex.unlock();
+    }
+
+    mutex& getImageMutex() const {
+        return _imageMutex;
     }
 
 private:
@@ -125,8 +128,11 @@ public:
         _image.unlock();
     }
 
+    ImageFormat getImageFormat() const {
+        return _image._format;
+    }
     template<typename TData>
-    TData getData() {
+    TData getData() const {
         return static_cast<TData*>(_image._data.get());
     }
 
@@ -136,7 +142,6 @@ private:
 
 class Frame: public Image {
 public:
-
     TimeStamp _timeStamp;
 };
 

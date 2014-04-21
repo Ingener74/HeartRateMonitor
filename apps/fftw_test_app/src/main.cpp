@@ -106,11 +106,8 @@ int main(int argc, char **argv)
 
         const double freq_prec = frequency / N; /* Hz in one dft output bin */
 
-        const double sample_len = N / sample_rate;
-
-        const double set_cur_freq = 3.0;
-
-        const double cur_freq = 1 / (sample_len / set_cur_freq);
+        const double periodsInSample = 20;
+        const double cur_freq = frequency / N * periodsInSample;
 
 //        stringstream sout;
 
@@ -118,7 +115,6 @@ int main(int argc, char **argv)
         cout << "sample rate       = " << setw(20) << sample_rate << " sample per second" << endl;
         cout << "frequency         = " << setw(20) << frequency   << " Hz" << endl;
         cout << "freq prec         = " << setw(20) << freq_prec   << " Hz in one fft output bin" << endl;
-        cout << "sample len        = " << setw(20) << sample_len  << " second" << endl;
         cout << "current frequency = " << setw(20) << cur_freq    << " Hz" << endl;
 
         vector<double> in(N), out(N);
@@ -126,7 +122,7 @@ int main(int argc, char **argv)
 
         for (int i = 0; i < N; ++i)
         {
-            in[i] = sin(f1 + fs * i * set_cur_freq);
+            in[i] = sin(f1 + fs * i * periodsInSample);
         }
 
         auto fftin  = boost::make_shared<fftw_complex[]>(N);
