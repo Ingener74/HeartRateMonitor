@@ -23,11 +23,16 @@
 void draw_vector(const std::vector<double>& vector, cv::Mat& image,
         cv::Scalar color)
 {
+    if(image.empty())
+        throw std::runtime_error("image is empty");
+    if(vector.empty())
+        throw std::runtime_error("vector is empty");
 
-    double mx = std::numeric_limits<double>::min(), mn = std::numeric_limits<
-            double>::max(), diff;
+    double mx = std::numeric_limits<double>::min(),
+            mn = std::numeric_limits<double>::max(),
+            diff;
 
-    for (const double& x : vector)
+    for (auto& x : vector)
     {
         mx = std::max(mx, x);
         mn = std::min(mn, x);
@@ -107,6 +112,7 @@ int main(int argc, char **argv)
         const double freq_prec = frequency / N; /* Hz in one dft output bin */
 
         const double periodsInSample = 20;
+
         const double cur_freq = frequency / N * periodsInSample;
 
 //        stringstream sout;
