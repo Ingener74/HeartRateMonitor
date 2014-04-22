@@ -6,16 +6,15 @@
 ## Build
 ### Linux
 1) install dependencies
+```
+sudo apt-get install ant libbz2-dev libboost-dev libgtest-dev libgtk2.0-dev pkg-config
+```
 
-    ```
-    sudo apt-get install ant libbz2-dev libboost-dev libgtest-dev libgtk2.0-dev pkg-config
-    ```
+or
 
-    or
-
-    ```
-    ../scripts/install_dependencies.sh
-    ```
+```
+../scripts/install_dependencies.sh
+```
 
 2) mkdir build
 
@@ -31,3 +30,4 @@
 
 ./b2 install
 ```
+### Windows... coming soon
