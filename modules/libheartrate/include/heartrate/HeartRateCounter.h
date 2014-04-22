@@ -13,21 +13,22 @@
 #include <heartrate/IHeartRateNumber.h>
 #include <heartrate/IHeartRateVisualizer.h>
 
-namespace hrm {
+namespace hrm
+{
 
-class HeartRateCounter {
+class HeartRateCounter
+{
 public:
     typedef boost::shared_ptr<HeartRateCounter> Ptr;
 
-    HeartRateCounter(
-            IHeartRateGenerator::Ptr hrGenerator,
+    HeartRateCounter(IHeartRateGenerator::Ptr hrGenerator,
             IHeartRateRecognizer::Ptr hrRecognizer,
             IHeartRateNumber::Ptr hrNumber,
-            IHeartRateVisualizer::Ptr hrVisualizer
-            );
+            IHeartRateVisualizer::Ptr hrVisualizer);
     virtual ~HeartRateCounter();
 
     bool start();
+    void run();
 
 private:
     IHeartRateGenerator::Ptr _hrg;

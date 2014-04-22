@@ -115,8 +115,6 @@ int main(int argc, char **argv)
 
         const double cur_freq = frequency / N * periodsInSample;
 
-//        stringstream sout;
-
         cout.precision(5);
         cout << "sample rate       = " << setw(20) << sample_rate << " sample per second" << endl;
         cout << "frequency         = " << setw(20) << frequency   << " Hz" << endl;
