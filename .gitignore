@@ -2,6 +2,7 @@
 .project
 build
 build_android
+build_windows
 .gitignore
 HeartRateMonitor/.settings
 HeartRateMonitor/bin

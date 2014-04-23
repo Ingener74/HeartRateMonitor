@@ -12,12 +12,13 @@ endif(ANDROID)
 # find boost
 set(Boost_USE_STATIC_LIBS    ON)
 set(Boost_USE_MULTITHREADED  ON)
-set(Boost_COMPILER -gcc)
-find_package(Boost 1.53.0 REQUIRED 
-    COMPONENTS 
-        system 
-        thread
-)
+if(MINGW)
+    set(Boost_COMPILER -mgw48)
+else(MINGW)
+    set(Boost_COMPILER -gcc)
+endif(MINGW)
+find_package(Boost 1.53.0 REQUIRED COMPONENTS system thread)
+
 
 # find fftw
 find_package(FFTW3)
