@@ -19,7 +19,7 @@ public:
     MockRGBFrameSource();
     virtual ~MockRGBFrameSource();
 
-    virtual FrameSharedLockedRGB getFrame();
+    virtual FrameSharedLockedRGB getFrame() throw (HRFrameSourceException);
 
 private:
     FrameRGB _frame;

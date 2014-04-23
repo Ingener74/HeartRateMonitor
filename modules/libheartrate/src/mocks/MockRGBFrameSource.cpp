@@ -17,7 +17,8 @@ MockRGBFrameSource::MockRGBFrameSource() :
 MockRGBFrameSource::~MockRGBFrameSource() {
 }
 
-FrameSharedLockedRGB MockRGBFrameSource::getFrame() {
+FrameSharedLockedRGB MockRGBFrameSource::getFrame()
+        throw (HRFrameSourceException) {
 
     this_thread::sleep(posix_time::milliseconds(30));
 

@@ -18,7 +18,7 @@ public:
     RGBFrameSource(INV21FrameSource::Ptr nv21);
     virtual ~RGBFrameSource();
 
-    virtual FrameSharedLockedRGB getFrame();
+    virtual FrameSharedLockedRGB getFrame() throw (HRFrameSourceException);
 private:
     FrameRGB _frame;
     shared_mutex _frameMutex;

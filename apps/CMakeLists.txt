@@ -6,10 +6,12 @@ if(ANDROID)
     
 else()
     
-    if(OpenCV_FOUND)
+    if(OpenCV_FOUND AND FFTW3_FOUND)
     
         add_subdirectory(heart_rate_monitor_test)
         
-    endif(OpenCV_FOUND)
+        add_subdirectory(fftw_test_app)
+        
+    endif(OpenCV_FOUND AND FFTW3_FOUND)
     
 endif()

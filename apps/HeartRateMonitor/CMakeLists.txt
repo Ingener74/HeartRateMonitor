@@ -9,7 +9,6 @@ set(HRM_LIBS_DIR ${HRM_BIN_DIR}/libs/armeabi-v7a)
 # HeartRateMonitor native part
 include_directories(
     cpp
-    ../../modules/libheartrate/include
     )
 
 set(SOURCES
@@ -49,7 +48,7 @@ add_custom_target(
         cd ${HRM_BIN_DIR} && 
         
         # and build it
-        ant clean debug | grep BUILD
+        ant clean debug > /dev/null # | grep BUILD
     
     DEPENDS ${HRM_CPP}
 )

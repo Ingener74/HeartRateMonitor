@@ -13,17 +13,29 @@ endif(ANDROID)
 set(Boost_USE_STATIC_LIBS    ON)
 set(Boost_USE_MULTITHREADED  ON)
 if(MINGW)
-	set(Boost_COMPILER -mgw48)
+    set(Boost_COMPILER -mgw48)
 else(MINGW)
-	set(Boost_COMPILER -gcc)
+    set(Boost_COMPILER -gcc)
 endif(MINGW)
 find_package(Boost 1.53.0 REQUIRED COMPONENTS system thread)
 
+
 # find fftw
-find_package(FFTW)
+find_package(FFTW3)
+if(FFTW3_FOUND)
+    add_definitions(-DFFTW3_FOUND)
+    include_directories(
+        ${FFTW3_INCLUDE_DIRS}
+    )
+endif(FFTW3_FOUND)
 
 # find OpenCV
-find_package(OpenCV COMPONENTS core imgproc highgui)
+find_package(OpenCV 
+    COMPONENTS 
+        core 
+        imgproc 
+        highgui
+)
 
 # find gtest
 find_package(GTest)
@@ -34,13 +46,22 @@ if(PNG_FOUND)
     add_definitions(-DPNG_FOUND)
 endif(PNG_FOUND)
 
+# include dependencies
 include_directories(
     ${Boost_INCLUDE_DIRS}
     ${OpenCV_INCLUDE_DIRS}
     ${PNG_INCLUDE_DIRS}
 )
 
-add_definitions(-std=c++11)
+# include modules
+include_directories(
+    ${CMAKE_SOURCE_DIR}/modules/libheartrate/include
+)
+
+add_definitions(
+    -std=c++11 -pedantic # -Wall -Wextra
+    ${PNG_DEFINITIONS}
+)
 
 add_subdirectory(modules)
 

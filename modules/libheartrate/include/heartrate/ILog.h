@@ -19,10 +19,15 @@ public:
 	virtual ~ILog() {
 	}
 
-	virtual void DEBUG(const std::string& message) = 0;
-	virtual void INFO(const std::string& message) = 0;
-	virtual void ERROR(const std::string& message) = 0;
-	virtual void WARN(const std::string& message) = 0;
+    virtual void DEBUG(const std::string& message) = 0;
+    virtual void INFO(const std::string& message) = 0;
+    virtual void ERROR(const std::string& message) = 0;
+    virtual void WARN(const std::string& message) = 0;
+
+    virtual void DEBUG(const basic_format<char>& messages) = 0;
+    virtual void INFO(const basic_format<char>& messages) = 0;
+    virtual void ERROR(const basic_format<char>& messages) = 0;
+    virtual void WARN(const basic_format<char>& messages) = 0;
 
 protected:
 	ILog() {

@@ -10,14 +10,16 @@
 
 #include <heartrate/IRGBFrameDrawer.h>
 
-namespace hrm {
+namespace hrm
+{
 
-class RGB2PNGDataBaseFrameDrawer: public IRGBFrameDrawer {
+class RGB2PNGDataBaseFrameDrawer: public IRGBFrameDrawer
+{
 public:
     RGB2PNGDataBaseFrameDrawer(const std::string& dataBaseDir = std::string());
     virtual ~RGB2PNGDataBaseFrameDrawer();
 
-    virtual void drawFrame(FrameRGB frame) throw (DrawError);
+    virtual void drawFrame(FrameRGB frame) throw (HRDrawException);
 
 private:
     std::string _dataBaseDir;

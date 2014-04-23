@@ -32,5 +32,21 @@ void LinuxLog::WARN(const std::string& message) {
     std::cout << message << std::endl;
 }
 
+void LinuxLog::DEBUG(const basic_format<char>& messages) {
+    std::cout << messages << std::endl;
+}
+
+void LinuxLog::INFO(const basic_format<char>& messages) {
+    std::cout << messages << std::endl;
+}
+
+void LinuxLog::ERROR(const basic_format<char>& messages) {
+    std::cerr << messages << std::endl;
+}
+
+void LinuxLog::WARN(const basic_format<char>& messages) {
+    std::cerr << messages << std::endl;
+}
+
 }  // namespace hrm
 

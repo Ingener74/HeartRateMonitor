@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
 
 # Cpp part
-set(HRL_CPP HeartRate_cpp)
+set(HRL_CPP HeartRateLibrary_cpp)
 
 set(SOURCES
     android_cpp/src/HeartRate.cpp
@@ -45,7 +45,7 @@ add_custom_target(
         cd ${HRL_BIN_DIR} && 
         
         # and build it
-        ant clean debug | grep BUILD
+        ant clean debug > /dev/null # | grep BUILD
     DEPENDS 
         ${HRL_CPP}
 )

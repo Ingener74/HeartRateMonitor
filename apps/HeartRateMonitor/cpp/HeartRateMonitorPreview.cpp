@@ -39,39 +39,26 @@ jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativeSta
     try {
 
         TimeCounter::instance();
-        HeartRateTools::instance()->getLog()->INFO("native start");
+        HRM_INFO("native start");
 
-        nv21 = INV21FrameSource::Ptr(
-                new NV21FrameSource()
-//                new dummys::DummyNV21FrameSource()
-        );
-        IRGBFrameSource::Ptr rgbfs(
-                new RGBFrameSource(nv21)
-//                new DummyRGBFrameSource()
-        );
+        nv21 = make_shared<NV21FrameSource>();
 
-        IHeartRateGenerator::Ptr hrGenerator(new RGBHeartRateGenerator(
-                rgbfs,
-//                IRGBFrameDrawer::Ptr(new RGB2PNGDataBaseFrameDrawer("/sdcard/test_db"))
-                IRGBFrameDrawer::Ptr(new ImageViewFrameDrawer(JNIEnv_, self, "drawCameraPreview"))
-                ));
+//      IRGBFrameDrawer::Ptr(new RGB2PNGDataBaseFrameDrawer("/sdcard/test_db"))
+        auto hrGenerator = make_shared<RGBHeartRateGenerator>(
+                make_shared<RGBFrameSource>(nv21),
+                make_shared<ImageViewFrameDrawer>(JNIEnv_, self, "drawCameraPreview"));
 
-        IHeartRateNumber::Ptr hrNumber(new mock::MockHeartRateNumber());
+        auto hrNumber = make_shared<mock::MockHeartRateNumber>();
+        auto hrVisualizer = make_shared<ImageViewHeartRateVisualizer>(JNIEnv_, self, "drawHeartRate");
+        auto hrRecog = make_shared<mock::MockHeartRateRecognizer>();
 
-        IHeartRateVisualizer::Ptr hrVisualizer = IHeartRateVisualizer::Ptr(
-                new ImageViewHeartRateVisualizer(JNIEnv_, self, "drawHeartRate")
-//                new SimpleHeartRateVisualizer()
-        );
+        heartRateCounter = make_shared<HeartRateCounter>(
+                hrGenerator, hrRecog, hrNumber, hrVisualizer);
 
-        heartRateCounter = HeartRateCounter::Ptr(
-                new HeartRateCounter(hrGenerator, hrNumber, hrVisualizer));
-
-        HeartRateTools::instance()->getLog()->INFO("native started");
+        HRM_INFO("native started");
 
     } catch (const std::runtime_error& e) {
-        HeartRateTools::instance()->getLog()->ERROR((
-                format("runtime error in hrm native start: %1%") % e.what()
-                ).str());
+        HRM_ERROR(format("runtime error in hrm native start: %1%") % e.what());
         return false;
     }
     return heartRateCounter->start();
@@ -105,8 +92,7 @@ jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativePas
 //                format("type = %1%") % type
 //                ).str());
 
-        boost::tuple<TimeStamp, ElapsedTime> ts =
-                TimeCounter::instance()->getTimeStampExt();
+        auto ts = TimeCounter::instance()->getTimeStampExt();
 
         dynamic_cast<NV21FrameSource&>(*nv21).putFrame(
                 static_cast<uint16_t>(rows),
@@ -116,11 +102,7 @@ jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativePas
                 );
 
     } catch (const std::runtime_error& e) {
-        hrm::HeartRateTools::instance()->getLog()->ERROR((
-                format("put frame error: %1%") % e.what()
-        ).str());
-    } catch (...) {
-        hrm::HeartRateTools::instance()->getLog()->ERROR("fatal error");
+        HRM_ERROR(format("put frame error: %1%") % e.what());
     }
 
     JNIEnv_->ReleaseByteArrayElements(data, imageData, 0);

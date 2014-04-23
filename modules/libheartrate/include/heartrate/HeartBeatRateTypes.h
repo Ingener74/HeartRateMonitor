@@ -15,15 +15,6 @@ namespace hrm {
 template <typename Mutex>
 using unique_lock = boost::unique_lock<Mutex>;
 
-class DrawError: std::runtime_error {
-public:
-    DrawError(const std::string& mes) :
-            runtime_error(mes) {
-    }
-    virtual ~DrawError() {
-    }
-};
-
 typedef double TimeStamp;
 typedef double ElapsedTime;
 
@@ -37,8 +28,16 @@ typedef boost::tuple<TimeStamp, NormalizedMeasurementValue>
 typedef boost::tuple<TimeStamp, NormalizedMeasurementValue, HeartBeatID>
     Measurement;
 
+using HrRawMeasurement = double;
+using HrMeasurementSampleRate = double;
+using HrRawMeasurementGraph =
+                tuple<HrMeasurementSampleRate, std::deque<HrRawMeasurement> >;
+
 typedef std::deque<RawMeasurement> RawMeasurementGraph;
 typedef std::deque<Measurement>    MeasurementGraph;
+
+typedef double Frequency;
+typedef std::vector<Frequency>     FrequencyGraph;
 
 class TimeCounter {
 public:
