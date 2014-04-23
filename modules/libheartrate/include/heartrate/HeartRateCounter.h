@@ -31,6 +31,8 @@ public:
     void run();
 
 private:
+    void calcHeartRate();
+
     IHeartRateGenerator::Ptr _hrg;
     IHeartRateRecognizer::Ptr _hrr;
     IHeartRateNumber::Ptr _hrn;

@@ -9,20 +9,25 @@
 #define IRGBFRAMEDRAWER_H_
 
 #include <heartrate/HeartBeatRateTypes.h>
+#include <heartrate/types/Exception.h>
 
-namespace hrm {
+namespace hrm
+{
 
-class IRGBFrameDrawer {
+class IRGBFrameDrawer
+{
 public:
     typedef shared_ptr<IRGBFrameDrawer> Ptr;
 
-    virtual ~IRGBFrameDrawer() {
+    virtual ~IRGBFrameDrawer()
+    {
     }
 
-    virtual void drawFrame(FrameRGB frame) throw (DrawError)= 0;
+    virtual void drawFrame(FrameRGB frame) throw (HRDrawException) = 0;
 
 protected:
-    IRGBFrameDrawer() {
+    IRGBFrameDrawer()
+    {
     }
 };
 

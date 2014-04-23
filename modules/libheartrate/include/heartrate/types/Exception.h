@@ -10,7 +10,8 @@
 
 #include <heartrate/HeartRateCommon.h>
 
-namespace hrm {
+namespace hrm
+{
 
 /*
  * HeartRateException
@@ -19,50 +20,78 @@ namespace hrm {
  *  |-> HRNumberException
  *  |-> HRVisualizeException
  *  |-> HRRecognitionException
+ *  |-> HRDrawException
  */
 
-class HeartRateException: public std::runtime_error {
+class HeartRateException: public std::runtime_error
+{
 public:
     HeartRateException(const std::string& message) :
-            std::runtime_error(message) {
+            std::runtime_error(message)
+    {
     }
-    virtual ~HeartRateException() throw () {
+    virtual ~HeartRateException() throw ()
+    {
     }
 };
 
-class HRFrameSourceException: public HeartRateException {
+class HRFrameSourceException: public HeartRateException
+{
 public:
     HRFrameSourceException(const std::string& message) :
-            HeartRateException(message) {
+            HeartRateException(message)
+    {
     }
-    virtual ~HRFrameSourceException() throw () {
+    virtual ~HRFrameSourceException() throw ()
+    {
     }
 };
 
-class HRNumberException: public HeartRateException {
+class HRNumberException: public HeartRateException
+{
 public:
     HRNumberException(const std::string& message) :
-            HeartRateException(message) {
+            HeartRateException(message)
+    {
     }
-    virtual ~HRNumberException() {
+    virtual ~HRNumberException() throw ()
+    {
     }
 };
 
-class HRVisualizeException: public HeartRateException {
+class HRVisualizeException: public HeartRateException
+{
 public:
     HRVisualizeException(const std::string& message) :
-            HeartRateException(message) {
+            HeartRateException(message)
+    {
     }
-    virtual ~HRVisualizeException() {
+    virtual ~HRVisualizeException() throw ()
+    {
     }
 };
 
-class HRRecognitionException: public HeartRateException {
+class HRRecognitionException: public HeartRateException
+{
 public:
     HRRecognitionException(const std::string& message) :
-            HeartRateException(message) {
+            HeartRateException(message)
+    {
     }
-    virtual ~HRRecognitionException() {
+    virtual ~HRRecognitionException() throw ()
+    {
+    }
+};
+
+class HRDrawException: public HeartRateException
+{
+public:
+    HRDrawException(const std::string& message) :
+            HeartRateException(message)
+    {
+    }
+    virtual ~HRDrawException() throw ()
+    {
     }
 };
 

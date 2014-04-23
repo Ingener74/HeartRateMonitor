@@ -35,41 +35,46 @@ bool HeartRateCounter::start()
     return true;
 }
 
+void HeartRateCounter::calcHeartRate()
+{
+    RawMeasurementGraph hrRawGraph = _hrg->getHeartRate();
+    MeasurementGraph hrGraph;
+    HeartRateValue hrNumber = 70;
+
+    /* calculate heart rate */
+
+    hrNumber = _hrr->recognizeHeartRateValue(hrRawGraph);
+
+    NormalizedMeasurementValue
+    minValue = std::numeric_limits<NormalizedMeasurementValue>().max(),
+    maxValue = std::numeric_limits<NormalizedMeasurementValue>().min();
+
+    for (const RawMeasurement& r : hrRawGraph)
+    {
+        minValue = std::min(r.get<1>(), minValue);
+        maxValue = std::max(r.get<1>(), maxValue);
+    }
+
+    NormalizedMeasurementValue diff = maxValue - minValue;
+
+    for (const RawMeasurement& r : hrRawGraph)
+    {
+        hrGraph.push_back(
+                Measurement(r.get<0>(),
+                        ((r.get<1>() - minValue) / diff), 0));
+    }
+
+    _hrn->setHeartRateNumber(hrNumber);
+    _hrv->visualizeHeartRate(hrGraph);
+}
+
 void HeartRateCounter::threadFunc(void)
 {
     try
     {
         while (1)
         {
-            RawMeasurementGraph hrRawGraph = _hrg->getHeartRate();
-            MeasurementGraph hrGraph;
-            HeartRateValue hrNumber = 70;
-
-            /* calculate heart rate */
-
-            hrNumber = _hrr->recognizeHeartRateValue(hrRawGraph);
-
-            NormalizedMeasurementValue
-            minValue = std::numeric_limits<NormalizedMeasurementValue>().max(),
-            maxValue = std::numeric_limits<NormalizedMeasurementValue>().min();
-
-            for (const RawMeasurement& r : hrRawGraph)
-            {
-                minValue = std::min(r.get<1>(), minValue);
-                maxValue = std::max(r.get<1>(), maxValue);
-            }
-
-            NormalizedMeasurementValue diff = maxValue - minValue;
-
-            for (const RawMeasurement& r : hrRawGraph)
-            {
-                hrGraph.push_back(
-                        Measurement(r.get<0>(),
-                                ((r.get<1>() - minValue) / diff), 0));
-            }
-
-            _hrn->setHeartRateNumber(hrNumber);
-            _hrv->visualizeHeartRate(hrGraph);
+            calcHeartRate();
 
             boost::this_thread::interruption_point();
         }
@@ -91,35 +96,7 @@ void hrm::HeartRateCounter::run()
 {
     while (1)
     {
-        RawMeasurementGraph hrRawGraph = _hrg->getHeartRate();
-        MeasurementGraph hrGraph;
-        HeartRateValue hrNumber = 70;
-
-        /* calculate heart rate */
-
-        hrNumber = _hrr->recognizeHeartRateValue(hrRawGraph);
-
-        NormalizedMeasurementValue
-        minValue = std::numeric_limits<NormalizedMeasurementValue>().max(),
-        maxValue = std::numeric_limits<NormalizedMeasurementValue>().min();
-
-        for (const RawMeasurement& r : hrRawGraph)
-        {
-            minValue = std::min(r.get<1>(), minValue);
-            maxValue = std::max(r.get<1>(), maxValue);
-        }
-
-        NormalizedMeasurementValue diff = maxValue - minValue;
-
-        for (const RawMeasurement& r : hrRawGraph)
-        {
-            hrGraph.push_back(
-                    Measurement(r.get<0>(),
-                            ((r.get<1>() - minValue) / diff), 0));
-        }
-
-        _hrn->setHeartRateNumber(hrNumber);
-        _hrv->visualizeHeartRate(hrGraph);
+        calcHeartRate();
     }
 }
 

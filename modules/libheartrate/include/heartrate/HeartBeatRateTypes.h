@@ -15,15 +15,6 @@ namespace hrm {
 template <typename Mutex>
 using unique_lock = boost::unique_lock<Mutex>;
 
-class DrawError: std::runtime_error {
-public:
-    DrawError(const std::string& mes) :
-            runtime_error(mes) {
-    }
-    virtual ~DrawError() {
-    }
-};
-
 typedef double TimeStamp;
 typedef double ElapsedTime;
 

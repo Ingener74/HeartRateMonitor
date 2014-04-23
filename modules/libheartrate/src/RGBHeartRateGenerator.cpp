@@ -28,13 +28,7 @@ RawMeasurementGraph RGBHeartRateGenerator::getHeartRate() {
     {
         FrameSharedLockedRGB slf = _rgbfs->getFrame();
 
-        try {
-            _rgbfd->drawFrame(slf.get<1>());
-        } catch (const DrawError& e) {
-            HeartRateTools::instance()->getLog()->ERROR((
-                    format("rgb frame drawer")/* % e.what()*/
-            ).str());
-        }
+        _rgbfd->drawFrame(slf.get<1>());
 
         RGB* p = slf.get<1>().getData();
 

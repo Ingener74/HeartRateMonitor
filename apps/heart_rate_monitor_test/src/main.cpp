@@ -13,6 +13,34 @@
 
 #include <heartrate/HeartRate.h>
 
+class OpenCvHeartRateVisualizer
+{
+public:
+    OpenCvHeartRateVisualizer()
+    {
+    }
+    virtual ~OpenCvHeartRateVisualizer()
+    {
+    }
+
+    void setFreq(cv::Mat freqImage)
+    {
+    }
+    void setHeartRate(cv::Mat heartRateImage)
+    {
+    }
+    void setMockImage(cv::Mat image)
+    {
+    }
+    void start()
+    {
+    }
+
+private:
+    cv::Mat common;
+    boost::thread _thread;
+};
+
 class OpenCVHRFreqVisualizer: public hrm::IHeartRateFrequencyVisualizer
 {
 public:
@@ -57,11 +85,8 @@ public:
             cv::line(image, p1, p2, cv::Scalar(0, 255, 0), 1);
         }
         cv::imshow("freq vis", image);
-//        cv::moveWindow("freq vis", 0, 480);
-        if (cv::waitKey(1) == 27)
-        {
-            throw hrm::HeartRateException("esc pressed");
-        }
+        if (cv::waitKey(1) == 27) throw hrm::HRVisualizeException(
+                "esc pressed");
     }
 
 private:
@@ -104,12 +129,7 @@ public:
         }
 
         cv::imshow("OpenCV heart rate visualizer", image);
-//        cv::moveWindow("OpenCV heart rate visualizer", 0, 0);
-
-        if (cv::waitKey(1) == 27)
-        {
-            throw hrm::HeartRateException("esc pressed");
-        }
+        if (cv::waitKey(1) == 27) throw hrm::HeartRateException("esc pressed");
     }
 };
 
@@ -123,19 +143,13 @@ public:
     {
     }
 
-    virtual void drawFrame(hrm::FrameRGB frame) throw (hrm::DrawError)
+    virtual void drawFrame(hrm::FrameRGB frame) throw (hrm::HRDrawException)
     {
-
         cv::Mat image(frame.getFormat().rect._rows,
                 frame.getFormat().rect._cols, CV_8UC3, frame.getData());
 
         cv::imshow("OpenCV RGB frame drawer", image);
-//        cv::moveWindow("OpenCV RGB frame drawer", 640, 0);
-
-        if (cv::waitKey(1) == 27)
-        {
-            throw hrm::DrawError("esc pressed");
-        }
+        if (cv::waitKey(1) == 27) throw hrm::HRDrawException("esc pressed");
     }
 };
 
@@ -147,6 +161,8 @@ int main(int argc, const char *argv[])
 
     try
     {
+        OpenCvHeartRateVisualizer vis;
+
         auto rgbfs = make_shared<PNGDataBase2RGBFrameSource>("../data/test_data/test_db");
 
         auto hrg = make_shared<RGBHeartRateGenerator>(rgbfs, make_shared<OpenCVRGBFrameDrawer>());
@@ -159,11 +175,8 @@ int main(int argc, const char *argv[])
 
         HeartRateCounter hrc(hrg, hrr, hrn, hrv);
 
+        vis.start();
         hrc.run();
-
-//        cv::Mat image = cv::imread("../data/test_data/test_db/data_1.png");
-//        cv::imshow("image", image);
-//        cv::waitKey(-1);
     }
     catch (const std::exception& e)
     {
