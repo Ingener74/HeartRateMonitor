@@ -12,16 +12,16 @@
 
 namespace hrm {
 
-#define CHECK(condition, error_message){             \
-    if(condition)                                    \
-        throw DrawError((                            \
-        format("runtime error: %1%") % error_message \
+#define CHECK(condition, error_message){                                       \
+    if(condition)                                                              \
+        throw HRDrawException((                                                \
+        format("runtime error: %1%") % error_message                           \
         ).str());}
 
-ImageViewFrameDrawer::ImageViewFrameDrawer(JNIEnv * jniEnv, jobject object_self,
-        const std::string& methodName) :
-        _isError(false), _javaVM(nullptr), _object_global_self(nullptr), _method_self_drawBitmap(
-                nullptr) {
+ImageViewFrameDrawer::ImageViewFrameDrawer(
+        JNIEnv * jniEnv, jobject object_self, const std::string& methodName) :
+        _isError(false), _javaVM(nullptr), _object_global_self(nullptr),
+        _method_self_drawBitmap(nullptr) {
 
     jint res = jniEnv->GetJavaVM(&_javaVM);
     CHECK(res != JNI_OK, "can't get java vm");
@@ -42,14 +42,14 @@ ImageViewFrameDrawer::ImageViewFrameDrawer(JNIEnv * jniEnv, jobject object_self,
 ImageViewFrameDrawer::~ImageViewFrameDrawer() {
 }
 
-void ImageViewFrameDrawer::drawFrame(FrameRGB frame) throw (DrawError) {
+void ImageViewFrameDrawer::drawFrame(FrameRGB frame) throw (HRDrawException) {
     if (!frame) {
-        HeartRateTools::instance()->getLog()->ERROR("image is empty");
+        HRM_ERROR("image is empty");
         return;
     }
 
     if (_isError) {
-        HeartRateTools::instance()->getLog()->ERROR("is error");
+        HRM_ERROR("is error");
         return;
     }
 
