@@ -18,7 +18,7 @@ public:
             const std::string& methodName);
     virtual ~ImageViewFrameDrawer();
 
-    virtual void drawFrame(FrameRGB frame) throw (DrawError);
+    virtual void drawFrame(FrameRGB frame) throw (HRDrawException);
 private:
     bool _isError;
 
