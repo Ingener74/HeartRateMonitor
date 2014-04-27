@@ -16,7 +16,7 @@ MockHeartRateFrequencyVisualizer::MockHeartRateFrequencyVisualizer() {
 MockHeartRateFrequencyVisualizer::~MockHeartRateFrequencyVisualizer() {
 }
 
-void MockHeartRateFrequencyVisualizer::visualize(const FrequencyGraph& graph)
+void MockHeartRateFrequencyVisualizer::visualize(const HrmFrequencyGraph& graph)
         throw (HRVisualizeException) {
 }
 

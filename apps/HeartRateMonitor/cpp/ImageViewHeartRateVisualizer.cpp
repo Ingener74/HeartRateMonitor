@@ -49,8 +49,8 @@ ImageViewHeartRateVisualizer::~ImageViewHeartRateVisualizer() {
 }
 
 void ImageViewHeartRateVisualizer::visualizeHeartRate(
-        MeasurementGraph heartRateMeasuredGraph) {
-
+        HrmMeasurementGraph heartRateMeasuredGraph) throw (HRVisualizeException)
+{
     if(_isError){
         HeartRateTools::instance()->getLog()->ERROR("is error");
         return;
@@ -74,25 +74,40 @@ void ImageViewHeartRateVisualizer::visualizeHeartRate(
         }
     }
 
-    Measurement
-        f = heartRateMeasuredGraph.front(),
-        l = heartRateMeasuredGraph.back();
+    auto
+    f = heartRateMeasuredGraph.front(),
+    l = heartRateMeasuredGraph.back();
 
-    TimeStamp allTime = l.get<0>() - f.get<0>();
+    auto allTime = l.timeStamp - f.timeStamp;
+
+    auto
+    maxV = std::numeric_limits<hrm::HrmMeasurement::Value>::min(),
+    minV = std::numeric_limits<hrm::HrmMeasurement::Value>::max();
+
+    for(const auto& m: heartRateMeasuredGraph){
+        maxV = std::max(m.value, maxV);
+        minV = std::min(m.value, minV);
+    }
+
+    auto valueDiff = maxV - minV;
+
+    maxV += valueDiff * .1;
+    minV -= valueDiff * .1;
+    valueDiff = maxV - minV;
 
     for (int i = 0, imax = heartRateMeasuredGraph.size() - 1; i < imax; ++i) {
-        Measurement
-            m1 = heartRateMeasuredGraph[i],
-            m2 = heartRateMeasuredGraph[i + 1];
+        auto
+        m1 = heartRateMeasuredGraph[i],
+        m2 = heartRateMeasuredGraph[i + 1];
 
         line(testImage,
                 Point(
-                        max<int>(0, min<int>(cols * (m1.get<0>() - f.get<0>()) / allTime, cols)),
-                        max<int>(0, min<int>(rows * m1.get<1>(), rows))
+                        max<int>(0, min<int>(cols * (m1.timeStamp - f.timeStamp) / allTime, cols)),
+                        max<int>(0, min<int>(rows * (m1.value - minV) / valueDiff, rows))
                 ),
                 Point(
-                        max<int>(0, min<int>(cols * (m2.get<0>() - f.get<0>()) / allTime, cols)),
-                        max<int>(0, min<int>(rows * m2.get<1>(), rows))
+                        max<int>(0, min<int>(cols * (m2.timeStamp - f.timeStamp) / allTime, cols)),
+                        max<int>(0, min<int>(rows * (m2.value - minV) / valueDiff, rows))
                 ),
                 {255, 0, 0});
     }

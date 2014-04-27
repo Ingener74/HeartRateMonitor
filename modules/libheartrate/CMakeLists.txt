@@ -10,6 +10,7 @@ set(SOURCES
     src/RGBFrameSource.cpp
     src/HeartRateCounter.cpp
     src/RGBHeartRateGenerator.cpp
+    src/Types.cpp
 
     src/mocks/MockHeartRateVisualizer.cpp
     src/mocks/MockHeartRateGenerator.cpp

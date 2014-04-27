@@ -20,11 +20,13 @@ public:
     FFTWHeartRateRecognizer(IHeartRateFrequencyVisualizer::Ptr hrFreqVisualizer);
     virtual ~FFTWHeartRateRecognizer();
 
-    virtual HeartRateValue recognizeHeartRateValue(
-            RawMeasurementGraph rawMeasGraph) throw (HRRecognitionException);
+    virtual HrmHeartRate recognizeHeartRateValue(HrmMeasurement rawMeas)
+            throw (HRRecognitionException);
 
 private:
     IHeartRateFrequencyVisualizer::Ptr _hrFreqVisualizer;
+
+    std::vector<double> _samples;
 };
 
 } /* namespace hrm */

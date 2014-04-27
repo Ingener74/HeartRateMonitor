@@ -9,22 +9,26 @@
 #define IHEARTRATERECOGNIZER_H_
 
 #include <heartrate/types/Exception.h>
+#include <heartrate/types/Types.h>
 #include <heartrate/HeartRateCommon.h>
-#include <heartrate/HeartBeatRateTypes.h>
 
-namespace hrm {
+namespace hrm
+{
 
-class IHeartRateRecognizer {
+class IHeartRateRecognizer
+{
 public:
-    typedef shared_ptr<IHeartRateRecognizer> Ptr;
+    using Ptr = shared_ptr<IHeartRateRecognizer>;
 
-    virtual ~IHeartRateRecognizer() {
+    virtual ~IHeartRateRecognizer()
+    {
     }
 
-    virtual HeartRateValue recognizeHeartRateValue(
-            RawMeasurementGraph rawMeasGraph) throw (HRRecognitionException) = 0;
+    virtual HrmHeartRate recognizeHeartRateValue(HrmMeasurement rawMeas)
+            throw (HRRecognitionException) = 0;
 protected:
-    IHeartRateRecognizer() {
+    IHeartRateRecognizer()
+    {
     }
 };
 

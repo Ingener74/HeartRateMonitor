@@ -18,7 +18,8 @@ public:
     MockHeartRateVisualizer();
     virtual ~MockHeartRateVisualizer();
 
-    virtual void visualizeHeartRate(MeasurementGraph heartRateMeasuredGraph);
+    virtual void visualizeHeartRate(HrmMeasurementGraph heartRateMeasuredGraph)
+                throw (HRVisualizeException);
 };
 
 } /* namespace mock */

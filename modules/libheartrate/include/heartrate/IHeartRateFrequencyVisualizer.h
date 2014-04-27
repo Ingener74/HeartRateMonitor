@@ -8,23 +8,26 @@
 #ifndef IHEARTRATEFREQUENCYVISUALIZER_H_
 #define IHEARTRATEFREQUENCYVISUALIZER_H_
 
-#include <heartrate/HeartRateCommon.h>
 #include <heartrate/types/Exception.h>
-#include <heartrate/HeartBeatRateTypes.h>
+#include <heartrate/types/Types.h>
 
-namespace hrm {
+namespace hrm
+{
 
-class IHeartRateFrequencyVisualizer {
+class IHeartRateFrequencyVisualizer
+{
 public:
     typedef shared_ptr<IHeartRateFrequencyVisualizer> Ptr;
 
-    virtual ~IHeartRateFrequencyVisualizer() {
+    virtual ~IHeartRateFrequencyVisualizer()
+    {
     }
 
-    virtual void visualize(const FrequencyGraph& graph)
+    virtual void visualize(const HrmFrequencyGraph& graph)
             throw (HRVisualizeException) = 0;
 protected:
-    IHeartRateFrequencyVisualizer() {
+    IHeartRateFrequencyVisualizer()
+    {
     }
 };
 

@@ -8,10 +8,9 @@
 #ifndef RGBHEARTRATEGENERATOR_H_
 #define RGBHEARTRATEGENERATOR_H_
 
-#include <heartrate/HeartBeatRateTypes.h>
 #include <heartrate/IRGBFrameSource.h>
-#include <heartrate/IHeartRateGenerator.h>
 #include <heartrate/IRGBFrameDrawer.h>
+#include <heartrate/IHeartRateGenerator.h>
 
 namespace hrm {
 
@@ -22,12 +21,11 @@ public:
             IRGBFrameDrawer::Ptr rgbFrameDrawer);
     virtual ~RGBHeartRateGenerator();
 
-    virtual RawMeasurementGraph getHeartRate();
+    virtual HrmMeasurement getHeartMeasurementValue()
+                throw (HRGenerateException);
 
 private:
     IRGBFrameSource::Ptr _rgbfs;
-    RawMeasurementGraph _rawGraph;
-
     IRGBFrameDrawer::Ptr _rgbfd;
 };
 

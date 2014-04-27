@@ -15,6 +15,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include <iostream>
+#include <tuple>
 #include <limits>
 #include <cmath>
 #include <vector>

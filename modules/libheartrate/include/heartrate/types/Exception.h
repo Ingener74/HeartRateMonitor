@@ -47,6 +47,18 @@ public:
     }
 };
 
+class HRGenerateException: public HeartRateException
+{
+public:
+    HRGenerateException(const std::string& mes) :
+            HeartRateException(mes)
+    {
+    }
+    virtual ~HRGenerateException() throw ()
+    {
+    }
+};
+
 class HRNumberException: public HeartRateException
 {
 public:

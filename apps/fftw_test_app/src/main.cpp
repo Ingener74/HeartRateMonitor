@@ -107,6 +107,26 @@ int main(int argc, char **argv)
 
         const double sample_rate = 44100 /* sample per second */;
 
+        /*
+         * samples per minute
+         *
+         * 30 fps = 30 frames per second
+         *
+         * 60 sec = 1 min
+         *
+         * 30 [fps] * 60[second]  = frames per minute = 900 fpm [ frames per minute ]
+         *
+         * ~= 900 samples per minute [ spm ]
+         *
+         * {30 [fps], 60 [fps], 120 [fps]} * 60 [sec] = {900 [fpm] - 7200 [fpm]}
+         *
+         * 1 [fpm] = 1 [min] / 7200 [sample] = 60 [sec] / 7200 [sample] = 60 * 1000 [ms] / 7200 [sample] = 60000 [ms] / 7200 [sample] = 8 [ms / sample]
+         *
+         *
+         */
+
+
+
         const double frequency = sample_rate / 2 /* Hz */;
 
         const double freq_prec = frequency / N; /* Hz in one dft output bin */
@@ -121,7 +141,7 @@ int main(int argc, char **argv)
         cout << "freq prec         = " << setw(20) << freq_prec   << " Hz in one fft output bin" << endl;
         cout << "current frequency = " << setw(20) << cur_freq    << " Hz" << endl;
 
-        vector<double> in(N), out(N);
+        vector<double> in(N), out(N / 2);
         double f1 = -M_PI, f2 = M_PI, fs = (f2 - f1) / N;
 
         for (int i = 0; i < N; ++i)
@@ -154,7 +174,7 @@ int main(int argc, char **argv)
         draw_vector(in, input, cv::Scalar(255, 0, 0));
 
         double ds = 0.0;
-        for (int i = 0; i < N; ++i)
+        for (int i = 0; i < N / 2; ++i)
         {
             out[i] = sqrt(fftout.get()[i][0] * fftout.get()[i][0] + fftout.get()[i][1] * fftout.get()[i][1]);
 

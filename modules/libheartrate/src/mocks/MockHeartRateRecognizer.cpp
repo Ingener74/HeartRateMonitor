@@ -16,11 +16,12 @@ MockHeartRateRecognizer::MockHeartRateRecognizer() {
 MockHeartRateRecognizer::~MockHeartRateRecognizer() {
 }
 
-HeartRateValue MockHeartRateRecognizer::recognizeHeartRateValue(
-        RawMeasurementGraph rawMeasGraph) throw (HRRecognitionException) {
-
-    return 80.0;
+HrmHeartRate hrm::mock::MockHeartRateRecognizer::recognizeHeartRateValue(
+        HrmMeasurement rawMeas) throw (HRRecognitionException)
+{
+    return {HrmHeartRate::State::Valid, 80};
 }
 
 } /* namespace mock */
 } /* namespace hrm */
+

@@ -20,9 +20,10 @@ public:
     }
     virtual ~MockHeartRateNumber(){}
 
-    virtual void setHeartRateNumber(HeartRateValue heartRateNumber) {
+    virtual void setHeartRate(HrmHeartRate heartRate)
+            throw (HRNumberException){
         HRM_INFO((
-                format("Heart rate = %1% beats per minute") % heartRateNumber
+                format("Heart rate = %1% beats per minute") % heartRate.value
                 ).str());
     }
 };
