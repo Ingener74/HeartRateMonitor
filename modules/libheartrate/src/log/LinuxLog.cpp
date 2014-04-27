@@ -24,7 +24,7 @@ void LinuxLog::INFO(const std::string& message) {
     std::cout << message << std::endl;
 }
 
-void LinuxLog::ERROR(const std::string& message) {
+void LinuxLog::ERR(const std::string& message) {
     std::cout << message << std::endl;
 }
 
@@ -40,7 +40,7 @@ void LinuxLog::INFO(const basic_format<char>& messages) {
     std::cout << messages << std::endl;
 }
 
-void LinuxLog::ERROR(const basic_format<char>& messages) {
+void LinuxLog::ERR(const basic_format<char>& messages) {
     std::cerr << messages << std::endl;
 }
 

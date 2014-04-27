@@ -13,7 +13,7 @@
 
 #define HRM_DEBUG(mes) hrm::HeartRateTools::instance()->getLog()->DEBUG(mes);
 #define HRM_INFO(mes) hrm::HeartRateTools::instance()->getLog()->INFO(mes);
-#define HRM_ERROR(mes) hrm::HeartRateTools::instance()->getLog()->ERROR(mes);
+#define HRM_ERROR(mes) hrm::HeartRateTools::instance()->getLog()->ERR(mes);
 #define HRM_WARN(mes) hrm::HeartRateTools::instance()->getLog()->WARN(mes);
 
 namespace hrm {

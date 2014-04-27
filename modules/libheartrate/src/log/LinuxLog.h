@@ -19,12 +19,12 @@ public:
 
     virtual void DEBUG(const std::string& message);
     virtual void INFO(const std::string& message);
-    virtual void ERROR(const std::string& message);
+    virtual void ERR(const std::string& message);
     virtual void WARN(const std::string& message);
 
     virtual void DEBUG(const basic_format<char>& messages);
     virtual void INFO(const basic_format<char>& messages);
-    virtual void ERROR(const basic_format<char>& messages);
+    virtual void ERR(const basic_format<char>& messages);
     virtual void WARN(const basic_format<char>& messages);
 
 private:
