@@ -38,6 +38,8 @@ private:
     IHeartRateNumber::Ptr _hrn;
     IHeartRateVisualizer::Ptr _hrv;
 
+    HrmMeasurementGraph _measGraph;
+
     boost::thread _thread;
     void threadFunc(void);
 };

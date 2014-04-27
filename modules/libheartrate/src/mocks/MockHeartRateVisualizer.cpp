@@ -7,18 +7,24 @@
 
 #include <heartrate/mocks/MockHeartRateVisualizer.h>
 
-namespace hrm {
-namespace mock {
+namespace hrm
+{
+namespace mock
+{
 
-MockHeartRateVisualizer::MockHeartRateVisualizer() {
+MockHeartRateVisualizer::MockHeartRateVisualizer()
+{
 }
 
-MockHeartRateVisualizer::~MockHeartRateVisualizer() {
+MockHeartRateVisualizer::~MockHeartRateVisualizer()
+{
 }
 
 void MockHeartRateVisualizer::visualizeHeartRate(
-        MeasurementGraph heartRateMeasuredGraph) {
+        HrmMeasurementGraph heartRateMeasuredGraph) throw (HRVisualizeException)
+{
 }
 
 } /* namespace mock */
 } /* namespace hrm */
+

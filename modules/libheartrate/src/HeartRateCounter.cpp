@@ -23,9 +23,9 @@ HeartRateCounter::HeartRateCounter(
 
 HeartRateCounter::~HeartRateCounter()
 {
-    HRM_DEBUG("HeartRateCounter::~HeartRateCounter()");
     _thread.interrupt();
     _thread.join();
+    HRM_DEBUG("HeartRateCounter::~HeartRateCounter()");
 }
 
 bool HeartRateCounter::start()
@@ -37,35 +37,29 @@ bool HeartRateCounter::start()
 
 void HeartRateCounter::calcHeartRate()
 {
-    RawMeasurementGraph hrRawGraph = _hrg->getHeartRate();
-    MeasurementGraph hrGraph;
-    HeartRateValue hrNumber = 70;
+    HRM_DEBUG("calc heart rate 1");
 
+    HrmMeasurement hrMeasurement = _hrg->getHeartMeasurementValue();
+    HRM_DEBUG("calc heart rate 2");
+
+    HrmHeartRate heartRate = {HrmHeartRate::State::Valid, 70};
     /* calculate heart rate */
+    HRM_DEBUG("calc heart rate 3");
 
-    hrNumber = _hrr->recognizeHeartRateValue(hrRawGraph);
-
-    NormalizedMeasurementValue
-    minValue = std::numeric_limits<NormalizedMeasurementValue>().max(),
-    maxValue = std::numeric_limits<NormalizedMeasurementValue>().min();
-
-    for (const RawMeasurement& r : hrRawGraph)
-    {
-        minValue = std::min(r.get<1>(), minValue);
-        maxValue = std::max(r.get<1>(), maxValue);
+    _measGraph.push_back(hrMeasurement);
+    if(_measGraph.size() > 64){
+        _measGraph.pop_front();
     }
+    HRM_DEBUG("calc heart rate 4");
 
-    NormalizedMeasurementValue diff = maxValue - minValue;
+    heartRate = _hrr->recognizeHeartRateValue(hrMeasurement);
+    HRM_DEBUG("calc heart rate 5");
 
-    for (const RawMeasurement& r : hrRawGraph)
-    {
-        hrGraph.push_back(
-                Measurement(r.get<0>(),
-                        ((r.get<1>() - minValue) / diff), 0));
-    }
+    _hrv->visualizeHeartRate(_measGraph);
+    HRM_DEBUG("calc heart rate 6");
 
-    _hrn->setHeartRateNumber(hrNumber);
-    _hrv->visualizeHeartRate(hrGraph);
+    _hrn->setHeartRate(heartRate);
+    HRM_DEBUG("calc heart rate 7");
 }
 
 void HeartRateCounter::threadFunc(void)
@@ -81,6 +75,7 @@ void HeartRateCounter::threadFunc(void)
     }
     catch (const boost::thread_interrupted& e)
     {
+        HRM_DEBUG("thread interupted");
     }
     catch (const std::runtime_error& e)
     {

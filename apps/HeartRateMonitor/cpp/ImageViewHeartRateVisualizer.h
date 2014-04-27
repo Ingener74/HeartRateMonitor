@@ -20,7 +20,8 @@ public:
             const std::string& methodName);
     virtual ~ImageViewHeartRateVisualizer();
 
-    virtual void visualizeHeartRate(MeasurementGraph heartRateMeasuredGraph);
+    virtual void visualizeHeartRate(HrmMeasurementGraph heartRateMeasuredGraph)
+            throw (HRVisualizeException);
 
 private:
     bool _isError;

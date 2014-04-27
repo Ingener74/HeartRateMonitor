@@ -10,16 +10,19 @@
 
 #include <heartrate/IHeartRateRecognizer.h>
 
-namespace hrm {
-namespace mock {
+namespace hrm
+{
+namespace mock
+{
 
-class MockHeartRateRecognizer: public IHeartRateRecognizer {
+class MockHeartRateRecognizer: public IHeartRateRecognizer
+{
 public:
     MockHeartRateRecognizer();
     virtual ~MockHeartRateRecognizer();
 
-    virtual HeartRateValue recognizeHeartRateValue(
-            RawMeasurementGraph rawMeasGraph) throw (HRRecognitionException);
+    virtual HrmHeartRate recognizeHeartRateValue(HrmMeasurement rawMeas)
+            throw (HRRecognitionException);
 };
 
 } /* namespace mock */

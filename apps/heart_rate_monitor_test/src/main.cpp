@@ -51,7 +51,7 @@ public:
     {
     }
 
-    virtual void visualize(const hrm::FrequencyGraph& graph)
+    virtual void visualize(const hrm::HrmFrequencyGraph& graph)
             throw (hrm::HRVisualizeException)
     {
 
@@ -84,6 +84,8 @@ public:
 
             cv::line(image, p1, p2, cv::Scalar(0, 255, 0), 1);
         }
+
+        cv::namedWindow("freq vis", CV_WINDOW_AUTOSIZE);
         cv::imshow("freq vis", image);
         if (cv::waitKey(1) == 27) throw hrm::HRVisualizeException(
                 "esc pressed");
@@ -102,32 +104,60 @@ public:
     {
     }
 
-    virtual void visualizeHeartRate(hrm::MeasurementGraph heartRateMeasuredGraph)
+    virtual void visualizeHeartRate(hrm::HrmMeasurementGraph heartRateMeasuredGraph)
+            throw (hrm::HRVisualizeException)
     {
+        if(heartRateMeasuredGraph.size() < 2)
+            return;
 
         cv::Mat image(480, 640, CV_8UC3, cv::Scalar(0, 0, 0));
 
-        hrm::Measurement f = heartRateMeasuredGraph.front(), l =
-                heartRateMeasuredGraph.back();
+        auto
+        f = heartRateMeasuredGraph.front(),
+        l = heartRateMeasuredGraph.back();
 
-        hrm::TimeStamp allTime = l.get<0>() - f.get<0>();
+        auto allTime = l.timeStamp - f.timeStamp;
+
+        auto
+        maxV = std::numeric_limits<hrm::HrmMeasurement::Value>::min(),
+        minV = std::numeric_limits<hrm::HrmMeasurement::Value>::max();
+
+        for(const auto& m: heartRateMeasuredGraph){
+            maxV = std::max(m.value, maxV);
+            minV = std::min(m.value, minV);
+        }
+
+        auto valueDiff = maxV - minV;
+
+        maxV += valueDiff * .1;
+        minV -= valueDiff * .1;
+        valueDiff = maxV - minV;
 
         for (int i = 0, imax = heartRateMeasuredGraph.size() - 1; i < imax; ++i)
         {
-            hrm::Measurement
+            auto
             m1 = heartRateMeasuredGraph[i],
             m2 = heartRateMeasuredGraph[i + 1];
 
-            cv::Point p1(
-                    std::max<int>(0, std::min<int>(image.cols * (m1.get<0>() - f.get<0>()) / allTime, image.cols)),
-                    std::max<int>(0, std::min<int>(image.rows * m1.get<1>(), image.rows)));
-            cv::Point p2(
-                    std::max<int>(0, std::min<int>(image.cols * (m2.get<0>() - f.get<0>()) / allTime, image.cols)),
-                    std::max<int>(0, std::min<int>(image.rows * m2.get<1>(), image.rows)));
+            auto x1 = std::max<int>(0, std::min<int>(image.cols * (m1.timeStamp - f.timeStamp) / allTime, image.cols));
+            auto y1 = std::max<int>(0, std::min<int>(image.rows * (m1.value - minV)/ valueDiff, image.rows));
 
-            cv::line(image, p1, p2, cv::Scalar(255, 0, 0));
+            auto x2 = std::max<int>(0, std::min<int>(image.cols * (m2.timeStamp - f.timeStamp) / allTime, image.cols));
+            auto y2 = std::max<int>(0, std::min<int>(image.rows * (m2.value - minV)/ valueDiff, image.rows));
+
+            cv::Point p1(x1, y1);
+            cv::Point p2(x2, y2);
+
+            cv::line(image, p1, p2, cv::Scalar(0, 0, 255), 3);
+
+//            int x = std::max<int>(0, std::min<int>(image.cols * (m1.timeStamp - f.timeStamp) / allTime, image.cols));
+//            cv::Point
+//            p3(x, 0),
+//            p4(x, image.rows - 1);
+//            cv::line(image, p3, p4, cv::Scalar(0,255,0));
         }
 
+        cv::namedWindow("OpenCV heart rate visualizer", CV_WINDOW_AUTOSIZE);
         cv::imshow("OpenCV heart rate visualizer", image);
         if (cv::waitKey(1) == 27) throw hrm::HeartRateException("esc pressed");
     }
@@ -148,6 +178,7 @@ public:
         cv::Mat image(frame.getFormat().rect._rows,
                 frame.getFormat().rect._cols, CV_8UC3, frame.getData());
 
+        cv::namedWindow("OpenCV RGB frame drawer", CV_WINDOW_AUTOSIZE);
         cv::imshow("OpenCV RGB frame drawer", image);
         if (cv::waitKey(1) == 27) throw hrm::HRDrawException("esc pressed");
     }

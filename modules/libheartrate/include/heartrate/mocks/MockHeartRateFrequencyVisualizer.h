@@ -11,15 +11,18 @@
 #include <heartrate/HeartRateCommon.h>
 #include <heartrate/IHeartRateFrequencyVisualizer.h>
 
-namespace hrm {
-namespace mock {
+namespace hrm
+{
+namespace mock
+{
 
-class MockHeartRateFrequencyVisualizer: public IHeartRateFrequencyVisualizer {
+class MockHeartRateFrequencyVisualizer: public IHeartRateFrequencyVisualizer
+{
 public:
     MockHeartRateFrequencyVisualizer();
     virtual ~MockHeartRateFrequencyVisualizer();
 
-    virtual void visualize(const FrequencyGraph& graph)
+    virtual void visualize(const HrmFrequencyGraph& graph)
             throw (HRVisualizeException);
 };
 

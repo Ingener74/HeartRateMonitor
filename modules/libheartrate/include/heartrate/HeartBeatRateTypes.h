@@ -5,8 +5,8 @@
  *      Author: pavel
  */
 
-#ifndef TYPES_H_
-#define TYPES_H_
+#ifndef HEARTBEATTYPES_H_
+#define HEARTBEATTYPES_H_
 
 #include <heartrate/HeartRateCommon.h>
 
@@ -17,27 +17,6 @@ using unique_lock = boost::unique_lock<Mutex>;
 
 typedef double TimeStamp;
 typedef double ElapsedTime;
-
-typedef double  NormalizedMeasurementValue;
-typedef int32_t HeartRateValue;
-
-typedef int64_t HeartBeatID;
-
-typedef boost::tuple<TimeStamp, NormalizedMeasurementValue>
-    RawMeasurement;
-typedef boost::tuple<TimeStamp, NormalizedMeasurementValue, HeartBeatID>
-    Measurement;
-
-using HrRawMeasurement = double;
-using HrMeasurementSampleRate = double;
-using HrRawMeasurementGraph =
-                tuple<HrMeasurementSampleRate, std::deque<HrRawMeasurement> >;
-
-typedef std::deque<RawMeasurement> RawMeasurementGraph;
-typedef std::deque<Measurement>    MeasurementGraph;
-
-typedef double Frequency;
-typedef std::vector<Frequency>     FrequencyGraph;
 
 class TimeCounter {
 public:

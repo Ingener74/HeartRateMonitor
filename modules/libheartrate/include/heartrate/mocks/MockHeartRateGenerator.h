@@ -18,7 +18,8 @@ public:
     MockHeartRateGenerator();
     virtual ~MockHeartRateGenerator();
 
-    virtual RawMeasurementGraph getHeartRate();
+    virtual HrmMeasurement getHeartMeasurementValue()
+            throw (HRGenerateException);
 };
 
 } /* namespace mock */

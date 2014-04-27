@@ -17,16 +17,14 @@ MockHeartRateGenerator::MockHeartRateGenerator() {
 MockHeartRateGenerator::~MockHeartRateGenerator() {
 }
 
-RawMeasurementGraph MockHeartRateGenerator::getHeartRate() {
-
+HrmMeasurement MockHeartRateGenerator::getHeartMeasurementValue()
+        throw (HRGenerateException)
+{
     this_thread::sleep(posix_time::milliseconds(30)); /* artificial delay */
 
-    RawMeasurementGraph heartRateRawGraph;
-    for (int i = 0; i < 60; ++i) {
-        heartRateRawGraph.push_back(RawMeasurement(i * 1.0, i * 0.2));
-    }
-    return heartRateRawGraph;
+    return {0.0, 0.0};
 }
 
 } /* namespace mock */
 } /* namespace hrm */
+

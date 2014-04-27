@@ -8,24 +8,30 @@
 #ifndef IHEARTRATEGENERATOR_H_
 #define IHEARTRATEGENERATOR_H_
 
-#include <heartrate/HeartBeatRateTypes.h>
+#include <heartrate/types/Exception.h>
+#include <heartrate/types/Types.h>
 
-namespace hrm {
+namespace hrm
+{
 
 typedef double HeartValue;
 
-class IHeartRateGenerator {
+class IHeartRateGenerator
+{
 public:
-	typedef shared_ptr<IHeartRateGenerator> Ptr;
+    typedef shared_ptr<IHeartRateGenerator> Ptr;
 
-	virtual ~IHeartRateGenerator() {
-	}
+    virtual ~IHeartRateGenerator()
+    {
+    }
 
-	virtual RawMeasurementGraph getHeartRate() = 0;
+    virtual HrmMeasurement getHeartMeasurementValue()
+            throw (HRGenerateException) = 0;
 
 protected:
-	IHeartRateGenerator() {
-	}
+    IHeartRateGenerator()
+    {
+    }
 };
 
 }  // namespace hrm
