@@ -25,7 +25,6 @@ HeartRateCounter::~HeartRateCounter()
 {
     _thread.interrupt();
     _thread.join();
-    HRM_DEBUG("HeartRateCounter::~HeartRateCounter()");
 }
 
 bool HeartRateCounter::start()
@@ -37,29 +36,21 @@ bool HeartRateCounter::start()
 
 void HeartRateCounter::calcHeartRate()
 {
-    HRM_DEBUG("calc heart rate 1");
-
     HrmMeasurement hrMeasurement = _hrg->getHeartMeasurementValue();
-    HRM_DEBUG("calc heart rate 2");
 
     HrmHeartRate heartRate = {HrmHeartRate::State::Valid, 70};
+
     /* calculate heart rate */
-    HRM_DEBUG("calc heart rate 3");
 
     _measGraph.push_back(hrMeasurement);
     if(_measGraph.size() > 64){
         _measGraph.pop_front();
     }
-    HRM_DEBUG("calc heart rate 4");
 
     heartRate = _hrr->recognizeHeartRateValue(hrMeasurement);
-    HRM_DEBUG("calc heart rate 5");
 
     _hrv->visualizeHeartRate(_measGraph);
-    HRM_DEBUG("calc heart rate 6");
-
     _hrn->setHeartRate(heartRate);
-    HRM_DEBUG("calc heart rate 7");
 }
 
 void HeartRateCounter::threadFunc(void)

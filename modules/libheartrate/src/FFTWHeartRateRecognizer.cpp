@@ -63,6 +63,9 @@ HrmHeartRate hrm::FFTWHeartRateRecognizer::recognizeHeartRateValue(
 //
 //    _hrFreqVisualizer->visualize(freqGraph);
 //    fftw_destroy_plan(_fftw_plan);
+
+    std::cout << rawMeas << std::endl;
+
     return {HrmHeartRate::State::Valid, 80};
 }
 
