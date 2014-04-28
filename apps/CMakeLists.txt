@@ -1,12 +1,8 @@
 cmake_minimum_required(VERSION 2.8)
 
-if(MINGW AND NOT ANDROID)
+if(OpenCV_FOUND)
 
-    if(OpenCV_FOUND)
-
-        add_subdirectory(HeartRateMonitor_MinGW)
-
-    endif()
+    add_subdirectory(HeartRateMonitor_MinGW)
 
 endif()
 
