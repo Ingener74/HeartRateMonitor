@@ -44,12 +44,12 @@ ImageViewFrameDrawer::~ImageViewFrameDrawer() {
 
 void ImageViewFrameDrawer::drawFrame(FrameRGB frame) throw (HRDrawException) {
     if (!frame) {
-        HRM_ERROR("image is empty");
+        Log(ERR) << "image is empty";
         return;
     }
 
     if (_isError) {
-        HRM_ERROR("is error");
+        Log(ERR) << "is error";
         return;
     }
 

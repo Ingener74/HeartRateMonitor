@@ -39,7 +39,7 @@ jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativeSta
     try
     {
         TimeCounter::instance();
-        HRM_INFO("native start");
+        Log(INFO) << "native start";
 
         nv21 = make_shared<NV21FrameSource>();
 
@@ -57,12 +57,12 @@ jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativeSta
         heartRateCounter = make_shared<HeartRateCounter>(hrGenerator, hrRecog,
                 hrNumber, hrVisualizer);
 
-        HRM_INFO("native started");
+        Log(INFO) << "native started";
 
     }
     catch (const std::runtime_error& e)
     {
-        HRM_ERROR(format("runtime error in hrm native start: %1%") % e.what());
+        Log(ERR) << format("runtime error in hrm native start: %1%") % e.what();
         return false;
     }
     return heartRateCounter->start();
@@ -71,21 +71,15 @@ jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativeSta
 void Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativeStop(
         JNIEnv* JNIEnv_, jobject self)
 {
+    using namespace hrm;
     try
     {
-        HRM_DEBUG("hrm native stop 1");
-
         heartRateCounter.reset();
-
-        HRM_DEBUG("hrm native stop 2");
-
         nv21.reset();
-
-        HRM_DEBUG("hrm native stop 3");
     }
     catch (const std::exception& e)
     {
-        HRM_DEBUG(hrm::format("hrmNativeStop exception: %1%") % e.what());
+        Log(ERR) << hrm::format("hrmNativeStop exception: %1%") % e.what();
     }
 }
 
@@ -116,7 +110,7 @@ jboolean Java_com_shnayder_heartratemonitor_HeartRateMonitorPreview_hrmNativePas
     }
     catch (const std::runtime_error& e)
     {
-        HRM_ERROR(format("put frame error: %1%") % e.what());
+        hrm::Log(ERR) << format("put frame error: %1%") % e.what();
     }
     JNIEnv_->ReleaseByteArrayElements(data, imageData, 0);
     return false;

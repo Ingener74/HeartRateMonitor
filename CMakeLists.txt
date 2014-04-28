@@ -3,6 +3,15 @@ cmake_minimum_required(VERSION 2.8)
 # include modules
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_LIST_DIR}/cmake/Modules")
 
+if(MINGW)
+    message(STATUS "Build for MinGW")
+elseif(ANDROID)
+    message(STATUS "Build for Android")
+else()
+    message(STATUS "Build for Linux")
+endif()
+
+
 if(ANDROID)
 
     include(Android)
