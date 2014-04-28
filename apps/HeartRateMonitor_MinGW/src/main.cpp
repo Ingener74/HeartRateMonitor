@@ -1,5 +1,6 @@
 
 #include <iostream>
+#include <stdexcept>
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
@@ -9,13 +10,21 @@ int main(int argc, char *argv[])
 {
     using namespace std;
 
-    cv::Mat image(480, 640, CV_8UC3);
+    try
+    {
+        cout << "HeartRateMonitor" << endl;
 
-    cv::imshow("image", image);
+        cv::Mat image = cv::imread(argv[1]);
 
-    cv::waitKey();
+        cv::imshow("image", image);
 
-    cout << "HeartRateMonitor" << endl;
+        cv::waitKey();
+
+    }
+    catch (const std::exception& e)
+    {
+        cerr << "exception: " << e.what() << endl;
+    }
 
     return 0;
 }
