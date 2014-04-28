@@ -15,7 +15,7 @@ namespace hrm
 
 enum LEVEL
 {
-    DEBUG, INFO, ERROR, WARN
+    DEBUG, INFO, ERR, WARN
 };
 class Log: public std::stringstream
 {

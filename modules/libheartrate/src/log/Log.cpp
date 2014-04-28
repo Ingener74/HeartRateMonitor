@@ -26,7 +26,7 @@ Log::~Log()
     case INFO:
         HeartRateTools::instance()->getLog()->INFO(str());
         break;
-    case ERROR:
+    case ERR:
         HeartRateTools::instance()->getLog()->ERR(str());
         break;
     case WARN:
