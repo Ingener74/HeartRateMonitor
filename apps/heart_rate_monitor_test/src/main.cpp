@@ -85,7 +85,6 @@ public:
             cv::line(image, p1, p2, cv::Scalar(0, 255, 0), 1);
         }
 
-        cv::namedWindow("freq vis", CV_WINDOW_AUTOSIZE);
         cv::imshow("freq vis", image);
         if (cv::waitKey(1) == 27) throw hrm::HRVisualizeException(
                 "esc pressed");
@@ -157,7 +156,6 @@ public:
 //            cv::line(image, p3, p4, cv::Scalar(0,255,0));
         }
 
-        cv::namedWindow("OpenCV heart rate visualizer", CV_WINDOW_AUTOSIZE);
         cv::imshow("OpenCV heart rate visualizer", image);
         if (cv::waitKey(1) == 27) throw hrm::HeartRateException("esc pressed");
     }
@@ -178,7 +176,6 @@ public:
         cv::Mat image(frame.getFormat().rect._rows,
                 frame.getFormat().rect._cols, CV_8UC3, frame.getData());
 
-        cv::namedWindow("OpenCV RGB frame drawer", CV_WINDOW_AUTOSIZE);
         cv::imshow("OpenCV RGB frame drawer", image);
         if (cv::waitKey(1) == 27) throw hrm::HRDrawException("esc pressed");
     }

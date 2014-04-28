@@ -15,6 +15,7 @@
 #include <heartrate/HeartBeatRateTypes.h>
 #include <heartrate/HeartRateTools.h>
 #include <heartrate/types/Exception.h>
+#include <heartrate/Log.h>
 
 /*
  * HeartRate interfaces
