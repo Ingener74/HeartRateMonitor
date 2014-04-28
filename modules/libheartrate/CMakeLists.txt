@@ -11,7 +11,7 @@ set(SOURCES
     src/HeartRateCounter.cpp
     src/RGBHeartRateGenerator.cpp
     src/Types.cpp
-    src/Log.cpp
+    src/log/Log.cpp
 
     src/mocks/MockHeartRateVisualizer.cpp
     src/mocks/MockHeartRateGenerator.cpp
