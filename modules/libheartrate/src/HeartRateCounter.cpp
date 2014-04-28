@@ -70,11 +70,11 @@ void HeartRateCounter::threadFunc(void)
     }
     catch (const std::runtime_error& e)
     {
-        Log(ERROR) << format("runtime error in heart rate counter: %1%") % e.what();
+        Log(ERR) << format("runtime error in heart rate counter: %1%") % e.what();
     }
     catch (...)
     {
-        Log(ERROR) << "fatal error in heart rate counter";
+        Log(ERR) << "fatal error in heart rate counter";
     }
 }
 
