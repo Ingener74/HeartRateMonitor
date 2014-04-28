@@ -25,14 +25,16 @@ public:
     static Ptr instance();
     virtual ~HeartRateTools();
 
-    void setLog(ILog::Ptr log);
     ILog::Ptr getLog();
+
+    void pushLog(ILog::Ptr log);
+    void popLog();
 
     static int32_t rountUpToNextPowerOfTwo(int32_t x);
 
 private:
     HeartRateTools();
-    ILog::Ptr _log;
+    std::list<ILog::Ptr> _log;
 };
 
 }  // namespace hrm

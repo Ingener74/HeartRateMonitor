@@ -9,6 +9,7 @@
 #define MOCKHEARTRATENUMBER_H_
 
 #include <heartrate/IHeartRateNumber.h>
+#include <heartrate/Log.h>
 
 namespace hrm {
 namespace mock {
@@ -16,15 +17,13 @@ namespace mock {
 class MockHeartRateNumber: public IHeartRateNumber {
 public:
     MockHeartRateNumber(){
-        HRM_DEBUG("MockHeartRateNumber()");
     }
     virtual ~MockHeartRateNumber(){}
 
     virtual void setHeartRate(HrmHeartRate heartRate)
             throw (HRNumberException){
-        HRM_INFO((
-                format("Heart rate = %1% beats per minute") % heartRate.value
-                ).str());
+        Log(INFO) << format("Heart rate = %1% beats per minute") %
+                heartRate.value;
     }
 };
 

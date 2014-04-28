@@ -23,12 +23,20 @@ HeartRateTools::Ptr HeartRateTools::instance() {
 HeartRateTools::~HeartRateTools() {
 }
 
-void hrm::HeartRateTools::setLog(ILog::Ptr log) {
-    _log = log;
+ILog::Ptr HeartRateTools::getLog() {
+    return _log.back();
 }
 
-ILog::Ptr HeartRateTools::getLog() {
-    return _log;
+void hrm::HeartRateTools::pushLog(ILog::Ptr log)
+{
+    _log.push_back(log);
+}
+
+void hrm::HeartRateTools::popLog()
+{
+    if(_log.size() > 1){
+        _log.pop_back();
+    }
 }
 
 int32_t HeartRateTools::rountUpToNextPowerOfTwo(int32_t x) {
@@ -45,9 +53,9 @@ int32_t HeartRateTools::rountUpToNextPowerOfTwo(int32_t x) {
 
 HeartRateTools::HeartRateTools() {
 #ifdef ANDROID
-    _log = ILog::Ptr(new AndroidLog());
+    _log.push_back(ILog::Ptr(new AndroidLog()));
 #else
-    _log = ILog::Ptr(new LinuxLog());
+    _log.push_back(ILog::Ptr(new LinuxLog()));
 #endif
 }
 
