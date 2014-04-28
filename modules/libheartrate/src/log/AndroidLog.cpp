@@ -23,7 +23,7 @@ void AndroidLog::INFO(const std::string& message) {
     __android_log_print(ANDROID_LOG_INFO, HRM_TAG, "%s", message.c_str());
 }
 
-void AndroidLog::ERROR(const std::string& message) {
+void AndroidLog::ERR(const std::string& message) {
     __android_log_print(ANDROID_LOG_ERROR, HRM_TAG, "%s", message.c_str());
 }
 
@@ -39,7 +39,7 @@ void AndroidLog::INFO(const basic_format<char>& messages) {
     __android_log_print(ANDROID_LOG_INFO, HRM_TAG, "%s", messages.str().c_str());
 }
 
-void AndroidLog::ERROR(const basic_format<char>& messages) {
+void AndroidLog::ERR(const basic_format<char>& messages) {
     __android_log_print(ANDROID_LOG_ERROR, HRM_TAG, "%s", messages.str().c_str());
 }
 

@@ -16,7 +16,7 @@ using std::min;
 using std::max;
 
 #define CHECK(condition, error_message){ if(_isError)return; if (condition) { \
-    HeartRateTools::instance()->getLog()->ERROR(error_message); \
+    HeartRateTools::instance()->getLog()->ERR(error_message); \
     _isError = true; return;} }
 
 ImageViewHeartRateVisualizer::ImageViewHeartRateVisualizer(JNIEnv * jniEnv,
@@ -52,7 +52,7 @@ void ImageViewHeartRateVisualizer::visualizeHeartRate(
         HrmMeasurementGraph heartRateMeasuredGraph) throw (HRVisualizeException)
 {
     if(_isError){
-        HeartRateTools::instance()->getLog()->ERROR("is error");
+        HeartRateTools::instance()->getLog()->ERR("is error");
         return;
     }
 
