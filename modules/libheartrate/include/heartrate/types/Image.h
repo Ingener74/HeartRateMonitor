@@ -78,6 +78,10 @@ public:
     virtual ~ ImageFormat() {
     }
 
+    const ImageRect& getRect() const {
+        return _rect;
+    }
+
     Size getSize() const {
         return _rect.getArea() * getBitsPerPixel(_imageType) / 8;
     }
@@ -85,6 +89,7 @@ public:
     ImageRect _rect;
     ImageType _imageType;
 
+private:
     static BitsPerPixel getBitsPerPixel(ImageType imageType) {
         return bitsPerPixels[imageType];
     }
@@ -92,52 +97,22 @@ public:
 
 class Image {
 public:
-    Image(ImageFormat) {
+    Image(const ImageFormat& format) {
     }
     virtual ~Image() {
     }
 
-    void lock() {
-        _imageMutex.lock();
+    const ImageFormat& getFormat() const {
+        return _format;
     }
 
-    void unlock() {
-        _imageMutex.unlock();
-    }
-
-    mutex& getImageMutex() const {
-        return _imageMutex;
+    Data getData() const {
+        return _data.get();
     }
 
 private:
-    friend class ImageLock;
-
-    mutex _imageMutex;
-
-    ImageData<uint8_t> _data;
     ImageFormat _format;
-};
-
-class ImageLock {
-public:
-    ImageLock(Image& image) :
-            _image(image) {
-        _image.lock();
-    }
-    virtual ~ImageLock() {
-        _image.unlock();
-    }
-
-    ImageFormat getImageFormat() const {
-        return _image._format;
-    }
-    template<typename TData>
-    TData getData() const {
-        return static_cast<TData*>(_image._data.get());
-    }
-
-private:
-    Image& _image;
+    ImageData<uint8_t> _data;
 };
 
 class Frame: public Image {
