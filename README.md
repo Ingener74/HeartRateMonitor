@@ -36,4 +36,8 @@ git clone https://github.com/MysticTreeGames/Boost-for-Android.git
 ./b2 install
 ```
 ### Windows... coming soon
-1. using Qt Creator with mingw32-4.8
+1. using Qt Creator with mingw32-4.8.
+2. build boost with mingw
+3. build OpenCV with mingw and cmake
+4. build fftw3 with configure and mingw
+5. build heart rate monitor with mingw and cmake
