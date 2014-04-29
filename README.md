@@ -20,9 +20,20 @@ or
 5. ```make```
 
 ### Android
+1. Build Boost-for-Android:
+clone Boost-for-Android git repository.
+```
+git clone https://github.com/MysticTreeGames/Boost-for-Android.git
+```
+2. run building
+```
+./build_android.sh --boost=1.55.0 --prefix=<android-gcc48-toolchain-sysroot-user>
+```
+
 ```
 ./bootstrap
 
 ./b2 install
 ```
 ### Windows... coming soon
+1. using Qt Creator with mingw32-4.8
