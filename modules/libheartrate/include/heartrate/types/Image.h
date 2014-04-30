@@ -41,28 +41,34 @@ const static BitsPerPixel bitsPerPixels[] = {
         12, /* NV21 */
 };
 
-class ImageRect {
+class ImageRect
+{
 public:
     ImageRect(Rows rows, Cols cols) :
-            _rows(rows), _cols(cols) {
+            _rows(rows), _cols(cols)
+    {
     }
-    virtual ~ImageRect(){
+    virtual ~ImageRect()
+    {
     }
-
-    bool operator==(const ImageRect& other) const {
+    bool operator==(const ImageRect& other) const
+    {
         return (_rows == other._rows && _cols == other._cols);
     }
-    bool operator!=(const ImageRect& other) const {
+    bool operator!=(const ImageRect& other) const
+    {
         return (_rows != other._rows || _cols != other._cols);
     }
-    bool operator!() const {
+    bool operator!() const
+    {
         return (!_rows || !_cols);
     }
-    operator bool() const {
+    operator bool() const
+    {
         return _rows && _cols;
     }
-
-    Area getArea() const {
+    Area getArea() const
+    {
         return _rows * _cols;
     }
 
@@ -70,43 +76,78 @@ public:
     Cols _cols;
 };
 
-class ImageFormat {
+class ImageFormat
+{
 public:
     ImageFormat(const ImageRect& rect, ImageType type = ImageType::RGB) :
-            _rect(rect), _imageType(type) {
+            _rect(rect), _imageType(type)
+    {
     }
-    virtual ~ ImageFormat() {
+    virtual ~ ImageFormat()
+    {
     }
-
-    const ImageRect& getRect() const {
+    bool operator==(const ImageFormat& other) const
+    {
+        return (_rect == other._rect && _imageType == other._imageType);
+    }
+    bool operator!=(const ImageFormat& other) const
+    {
+        return (_rect != other._rect || _imageType != other._imageType);
+    }
+    bool operator!() const
+    {
+        return (!_rect);
+    }
+    operator bool() const
+    {
         return _rect;
     }
-
-    Size getSize() const {
+    const ImageRect& getRect() const
+    {
+        return _rect;
+    }
+    ImageType getImageType() const
+    {
+        return _imageType;
+    }
+    Size getSize() const
+    {
         return _rect.getArea() * getBitsPerPixel(_imageType) / 8;
     }
 
+private:
     ImageRect _rect;
     ImageType _imageType;
-
-private:
-    static BitsPerPixel getBitsPerPixel(ImageType imageType) {
+    static BitsPerPixel getBitsPerPixel(ImageType imageType)
+    {
         return bitsPerPixels[imageType];
     }
 };
 
-class Image {
+class Image
+{
 public:
-    Image(const ImageFormat& format) {
+    Image(const ImageFormat& format)
+    {
+        if (format) _data = make_shared<uint8_t[]>(format.getSize());
     }
-    virtual ~Image() {
+    virtual ~Image()
+    {
     }
-
-    const ImageFormat& getFormat() const {
+    operator bool() const
+    {
+        return (_format && _data);
+    }
+    bool operator!() const
+    {
+        return (!_format || !_data);
+    }
+    const ImageFormat& getFormat() const
+    {
         return _format;
     }
-
-    Data getData() const {
+    Data getData() const
+    {
         return _data.get();
     }
 
@@ -115,8 +156,26 @@ private:
     ImageData<uint8_t> _data;
 };
 
-class Frame: public Image {
+class Frame: public Image
+{
 public:
+    Frame(const ImageFormat& format) :
+            Image(format), _timeStamp(0)
+    {
+    }
+    virtual ~Frame()
+    {
+    }
+    void setTimeStamp(TimeStamp timeStamp)
+    {
+        _timeStamp = timeStamp;
+    }
+    TimeStamp getTimeStamp() const
+    {
+        return _timeStamp;
+    }
+
+private:
     TimeStamp _timeStamp;
 };
 
