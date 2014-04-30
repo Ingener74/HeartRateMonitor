@@ -61,3 +61,6 @@ if(FFTW3_FOUND)
 endif(FFTW3_FOUND)
 
 target_link_libraries(${PROJECT_NAME} ${LIBS})
+
+if(GTEST_FOUND)
+endif(GTEST_FOUND)
