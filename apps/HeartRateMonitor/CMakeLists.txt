@@ -26,6 +26,8 @@ set(LIBS
 target_link_libraries(${HRM_CPP} ${LIBS})
 
 # HeartRateMonitor android java part
+file(GLOB_RECURSE JAVA_SOURCES java/*.*) 
+
 get_target_property(HRM_CPP_ ${HRM_CPP} LOCATION)
 
 add_custom_target(
@@ -48,9 +50,9 @@ add_custom_target(
         cd ${HRM_BIN_DIR} && 
         
         # and build it
-        ant clean debug > /dev/null # | grep BUILD
+        ant clean debug # > /dev/null
     
-    DEPENDS ${HRM_CPP}
+    DEPENDS ${HRM_CPP} ${JAVA_SOURCES}
 )
 
 add_custom_target(
