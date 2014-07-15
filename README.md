@@ -20,6 +20,16 @@ or
 5. ```make```
 
 ### Android
+1. Install dependencies:
+```
+sudo ../scripts/install_dependencies.sh
+```
+2. Download, build and install libpng
+```
+-- Download libpng 1.6.12 tarball from sourceforge
+-- tar xf libpng-1.6.12.tar.xf
+-- cd 
+```
 1. Build Boost-for-Android:
 clone Boost-for-Android git repository.
 ```
