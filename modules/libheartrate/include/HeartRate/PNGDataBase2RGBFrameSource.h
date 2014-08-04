@@ -8,7 +8,7 @@
 #ifndef PNGDATABASE2RGBFRAMESOURCE_H_
 #define PNGDATABASE2RGBFRAMESOURCE_H_
 
-#include <heartrate/IRGBFrameSource.h>
+#include <HeartRate/IRGBFrameSource.h>
 
 namespace hrm {
 
@@ -17,7 +17,7 @@ public:
     PNGDataBase2RGBFrameSource(const std::string& dataBaseDir);
     virtual ~PNGDataBase2RGBFrameSource();
 
-    virtual FrameSharedLockedRGB getFrame() throw (HRFrameSourceException);
+    virtual FrameSharedLockedRGB getFrame();
 
 private:
     std::string _dataBaseDir;

@@ -11,7 +11,6 @@ set(SOURCES
     src/HeartRateCounter.cpp
     src/RGBHeartRateGenerator.cpp
     src/Types.cpp
-    src/log/Log.cpp
 
     src/mocks/MockHeartRateVisualizer.cpp
     src/mocks/MockHeartRateGenerator.cpp
@@ -33,16 +32,6 @@ if(FFTW3_FOUND)
         src/FFTWHeartRateRecognizer.cpp
     )
 endif(FFTW3_FOUND)
-
-if(ANDROID)
-    set(SOURCES ${SOURCES}
-        src/log/AndroidLog.cpp
-        )
-else()
-    set(SOURCES ${SOURCES}
-        src/log/LinuxLog.cpp
-        )
-endif()
 
 add_library(${PROJECT_NAME} STATIC ${SOURCES})
 

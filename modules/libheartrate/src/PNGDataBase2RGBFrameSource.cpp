@@ -7,10 +7,12 @@
 
 #include <png.h>
 
-#include <heartrate/HeartRateTools.h>
-#include <heartrate/PNGDataBase2RGBFrameSource.h>
+#include <HeartRate/HeartRateTools.h>
+#include <HeartRate/PNGDataBase2RGBFrameSource.h>
 
 namespace hrm {
+
+using namespace std;
 
 PNGDataBase2RGBFrameSource::PNGDataBase2RGBFrameSource(
         const std::string& dataBaseDir) :
@@ -19,14 +21,14 @@ PNGDataBase2RGBFrameSource::PNGDataBase2RGBFrameSource(
     property_tree::read_json(_dataBaseDir + "/database.json", _dataBase);
     _frameCount = _dataBase.get<int>("frames");
     if(!_frameCount)
-        throw HRFrameSourceException("frame count is zero");
+        throw runtime_error("frame count is zero");
 }
 
 PNGDataBase2RGBFrameSource::~PNGDataBase2RGBFrameSource() {
 }
 
 FrameSharedLockedRGB PNGDataBase2RGBFrameSource::getFrame()
-        throw (HRFrameSourceException) {
+{
 
     this_thread::sleep(posix_time::milliseconds(_delay));
 
@@ -77,18 +79,18 @@ FrameSharedLockedRGB PNGDataBase2RGBFrameSource::getFrame()
          *
          */
 
-        char header[8];    // 8 is the maximum size that can be checked
+        unsigned char header[8];    // 8 is the maximum size that can be checked
 
         /* open file and test for it being a png */
         FILE *fp = fopen(framePath.c_str(), "rb");
         if (!fp)
-            throw HRFrameSourceException((
+            throw runtime_error((
                     boost::format("[read_png_file] File %1% could not be opened for reading") % frameFileName
                     ).str());
 
         fread(header, 1, 8, fp);
-        if (png_sig_cmp(reinterpret_cast<const unsigned char*>(header), 0, 8))
-            throw HRFrameSourceException((
+        if (png_sig_cmp(header, 0, 8))
+            throw runtime_error((
                     boost::format("[read_png_file] File %1% is not recognized as a PNG file") % frameFileName
                     ).str());
 
@@ -97,16 +99,16 @@ FrameSharedLockedRGB PNGDataBase2RGBFrameSource::getFrame()
         png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
 
         if (!png_ptr)
-            throw HRFrameSourceException(
+            throw runtime_error(
                     "[read_png_file] png_create_read_struct failed");
 
         info_ptr = png_create_info_struct(png_ptr);
         if (!info_ptr)
-            throw HRFrameSourceException(
+            throw runtime_error(
                     "[read_png_file] png_create_info_struct failed");
 
         if (setjmp(png_jmpbuf(png_ptr)))
-            throw HRFrameSourceException("[read_png_file] Error during init_io");
+            throw runtime_error("[read_png_file] Error during init_io");
 
         png_init_io(png_ptr, fp);
         png_set_sig_bytes(png_ptr, 8);
@@ -128,7 +130,7 @@ FrameSharedLockedRGB PNGDataBase2RGBFrameSource::getFrame()
 
         /* read file */
         if (setjmp(png_jmpbuf(png_ptr)))
-            throw HRFrameSourceException("[read_png_file] Error during read_image");
+            throw runtime_error("[read_png_file] Error during read_image");
 
         row_pointers = (png_bytep*) malloc(sizeof(png_bytep) * height);
 

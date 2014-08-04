@@ -11,33 +11,30 @@
 /*
  * HeartRate commons
  */
-#include <heartrate/HeartRateCommon.h>
-#include <heartrate/HeartBeatRateTypes.h>
-#include <heartrate/HeartRateTools.h>
-#include <heartrate/types/Exception.h>
-#include <heartrate/Log.h>
+#include <HeartRate/HeartRateCommon.h>
+#include <HeartRate/HeartBeatRateTypes.h>
+#include <HeartRate/HeartRateTools.h>
 
 /*
  * HeartRate interfaces
  */
-#include <heartrate/IHeartRateGenerator.h>
-#include <heartrate/IHeartRateNumber.h>
-#include <heartrate/IHeartRateVisualizer.h>
-#include <heartrate/IHeartRateFrequencyVisualizer.h>
-#include <heartrate/IHeartRateRecognizer.h>
-#include <heartrate/ILog.h>
-#include <heartrate/INV21FrameSource.h>
-#include <heartrate/IRGBFrameDrawer.h>
-#include <heartrate/IRGBFrameSource.h>
-#include <heartrate/IRGBImageDrawer.h>
+#include <HeartRate/IHeartRateGenerator.h>
+#include <HeartRate/IHeartRateNumber.h>
+#include <HeartRate/IHeartRateVisualizer.h>
+#include <HeartRate/IHeartRateFrequencyVisualizer.h>
+#include <HeartRate/IHeartRateRecognizer.h>
+#include <HeartRate/INV21FrameSource.h>
+#include <HeartRate/IRGBFrameDrawer.h>
+#include <HeartRate/IRGBFrameSource.h>
+#include <HeartRate/IRGBImageDrawer.h>
 
 /*
  * HeartRate concrete classes
  */
-#include <heartrate/HeartRateCounter.h>
-#include <heartrate/NV21FrameSource.h>
-#include <heartrate/RGBFrameSource.h>
-#include <heartrate/RGBHeartRateGenerator.h>
+#include <HeartRate/HeartRateCounter.h>
+#include <HeartRate/NV21FrameSource.h>
+#include <HeartRate/RGBFrameSource.h>
+#include <HeartRate/RGBHeartRateGenerator.h>
 
 #ifdef PNG_FOUND
 #include <heartrate/RGB2PNGDataBaseFrameDrawer.h>
@@ -51,12 +48,12 @@
 /*
  * Mock classes
  */
-#include <heartrate/mocks/MockNV21FrameSource.h>
-#include <heartrate/mocks/MockRGBFrameSource.h>
-#include <heartrate/mocks/MockHeartRateGenerator.h>
-#include <heartrate/mocks/MockHeartRateNumber.h>
-#include <heartrate/mocks/MockHeartRateVisualizer.h>
-#include <heartrate/mocks/MockHeartRateRecognizer.h>
-#include <heartrate/mocks/MockHeartRateFrequencyVisualizer.h>
+#include <HeartRate/mocks/MockNV21FrameSource.h>
+#include <HeartRate/mocks/MockRGBFrameSource.h>
+#include <HeartRate/mocks/MockHeartRateGenerator.h>
+#include <HeartRate/mocks/MockHeartRateNumber.h>
+#include <HeartRate/mocks/MockHeartRateVisualizer.h>
+#include <HeartRate/mocks/MockHeartRateRecognizer.h>
+#include <HeartRate/mocks/MockHeartRateFrequencyVisualizer.h>
 
 #endif /* HEARTRATE_H_ */

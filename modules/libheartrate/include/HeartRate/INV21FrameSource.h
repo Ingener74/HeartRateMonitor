@@ -8,7 +8,7 @@
 #ifndef INV21FRAMESOURCE_H_
 #define INV21FRAMESOURCE_H_
 
-#include <heartrate/HeartBeatRateTypes.h>
+#include <HeartRate/HeartBeatRateTypes.h>
 
 namespace hrm {
 
