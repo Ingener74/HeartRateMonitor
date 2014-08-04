@@ -1,8 +1,11 @@
 -- Test feature
 
-video_captures = {
+local current_video_capture = 0
+
+local video_captures = {
   {
-    name = "OpenCV Video Capture"
+    name = "OpenCV Video Capture",
+    device = 0
   },
   {
     name = "PNG data base video capture",

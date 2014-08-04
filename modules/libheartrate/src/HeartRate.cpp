@@ -22,6 +22,9 @@ HeartRate::~HeartRate()
 
 void HeartRate::putImage(int rows, int cols, const std::vector<char>& buffer)
 {
+	if (!_hro) throw runtime_error(__FUNCTION__ + "i have no heart rate output function");
+
+	_hro(70);
 }
 
 }
