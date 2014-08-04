@@ -5,8 +5,8 @@
  *      Author: pavel
  */
 
-#include <heartrate/HeartRateTools.h>
-#include <heartrate/NV21FrameSource.h>
+#include <HeartRate/HeartRateTools.h>
+#include <HeartRate/NV21FrameSource.h>
 
 namespace hrm {
 

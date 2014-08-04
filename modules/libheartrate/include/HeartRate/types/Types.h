@@ -8,7 +8,7 @@
 #ifndef TYPES_H_
 #define TYPES_H_
 
-#include <heartrate/HeartRateCommon.h>
+#include <HeartRate/HeartRateCommon.h>
 
 namespace hrm
 {

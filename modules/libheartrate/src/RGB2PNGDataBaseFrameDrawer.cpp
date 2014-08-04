@@ -7,11 +7,13 @@
 
 #include <png.h>
 
-#include <heartrate/Log.h>
-#include <heartrate/HeartRateTools.h>
-#include <heartrate/RGB2PNGDataBaseFrameDrawer.h>
+#include <HeartRate/HeartRateTools.h>
+#include <HeartRate/RGB2PNGDataBaseFrameDrawer.h>
 
 namespace hrm {
+
+using namespace std;
+using namespace boost;
 
 typedef struct  {
     RGB *pixels;
@@ -22,26 +24,24 @@ typedef struct  {
 RGB2PNGDataBaseFrameDrawer::RGB2PNGDataBaseFrameDrawer(
         const std::string& dataBaseDir) :
         _dataBaseDir(dataBaseDir), _counter(0) {
-    Log() << format("data base dir %1%") % _dataBaseDir;
+    cout << format("data base dir %1%") % _dataBaseDir;
 }
 
 RGB2PNGDataBaseFrameDrawer::~RGB2PNGDataBaseFrameDrawer() {
 
-    Log() << "RGB2PNGDataBaseFrameDrawer::~RGB2PNGDataBaseFrameDrawer()";
+    cout << "RGB2PNGDataBaseFrameDrawer::~RGB2PNGDataBaseFrameDrawer()";
 
     try {
-        write_json(_dataBaseDir + "/database.json", _dataBase);
+        property_tree::write_json(_dataBaseDir + "/database.json", _dataBase);
     } catch (const property_tree::json_parser_error& e) {
-        Log(ERR) << format("error in rgb to png data base frame drawer: %1%")
+        cerr << format("error in rgb to png data base frame drawer: %1%")
                 % e.what();
     }
 }
 
-void RGB2PNGDataBaseFrameDrawer::drawFrame(FrameRGB frame) throw (HRDrawException)
+void RGB2PNGDataBaseFrameDrawer::drawFrame(FrameRGB frame)
 {
-
-    if (_dataBaseDir.empty())
-        throw HRDrawException("data base dir path empty");
+	if (_dataBaseDir.empty()) throw runtime_error("data base dir path empty");
 
     _counter++;
 
@@ -75,21 +75,21 @@ void RGB2PNGDataBaseFrameDrawer::drawFrame(FrameRGB frame) throw (HRDrawExceptio
 
        fp = fopen(framePath.c_str(), "wb");
        if (!fp)
-           throw HRDrawException("can't open file");
+           throw runtime_error("can't open file");
 
 
        png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
        if (png_ptr == NULL)
-           throw HRDrawException("can't create write struct");
+           throw runtime_error("can't create write struct");
 
        info_ptr = png_create_info_struct(png_ptr);
        if (info_ptr == NULL)
-           throw HRDrawException("can't create info struct");
+           throw runtime_error("can't create info struct");
 
        /* Set up error handling. */
 
        if (setjmp(png_jmpbuf (png_ptr)))
-           throw HRDrawException("can't set error handling");
+           throw runtime_error("can't set error handling");
 
        /* Set image attributes. */
 
@@ -133,9 +133,9 @@ void RGB2PNGDataBaseFrameDrawer::drawFrame(FrameRGB frame) throw (HRDrawExceptio
        fclose(fp);
 
     } catch (const property_tree::json_parser_error& e) {
-        throw HRDrawException("data base put error");
+        throw runtime_error("data base put error");
     } catch (...){
-        throw HRDrawException("data base fatal error");
+        throw runtime_error("data base fatal error");
     }
 }
 
