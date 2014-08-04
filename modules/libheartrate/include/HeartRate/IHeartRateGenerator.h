@@ -8,8 +8,7 @@
 #ifndef IHEARTRATEGENERATOR_H_
 #define IHEARTRATEGENERATOR_H_
 
-#include <heartrate/types/Exception.h>
-#include <heartrate/types/Types.h>
+#include <HeartRate/types/Types.h>
 
 namespace hrm
 {
@@ -19,14 +18,13 @@ typedef double HeartValue;
 class IHeartRateGenerator
 {
 public:
-    typedef shared_ptr<IHeartRateGenerator> Ptr;
+    using Ptr = std::shared_ptr<IHeartRateGenerator>;
 
     virtual ~IHeartRateGenerator()
     {
     }
 
-    virtual HrmMeasurement getHeartMeasurementValue()
-            throw (HRGenerateException) = 0;
+    virtual HrmMeasurement getHeartMeasurementValue() = 0;
 
 protected:
     IHeartRateGenerator()

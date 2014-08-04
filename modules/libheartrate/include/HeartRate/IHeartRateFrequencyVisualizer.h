@@ -8,7 +8,6 @@
 #ifndef IHEARTRATEFREQUENCYVISUALIZER_H_
 #define IHEARTRATEFREQUENCYVISUALIZER_H_
 
-#include <heartrate/types/Exception.h>
 #include <heartrate/types/Types.h>
 
 namespace hrm
