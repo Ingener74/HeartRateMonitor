@@ -221,6 +221,12 @@ int main(int argc, const char *argv[])
 			*vc >> image;
 
 			hr.putImage(image.rows, image.cols, vector<char>(image.data, image.data + image.rows * image.cols * 3));
+
+			imshow("Output", image);
+			if (waitKey(10) == 27)
+			{
+				break;
+			}
 		}
 
 	}
