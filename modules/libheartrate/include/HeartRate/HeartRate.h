@@ -16,6 +16,7 @@ namespace heartrate
 class HeartRate
 {
 public:
+	using Ptr = std::shared_ptr<HeartRate>;
 	using HeartRateOutput = std::function<void(double)>;
 
 	HeartRate(HeartRateOutput heartRateOutput);
