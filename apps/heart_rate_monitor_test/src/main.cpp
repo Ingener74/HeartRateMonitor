@@ -30,20 +30,22 @@ int main(int argc, const char *argv[])
 
 		auto vc = make_shared<VideoCapture>(0);
 
-		for (;;)
+		for (;vc->isOpened();)
 		{
 			Mat image;
 			*vc >> image;
 
 			hr.putImage(image.rows, image.cols, vector<char>(image.data, image.data + image.rows * image.cols * 3));
 
-			imshow("Output", image);
-			if (waitKey(10) == 27)
+			if (image.rows && image.cols)
 			{
-				break;
+				imshow("Output", image);
+				if (waitKey(10) == 27)
+				{
+					break;
+				}
 			}
 		}
-
 	}
 	catch ( std::exception const & e )
 	{

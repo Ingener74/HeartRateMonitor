@@ -12,7 +12,7 @@ namespace heartrate
 
 using namespace std;
 
-HeartRate::HeartRate(HeartRateOutput heartRateOutput)
+HeartRate::HeartRate(HeartRateOutput heartRateOutput): _hro(heartRateOutput)
 {
 }
 
@@ -22,7 +22,7 @@ HeartRate::~HeartRate()
 
 void HeartRate::putImage(int rows, int cols, const std::vector<char>& buffer)
 {
-	if (!_hro) throw runtime_error(__FUNCTION__ + "i have no heart rate output function");
+	if (!_hro) throw runtime_error(string(__FUNCTION__) + " i have no heart rate output function");
 
 	_hro(70);
 }
